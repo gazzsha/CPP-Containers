@@ -4,6 +4,8 @@
 #include <utility>
 #include <string>
 #include <cmath>
+
+
 template <typename T, typename Alloc = std::allocator<T>>
 class s21_vector { 
     private:
@@ -22,7 +24,7 @@ public:
     private:
         T* ptr;
     public: 
-        constexpr iterator() noexcept: ptr(nullptr) {}
+        constexpr iterator() noexcept;
         explicit iterator (T* new_ptr): ptr(new_ptr) {}
        // ~iterator() {}
         T& operator*() const noexcept { 
@@ -298,9 +300,24 @@ public:
             std::swap(alloc,other.alloc);
         }
     }
+    template <typename... Args>
+    iterator insert_many(iterator pos, Args&&... args) { 
+        s21_vector<T> temp {args...};
+       for (auto i = static_cast<int>(temp.size() - 1);  i >= 0; i--) { 
+            insert(pos,temp.arr[i]);
+       }
+        iterator tmp = begin();
+    return tmp;
+    }
 
     template <typename... Args>
     void insert_many_back(Args&&... args) { 
-        push_back(std::forward<Args>(args)...);
+        insert_many(end(),(args)...);
     }
+
 };
+
+template <typename T, typename Alloc = std::allocator<T>>
+constexpr s21_vector<T,Alloc>::iterator::iterator() noexcept: ptr(nullptr) {};
+
+

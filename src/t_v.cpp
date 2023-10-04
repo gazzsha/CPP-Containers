@@ -155,7 +155,19 @@ std::cout << "\n";
         std::vector<std::string>  m = {"anc","dff","ff"};
         pr(mm);
               std::cout << "\n";
-              pr(m);
+
+       mm.reserve(10);
+
+       auto itvv =  mm.insert_many(mm.end(),"aaa","bbbb","ccccc");
+
+       std::cout << *itvv << "\n";
+
+        pr(mm);
+
+        mm.insert_many_back("A1","B2","B3");
+
+        std::cout << "\n";
+        pr(mm);
 
      
 
