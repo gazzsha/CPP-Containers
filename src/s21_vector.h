@@ -20,16 +20,25 @@ class vector {
   using AllocTraits = std::allocator_traits<Alloc>;
 
  public:
+  class const_iterator {
+   private:
+    value_type* ptr;
+
+   public:
+    explicit const_iterator(value_type* new_ptr) noexcept;
+    const_reference operator*() const noexcept;
+  };
+
   class iterator {
    private:
-    T* ptr;
+    value_type* ptr;
 
    public:
     // constuction
     constexpr iterator() noexcept;
-    explicit iterator(T* new_ptr) noexcept;
-    T& operator*() const noexcept;
-    T* getter() const noexcept;
+    explicit iterator(value_type* new_ptr) noexcept;
+    value_type& operator*() const noexcept;
+    value_type* getter() const noexcept;
     // operators
     iterator operator++() noexcept;
     iterator operator--() noexcept;
@@ -50,7 +59,7 @@ class vector {
   constexpr reference at(size_type pos);
   constexpr const_reference front();
   constexpr const_reference back();
-  T* data();
+  value_type* data();
   constexpr bool empty() noexcept;
   constexpr size_type max_size() const noexcept;
   void reserve(size_type size);
@@ -58,7 +67,7 @@ class vector {
   void clear() noexcept;
   void pop_back();
   void push_back(const_reference value);
-  void push_back(T&& value);
+  void push_back(value_type&& value);
   template <typename... Args>
   void emplace_back(Args&&... args);
   size_type size() const noexcept;
@@ -74,63 +83,65 @@ class vector {
   void insert_many_back(Args&&... args);
 };
 
-template <typename T, typename Alloc = std::allocator<T>>
-constexpr vector<T, Alloc>::iterator::iterator() noexcept : ptr(nullptr){};
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+constexpr vector<value_type, Alloc>::iterator::iterator() noexcept
+    : ptr(nullptr){};
 
-template <typename T, typename Alloc = std::allocator<T>>
-vector<T, Alloc>::iterator::iterator(T* new_ptr) noexcept : ptr(new_ptr){};
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+vector<value_type, Alloc>::iterator::iterator(value_type* new_ptr) noexcept
+    : ptr(new_ptr){};
 
-template <typename T, typename Alloc = std::allocator<T>>
-T& vector<T, Alloc>::iterator::operator*() const noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+value_type& vector<value_type, Alloc>::iterator::operator*() const noexcept {
   return *ptr;
 }
 
-template <typename T, typename Alloc = std::allocator<T>>
-T* vector<T, Alloc>::iterator::getter() const noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+value_type* vector<value_type, Alloc>::iterator::getter() const noexcept {
   return ptr;
 }
-template <typename T, typename Alloc = std::allocator<T>>
-typename vector<T, Alloc>::iterator
-vector<T, Alloc>::iterator::operator++() noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::iterator::operator++() noexcept {
   iterator tmp(++ptr);
   return tmp;
 }
 
-template <typename T, typename Alloc = std::allocator<T>>
-typename vector<T, Alloc>::iterator
-vector<T, Alloc>::iterator::operator--() noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::iterator::operator--() noexcept {
   iterator tmp(--ptr);
   return tmp;
 }
 
-template <typename T, typename Alloc = std::allocator<T>>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::iterator::operator-(
-    const size_type& ind) noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::iterator::operator-(const size_type& ind) noexcept {
   iterator tmp(ptr - ind);
   return tmp;
 }
 
-template <typename T, typename Alloc = std::allocator<T>>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::iterator::operator+(
-    const size_type& ind) noexcept {
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::iterator::operator+(const size_type& ind) noexcept {
   iterator tmp(ptr + ind);
   return tmp;
 }
 
-template <typename T, typename Alloc = std::allocator<T>>
-constexpr bool vector<T, Alloc>::iterator::operator!=(
+template <typename value_type, typename Alloc = std::allocator<value_type>>
+constexpr bool vector<value_type, Alloc>::iterator::operator!=(
     const iterator& other) noexcept {
   return ptr != other.ptr;
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::vector() noexcept : arr(nullptr), sz(0), cap(0) {}
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::vector() noexcept : arr(nullptr), sz(0), cap(0) {}
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::vector(size_type n)
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::vector(size_type n)
     : alloc(Alloc()), arr(AllocTraits::allocate(alloc, n)), sz(n), cap(n) {
   for (size_t i = 0; i < sz; ++i) try {
-      AllocTraits::construct(alloc, arr + i, T());
+      AllocTraits::construct(alloc, arr + i, value_type());
     } catch (...) {
       for (size_type j = 0; j < i; ++j) {
         AllocTraits::destroy(alloc, arr + j);
@@ -140,8 +151,8 @@ vector<T, Alloc>::vector(size_type n)
     }
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::vector(const vector& v)
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::vector(const vector& v)
     : alloc(AllocTraits::select_on_container_copy_construction(v.alloc)),
       arr(AllocTraits::allocate(alloc, v.cap)),
       sz(v.sz),
@@ -159,16 +170,17 @@ vector<T, Alloc>::vector(const vector& v)
   }
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::vector(std::initializer_list<value_type> const& items)
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::vector(
+    std::initializer_list<value_type> const& items)
     : vector(items.size()) {
   for (size_type i = 0; i < sz; ++i) {
     arr[i] = *(items.begin() + i);
   }
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::vector(vector&& v) noexcept(
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::vector(vector&& v) noexcept(
     noexcept(alloc(std::move(v.alloc))))
     : arr(v.arr), sz(v.size), cap(v.cap) {
   if (AllocTraits::propagate_on_container_move_assignment::value) {
@@ -179,8 +191,8 @@ vector<T, Alloc>::vector(vector&& v) noexcept(
   v.arr = nullptr;
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>::~vector() {
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::~vector() {
   for (size_type i = 0; i < sz; i++) {
     AllocTraits::destroy(alloc, arr + i);
   }
@@ -190,8 +202,9 @@ vector<T, Alloc>::~vector() {
   arr = nullptr;
 }
 
-template <typename T, typename Alloc>
-vector<T, Alloc>& vector<T, Alloc>::operator=(vector&& v) noexcept {
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>& vector<value_type, Alloc>::operator=(
+    vector&& v) noexcept {
   for (size_type i = 0; i < sz; ++i) {
     AllocTraits::destroy(alloc, arr + i);
   }
@@ -206,49 +219,51 @@ vector<T, Alloc>& vector<T, Alloc>::operator=(vector&& v) noexcept {
   return *this;
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::reference vector<T, Alloc>::at(
-    size_type pos) {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::reference
+vector<value_type, Alloc>::at(size_type pos) {
   if (pos > size()) throw std::out_of_range("Out of range");
   return arr[pos];
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::reference vector<T, Alloc>::operator[](
-    size_type pos) {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::reference
+vector<value_type, Alloc>::operator[](size_type pos) {
   return arr[pos];
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::const_reference vector<T, Alloc>::front() {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::const_reference
+vector<value_type, Alloc>::front() {
   return arr[0b0];
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::const_reference vector<T, Alloc>::back() {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::const_reference
+vector<value_type, Alloc>::back() {
   return arr[sz - 1];
 }
 
-template <typename T, typename Alloc>
-T* vector<T, Alloc>::data() {
+template <typename value_type, typename Alloc>
+value_type* vector<value_type, Alloc>::data() {
   return arr;
 }
-template <typename T, typename Alloc>
-constexpr bool vector<T, Alloc>::empty() noexcept {
+template <typename value_type, typename Alloc>
+constexpr bool vector<value_type, Alloc>::empty() noexcept {
   return !(begin() != end());
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::size_type vector<T, Alloc>::max_size()
-    const noexcept {
-  return static_cast<size_type>((std::pow(2, 63))) / sizeof(T) - 1;
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::size_type
+vector<value_type, Alloc>::max_size() const noexcept {
+  return static_cast<size_type>((std::pow(2, 63))) / sizeof(value_type) - 1;
 }
 
-template <typename T, typename Alloc>
-void vector<T, Alloc>::reserve(size_type size) {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::reserve(size_type size) {
   if (size <= cap) return;
 
-  T* newarr = AllocTraits::allocate(alloc, size);
+  value_type* newarr = AllocTraits::allocate(alloc, size);
 
   for (size_type i = 0; i < sz; ++i) {
     try {
@@ -269,10 +284,10 @@ void vector<T, Alloc>::reserve(size_type size) {
   cap = size;
   arr = newarr;
 }
-template <typename T, typename Alloc>
-void vector<T, Alloc>::shrink_to_fit() {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::shrink_to_fit() {
   if (size() < capacity()) {
-    T* newarr = AllocTraits::allocate(alloc, sz);
+    value_type* newarr = AllocTraits::allocate(alloc, sz);
 
     for (size_type i = 0; i < sz; ++i) {
       try {
@@ -295,23 +310,23 @@ void vector<T, Alloc>::shrink_to_fit() {
   }
 }
 
-template <typename T, typename Alloc>
-void vector<T, Alloc>::clear() noexcept {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::clear() noexcept {
   for (size_type i = 0; i < sz; i++) {
     AllocTraits::destroy(alloc, arr + i);
   }
   sz = 0;
 }
-template <typename T, typename Alloc>
-void vector<T, Alloc>::pop_back() {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::pop_back() {
   if (sz > 0) {
     --sz;
     AllocTraits::destroy(alloc, arr + sz);
   }
 }
 
-template <typename T, typename Alloc>
-void vector<T, Alloc>::push_back(const_reference value) {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::push_back(const_reference value) {
   if (cap == 0) {
     reserve(1);
   }
@@ -325,8 +340,8 @@ void vector<T, Alloc>::push_back(const_reference value) {
   }
   ++sz;
 }
-template <typename T, typename Alloc>
-void vector<T, Alloc>::push_back(T&& value) {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::push_back(value_type&& value) {
   if (cap == 0) {
     reserve(1);
   }
@@ -341,9 +356,9 @@ void vector<T, Alloc>::push_back(T&& value) {
   ++sz;
 }
 
-template <typename T, typename Alloc>
+template <typename value_type, typename Alloc>
 template <typename... Args>
-void vector<T, Alloc>::emplace_back(Args&&... args) {
+void vector<value_type, Alloc>::emplace_back(Args&&... args) {
   if (cap == 0) {
     reserve(1);
   }
@@ -353,18 +368,19 @@ void vector<T, Alloc>::emplace_back(Args&&... args) {
   AllocTraits::construct(alloc, arr + sz, std::forward<Args>(args)...);
   sz++;
 }
-template <typename T, typename Alloc>
-typename vector<T, Alloc>::size_type vector<T, Alloc>::size() const noexcept {
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::size_type vector<value_type, Alloc>::size()
+    const noexcept {
   return sz;
 }
 
-template <typename T, typename Alloc>
-typename vector<T, Alloc>::size_type vector<T, Alloc>::capacity()
-    const noexcept {
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::size_type
+vector<value_type, Alloc>::capacity() const noexcept {
   return cap;
 }
-template <typename T, typename Alloc>
-void vector<T, Alloc>::erase(iterator pos) {
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::erase(iterator pos) {
   AllocTraits::destroy(alloc, pos.getter());
   for (iterator it = pos; it != end() - 1; ++it) {
     *it = *(it + 1);
@@ -372,8 +388,8 @@ void vector<T, Alloc>::erase(iterator pos) {
   --sz;
 }
 
-template <typename T, typename Alloc>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::iterator vector<value_type, Alloc>::insert(
     iterator pos, const_reference value) {
   if (!(pos != end())) {
     push_back(value);
@@ -389,8 +405,8 @@ typename vector<T, Alloc>::iterator vector<T, Alloc>::insert(
   return tmp;
 }
 
-template <typename T, typename Alloc>
-void vector<T, Alloc>::swap(vector& other) noexcept(
+template <typename value_type, typename Alloc>
+void vector<value_type, Alloc>::swap(vector& other) noexcept(
     noexcept(AllocTraits::propagate_on_container_swap::value ||
              AllocTraits::is_always_equal::value)) {
   std::swap(arr, other.arr);
@@ -401,33 +417,45 @@ void vector<T, Alloc>::swap(vector& other) noexcept(
   }
 }
 
-template <typename T, typename Alloc>
+template <typename value_type, typename Alloc>
 template <typename... Args>
-typename vector<T, Alloc>::iterator vector<T, Alloc>::insert_many(
-    iterator pos, Args&&... args) {
-  vector<T> temp{args...};
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::insert_many(iterator pos, Args&&... args) {
+  vector<value_type> temp{args...};
   for (auto i = static_cast<int>(temp.size() - 1); i >= 0; i--) {
     insert(pos, temp.arr[i]);
   }
   iterator tmp = begin();
   return tmp;
 }
-template <typename T, typename Alloc>
+template <typename value_type, typename Alloc>
 template <typename... Args>
-void vector<T, Alloc>::insert_many_back(Args&&... args) {
+void vector<value_type, Alloc>::insert_many_back(Args&&... args) {
   insert_many(end(), (args)...);
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::iterator
-vector<T, Alloc>::begin() noexcept {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::begin() noexcept {
   iterator it(arr);
   return it;
 }
 
-template <typename T, typename Alloc>
-constexpr typename vector<T, Alloc>::iterator vector<T, Alloc>::end() noexcept {
+template <typename value_type, typename Alloc>
+constexpr typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::end() noexcept {
   iterator it(arr + sz);
   return it;
+}
+
+template <typename value_type, typename Alloc>
+vector<value_type, Alloc>::const_iterator::const_iterator(
+    value_type* new_ptr) noexcept
+    : ptr(new_ptr){};
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::const_reference
+vector<value_type, Alloc>::const_iterator::operator*() const noexcept {
+  return *ptr;
 }
 }  // namespace s21
