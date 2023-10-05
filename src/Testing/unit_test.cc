@@ -28,14 +28,14 @@ TEST(VectorTest, Constructor_n) {
 }
 
 TEST(VectorTest, Constructor_n_throw) {
-//   try {
-//     s21::vector<int> s21_v(-1);
-//     FAIL() << "std::bad_array_new_length";
-//   } catch (std::out_of_range const& err) {
-//     EXPECT_EQ(err.what(),
-//               std::string("std::bad_array_new_length)"));
-//   }
-EXPECT_THROW(s21::vector<int> s21_v(-1), std::bad_array_new_length);
+  //   try {
+  //     s21::vector<int> s21_v(-1);
+  //     FAIL() << "std::bad_array_new_length";
+  //   } catch (std::out_of_range const& err) {
+  //     EXPECT_EQ(err.what(),
+  //               std::string("std::bad_array_new_length)"));
+  //   }
+  EXPECT_THROW(s21::vector<int> s21_v(-1), std::bad_array_new_length);
 }
 
 TEST(VectorTest, Constructor_initializer_list_1) {
@@ -591,7 +591,6 @@ TEST(VectorTest, Helpers_add_memotysize_3) {
 
   EXPECT_EQ(s21_v.size(), n + 3);
 }
-
 
 int main(int argc, char* argv[]) {
   testing::InitGoogleTest(&argc, argv);

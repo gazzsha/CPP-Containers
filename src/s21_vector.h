@@ -51,7 +51,7 @@ class vector {
   vector(std::initializer_list<value_type> const& items);
   vector(vector&& v) noexcept(noexcept(alloc(std::move(v.alloc))));
   ~vector();
-  vector& operator=(vector&& v) noexcept;
+  vector& operator=(vector&& v) noexcept(noexcept(alloc = std::move(v.alloc)));
   constexpr reference operator[](size_type pos);
   constexpr reference at(size_type pos);
   constexpr const_reference front();
@@ -201,7 +201,7 @@ vector<value_type, Alloc>::~vector() {
 
 template <typename value_type, typename Alloc>
 vector<value_type, Alloc>& vector<value_type, Alloc>::operator=(
-    vector&& v) noexcept {
+    vector&& v) noexcept(noexcept(alloc = std::move(v.alloc))) {
   for (size_type i = 0; i < sz; ++i) {
     AllocTraits::destroy(alloc, arr + i);
   }
@@ -209,7 +209,9 @@ vector<value_type, Alloc>& vector<value_type, Alloc>::operator=(
   arr = v.arr;
   sz = v.sz;
   cap = v.cap;
-  alloc = v.alloc;
+  if (AllocTraits::propagate_on_container_move_assignment::value) {
+    alloc = (std::move(v.alloc));
+  }
   v.arr = nullptr;
   v.sz = 0;
   v.cap = 0;
