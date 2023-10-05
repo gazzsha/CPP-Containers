@@ -1,9 +1,6 @@
 #include <cmath>
-#include <iostream>
 #include <memory>
-#include <string>
 #include <utility>
-#include <vector>
 
 namespace s21 {
 template <typename T, typename Alloc = std::allocator<T>>
