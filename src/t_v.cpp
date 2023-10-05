@@ -169,6 +169,19 @@ std::cout << "\n";
         std::cout << "\n";
         pr(mm);
 
+
+
+
+
+        std::cout << "\n";
+        pr(m);
+       auto nn =  m.erase(m.end()-1);
+
+    std::cout << *nn << "===";
+        std::cout << "\n";
+
+        pr(m);
+
      
 
 
