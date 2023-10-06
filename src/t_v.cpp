@@ -197,31 +197,49 @@
 //   s21_v2 = std::move(s21_v1);
 // }
 
+// #include <iostream>
+// #include <vector>
+
+// #include "s21_vector.h"
+// struct Base {
+//   Base() { print(); }
+//   virtual void print() { std::cout << "Base\n"; }
+//   ~Base() { print(); }
+// };
+
+// struct Derived : Base {
+//   Derived() { print(); }
+//   void print() override { std::cout << "Derived\n"; }
+//   ~Derived() { print(); }
+// };
+
+// int main() {
+//   Base* base = new Derived();
+//   base->print();
+
+//   delete base;
+
+//   s21::vector<int> v{1, 23, 4};
+//   v.swap(v);
+//   for (auto n : v) {
+//     std::cout << n << " ";
+//   }
+// }
+
+#include "s21_list.h"
 #include <iostream>
-#include <vector>
+#include <list>
 
-#include "s21_vector.h"
-struct Base {
-  Base() { print(); }
-  virtual void print() { std::cout << "Base\n"; }
-  ~Base() { print(); }
-};
+int main() { 
 
-struct Derived : Base {
-  Derived() { print(); }
-  void print() override { std::cout << "Derived\n"; }
-  ~Derived() { print(); }
-};
+    s21::list<int> l {1,3,4,5};
+    l.print_data();
+    s21::list<int> v(l);
+    std::cout << "\n";
+    v.print_data();
+    
 
-int main() {
-  Base* base = new Derived();
-  base->print();
 
-  delete base;
 
-  s21::vector<int> v{1, 23, 4};
-  v.swap(v);
-  for (auto n : v) {
-    std::cout << n << " ";
-  }
+
 }
