@@ -38,6 +38,7 @@ class list {
             Node * cur = head -> next;
             for (size_type i = 0; i < sz; i++) { 
                 Node * del = cur;
+                AllocTraits::destroy(alloc,del);
                 cur = cur -> next;
                 AllocTraits::deallocate(alloc,del,1);
             }
@@ -66,7 +67,14 @@ class list {
         Node * cur_node = head; 
         for (size_type i = 0; i < items.size(); ++i) { 
             Node * node = AllocTraits::allocate(alloc,1);
-            AllocTraits::construct(alloc,node,node,node,*(items.begin() + i)); 
+            try {
+                AllocTraits::construct(alloc,node,node,node,*(items.begin() + i));
+            } catch (...) { 
+                AllocTraits::deallocate(alloc,node,1);
+                  cur_node -> next = head; 
+                 head->prev = cur_node;
+                 throw;
+            } 
             cur_node -> next = node;
             node -> prev = cur_node;
             cur_node = node;
@@ -81,7 +89,14 @@ class list {
         Node * cur_node_copy = l.head -> next; 
         for (size_type i = 0; i < l.sz; i++) {
             Node * node =  AllocTraits::allocate(alloc,1);
+            try {
             AllocTraits::construct(alloc,node,node,node,cur_node_copy->data);
+             } catch (...) { 
+                AllocTraits::deallocate(alloc,node,1);
+                  cur_node -> next = head; 
+                 head->prev = cur_node;
+                 throw;
+            } 
             cur_node ->next = node;
             node->prev = cur_node;
             cur_node = node;

@@ -4,6 +4,7 @@
 #include <cmath>
 #include <memory>
 #include <utility>
+#include <stdexcept>
 
 namespace s21 {
 template <typename T, typename Alloc = std::allocator<T>>
@@ -159,7 +160,7 @@ vector<value_type, Alloc>::vector(const vector& v)
       cap(v.cap) {
   for (size_type i = 0; i < sz; ++i) {
     try {
-      AllocTraits::construct(alloc, arr + i, std::move_if_noexcept(v.arr[i]));
+      AllocTraits::construct(alloc, arr + i, v.arr[i]);
     } catch (...) {
       for (size_type j = 0; j < i; ++i) {
         AllocTraits::destroy(alloc, arr + j);
@@ -339,6 +340,7 @@ void vector<value_type, Alloc>::push_back(const_reference value) {
     AllocTraits::construct(alloc, arr + sz, value);
   } catch (...) {
     AllocTraits::destroy(alloc, arr + sz);
+    throw;
   }
   ++sz;
 }
@@ -354,6 +356,7 @@ void vector<value_type, Alloc>::push_back(value_type&& value) {
     AllocTraits::construct(alloc, arr + sz, std::move_if_noexcept(value));
   } catch (...) {
     AllocTraits::destroy(alloc, arr + sz);
+    throw;
   }
   ++sz;
 }

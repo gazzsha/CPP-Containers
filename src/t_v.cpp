@@ -225,21 +225,32 @@
 //     std::cout << n << " ";
 //   }
 // }
-
+#include "s21_vector.h"
 #include "s21_list.h"
 #include <iostream>
 #include <list>
+#include <string>
 
 int main() { 
 
-    s21::list<int> l {1,3,4,5};
+    s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
     l.print_data();
-    s21::list<int> v(l);
+    s21::list<std::string> v(l);
     std::cout << "\n";
     v.print_data();
-    
 
+    // std::string a = "abc";
+    // a.~string();
+    // std::cout << a;
 
+    // auto pr = [](auto& n) { for (const auto v : n) std::cout << v << " "; };
 
+    // s21::vector<std::string> v = {"abc","bcd"};
+
+    // pr(v);
+
+    // v.~auto();
+
+    // pr(v);
 
 }
