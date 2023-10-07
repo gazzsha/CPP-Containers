@@ -239,6 +239,33 @@ int main() {
     std::cout << "\n";
     v.print_data();
 
+    s21::list<std::string> m(v);
+    m.print_data();
+    m.erase(++m.begin());
+    m.print_data();
+    std::cout << "====CLEAR CHECK\n";
+    m.clear();
+    std::cout << "====INSERT CHECK\n";
+    std::cout << "BEFORE:\n";
+    l.print_data();
+    std::cout<< "AFTER:\n";
+    l.insert(++l.end(),"new elem");
+    l.print_data();
+
+
+    // s21::list<std::string>::ListIterator it = m.begin();
+    // std::cout << *(++it) << "\n";
+
+    // std::cout << m.back() << "\n";
+    // std::cout << m.empty()<< "\n";
+    
+  //  m.front() = "first element";
+    //std::cout << m.front() << "\n";
+
+
+
+
+
     // std::string a = "abc";
     // a.~string();
     // std::cout << a;
