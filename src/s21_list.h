@@ -131,13 +131,13 @@ class list {
   void merge(list& other);
   void sort();
   void erase(iterator pos) noexcept;
-  void print_data() {
-    if (!sz) return;
-    head = head->next;
-    for (size_type i = 0; i < sz; i++) {
-      std::cout << i << " " << head->data << "\n";
-      head = head->next;
-    }
+//   void print_data() {
+//     if (!sz) return;
+//     head = head->next;
+//     for (size_type i = 0; i < sz; i++) {
+//       std::cout << i << " " << head->data << "\n";
+//       head = head->next;
+//     }
   };
 
  private:
