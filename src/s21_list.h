@@ -46,6 +46,11 @@ class list {
                 copy.node = node -> next;
                 return copy;
             }
+             constexpr ListIterator operator--(int) noexcept { 
+                ListIterator copy = *this;
+                copy.node = node -> prev;
+                return copy;
+            }
             constexpr ListIterator& operator--() noexcept{ 
                 node = node -> prev; 
                 return *this;
@@ -80,7 +85,7 @@ class list {
                 node = node->next;
                 return *this;
             }
-            constexpr ListConstIterator& operator--() const  noexcept{ 
+            constexpr ListConstIterator& operator--()  noexcept{ 
                 node = node -> prev; 
                 return *this;
             }
@@ -103,14 +108,14 @@ class list {
         };
 
             ListIterator begin() noexcept { 
-                return head->next; 
+                return ListIterator(head->next); 
             } 
             ListIterator end() noexcept { 
                 return ListIterator(head);
             }
 
             ListConstIterator cbegin() const noexcept { 
-                return head->next ;
+                return ListConstIterator(head->next) ;
             } 
             ListConstIterator cend() const noexcept { 
                 return ListConstIterator(head);
@@ -170,11 +175,25 @@ class list {
         }
 
         void reverse() noexcept { 
-            auto it_end = --end();
-            for (auto it = begin(); it != it_end; ++it,--it_end) { 
-                std::swap(*it,*it_end);
-                if (it++ == it_end) return;
-            }
+            size_type step = 0;
+        for (auto it = this->begin(); step <= this->size(); ++it) {
+              step++;
+             std::swap((it.getNode())->prev, (it.getNode())->next);
+        }
+        }
+
+
+        void splice(ListConstIterator pos, list& other) { 
+            Node * cur_other_begin = other.cbegin().getNode();
+            Node * cur_other_end = (--other.cend()).getNode();
+            cur_other_end -> next = pos.getNode(); 
+            pos.getNode() -> prev -> next = cur_other_begin;
+            cur_other_begin->prev = pos.getNode()->prev; 
+            pos.getNode()->prev = cur_other_end; 
+            (other.cend()).getNode() -> next = other.head;
+            (other.cend()).getNode() -> prev = other.head;
+            sz += other.sz;
+            other.sz = 0; 
         }
 
         void swap(list& other) noexcept(noexcept(AllocTraits::is_always_equal::value)) { 
@@ -182,6 +201,84 @@ class list {
             std::swap(sz,other.sz);
             if (AllocTraits::propagate_on_container_swap::value && alloc != other.alloc) 
                 std::swap(alloc,other.alloc);
+        }
+        
+        void unique() {
+            if (empty()) return;
+            for (auto it = begin(); it != end() && it.getNode() -> next != head; ++it) { 
+                if (it.getNode()->data == (it).getNode()->next->data) {
+                    auto it_del = it++;
+                    erase(it_del);
+                }
+            }
+        }
+
+        template <typename... Args>
+        ListConstIterator insert_many(ListConstIterator pos, Args&&... args) { 
+            list<value_type> temp {args...};
+             splice(pos,temp);
+            return ListConstIterator(cbegin().getNode());
+        }
+
+        template <typename... Args>
+        void insert_many_back(Args&&... args) { 
+            insert_many(cend(),std::forward<Args>(args)...);
+        }
+        template <typename... Args>
+        void insert_many_front(Args&&... args) { 
+            insert_many(cbegin(),std::forward<Args>(args)...);
+        }
+
+        void merge(list& other) {
+            auto it_other = other.begin();
+             for (auto it = begin(); it != end() && it_other != other.end();) { 
+                if (*it_other < *it) {
+                    Node * cur = it.getNode();
+                    Node * cur_adding = it_other.getNode();
+                    ++it_other;
+                    other.sz--;
+                    ++sz;
+                    cur -> prev -> next = cur_adding;
+                    cur_adding -> prev = cur -> prev;
+                    cur -> prev = cur_adding; 
+                    cur_adding -> next = cur;
+                } else ++it;
+             }
+                while(it_other != other.end()) {
+                    Node * cur = end().getNode(); 
+                    Node * cur_adding = it_other.getNode();
+                                        ++it_other;
+                                        other.sz--;
+                    ++sz;
+                    cur -> prev -> next = cur_adding;
+                    cur_adding -> prev = cur -> prev;
+                    cur -> prev = cur_adding; 
+                    cur_adding -> next = cur;
+                }
+        }
+
+
+        void sort() { 
+            auto it_end = end();
+            while (--it_end != head ) { 
+                bool swapped = false;
+                    for (auto it = begin(); it != it_end; ++it) { 
+                            Node * cur = it.getNode();
+                            Node * cur_next = cur->next;
+                            if (cur->data > cur_next -> data)  {
+                            cur -> prev -> next = cur_next; 
+                            cur_next -> next -> prev = cur;
+                            cur_next -> prev = cur -> prev; 
+                            cur -> next = cur_next -> next; 
+                            cur -> prev = cur_next;
+                            cur_next -> next = cur; 
+                            swapped = true;
+                            it = ++begin();
+                        }
+                    }
+                    if (swapped == false) 
+                        return;
+            }
         }
 
 

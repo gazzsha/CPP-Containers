@@ -236,7 +236,7 @@ int main() {
     s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
     l.print_data();
     l.insert(l.begin(),"ffff");
-    l.push_back("ffff");
+    l.push_back("fffff");
     l.print_data();
     s21::list<std::string> v(l);
     std::cout << "\n";
@@ -292,6 +292,67 @@ std::cout << "\n";
    copy.reverse();
    std::cout << "-----AFTER RESERVE\n";
    copy.print_data();
+      std::cout << "-----SORT\n";
+      s21::list<int> l_s {23,432,123,43,45654,21,32,3423,542,234,2,3,45,2,3434,542,2,0,-32,432};
+      l_s.print_data(); 
+      l_s.sort();
+   std::cout << "-----AFTER SORT\n";
+   l_s.print_data();
+   std::cout << "-----NEW SORT\n";
+    s21::list<int> l_s2 {1,3,5,6,2,4,-444,100000,200000,-213,32};
+      l_s2.print_data(); 
+       auto ittt = --l_s2.end();
+          std::cout << "---" << *ittt << "\n";
+      l_s2.sort();
+   std::cout << "-----AFTER SORT\n";
+   l_s2.print_data();
+   std::cout << "-----AFTER MERGE\n";
+   l_s.merge(l_s2);
+   l_s.print_data();
+   l_s2.print_data();
+      std::cout << "---" << *ittt << "\n";
+
+
+    auto f = []( auto & n ){ for ( auto& i : n) { std::cout << i <<"\n";}};
+
+      std::list<int> ex {1,2,3,4,5};
+      std::list<int> ex1 {11,22,33};
+      auto tt = ex.end();
+
+      ex.splice(tt,ex1);
+      f(ex);
+      f(ex1);
+      
+         std::cout << "-----SPLICE\n";
+        s21::list<int> ex_ {1,2,3,4,5};
+      s21::list<int> ex_1 {11,22,33};
+            auto tt_ = ex_.cend();
+      ex_.splice(tt_,ex_1);
+      f(ex_);
+      f(ex_1);
+
+  std::cout << "-----BEFORE UNIUE\n";
+   // l_s.push_back(200000);
+
+    s21::list<int> l_ss {1};
+
+     l_ss.print_data();
+      std::cout << "-----AFTER UNIQUE\n";
+      l_ss.unique();
+      l_ss.print_data();
+
+ std::cout << "-----AFTER INSERT MANY\n";
+    l_ss.insert_many(++l_ss.cbegin(),1,2,3,4,5,0);
+    l_ss.print_data();
+     std::cout << "-----AFTER INSERT MANY BACK\n";
+     l_ss.insert_many_back(10,11,223,342);
+     f(l_ss);
+        std::cout << "-----AFTER INSERT MANY FRONT\n";
+     l_ss.insert_many_front(999,99,213,3213213);
+     f(l_ss);
+
+
+
 
    
 
