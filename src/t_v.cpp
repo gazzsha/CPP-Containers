@@ -230,6 +230,31 @@
 #include <iostream>
 #include <list>
 #include <string>
+#include <iterator>
+
+
+template <typename value_type>
+bool compare_lists(s21::list<value_type> my_list,
+                   std::list<value_type> std_list) {
+  bool result = true;
+  if (my_list.size() == std_list.size()) {
+    auto my_it = my_list.begin();
+    auto std_it = std_list.begin();
+    for (size_t i = 0; i != my_list.size(); ++i) {
+      if (*my_it != *std_it) {
+        result = false;
+        break;
+      }
+      ++my_it;
+      ++std_it;
+    }
+  } else {
+    result = false;
+  }
+  return result;
+}
+
+
 
 int main() { 
 
@@ -334,7 +359,7 @@ std::cout << "\n";
   std::cout << "-----BEFORE UNIUE\n";
    // l_s.push_back(200000);
 
-    s21::list<int> l_ss {1};
+    s21::list<int> l_ss {0,0,0};
 
      l_ss.print_data();
       std::cout << "-----AFTER UNIQUE\n";
@@ -354,7 +379,26 @@ std::cout << "\n";
 
 
 
-   
+
+//      s21::list<int> my_list{1, 2, 3, 4, 5};
+//   std::list<int> std_list{1, 2, 3, 4, 5};
+//   f(my_list);
+//   f(std_list);
+//   std::cout << "RESULT: " << compare_lists(my_list,std_list);
+
+
+//  s21::list<int> my_list{1, 2, 3};
+//   s21::list<int> my_list_copy(my_list);
+//   s21::list<int> my_list_move(std::move(my_list));
+std::cout << "----\n";
+  s21::list<int> my_list1{1, 9999, 20000};
+  s21::list<int> my_list2;
+  my_list1.splice(my_list1.cbegin(), my_list2);
+
+  std::list<int> std_list1{1, 9999, 20000};
+  std::list<int> std_list2;
+  std_list1.splice(std_list1.cbegin(), std_list2);
+   f(std_list2);
 
 
 

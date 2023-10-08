@@ -39,7 +39,7 @@ rm_buld_file:
 
 
 style: 
-	clang-format -i *.cpp *.h $(SRC_TEST)
+	clang-format -i *.h $(SRC_TEST)
 
 $(CLEAN) :
 	rm -rf tests *.a *.o $(TESTS).*o ./html_report/ gcov_report *.gcno *.gcda *.info *.out Build

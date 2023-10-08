@@ -1,10 +1,10 @@
 //<PROJECT>_<PATH>_<FILE>_H_
 #ifndef CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_  //
-#define CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_ 
+#define CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_
 #include <cmath>
 #include <memory>
-#include <utility>
 #include <stdexcept>
+#include <utility>
 
 namespace s21 {
 template <typename T, typename Alloc = std::allocator<T>>
@@ -77,7 +77,8 @@ class vector {
   iterator insert_many(iterator pos, Args&&... args);
   template <typename... Args>
   void insert_many_back(Args&&... args);
-    private:
+
+ private:
   Alloc alloc;
   T* arr;
   size_t sz;
@@ -136,7 +137,8 @@ constexpr bool vector<value_type, Alloc>::iterator::operator!=(
 }
 
 template <typename value_type, typename Alloc>
-vector<value_type, Alloc>::vector() noexcept : alloc(Alloc()),arr(nullptr), sz(0), cap(0) {}
+vector<value_type, Alloc>::vector() noexcept
+    : alloc(Alloc()), arr(nullptr), sz(0), cap(0) {}
 
 template <typename value_type, typename Alloc>
 vector<value_type, Alloc>::vector(size_type n)
@@ -465,4 +467,4 @@ vector<value_type, Alloc>::const_iterator::operator*() const noexcept {
 }
 }  // namespace s21
 
-#endif //CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_ 
+#endif  // CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_
