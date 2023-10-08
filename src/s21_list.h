@@ -41,6 +41,11 @@ class list {
                 node = node->next;
                 return *this;
             }
+            constexpr ListIterator operator++(int) noexcept { 
+                ListIterator copy = *this;
+                copy.node = node -> next;
+                return copy;
+            }
             constexpr ListIterator& operator--() noexcept{ 
                 node = node -> prev; 
                 return *this;
@@ -63,11 +68,52 @@ class list {
              }
         };
 
+
+         class ListConstIterator { 
+            private: 
+                Node * node;
+            public:
+            ListConstIterator() =  delete; 
+            ListConstIterator(Node * new_node): node(new_node) {}
+            ListConstIterator(const ListIterator& li) noexcept: node(li.node) {}
+            constexpr ListConstIterator& operator++() noexcept { 
+                node = node->next;
+                return *this;
+            }
+            constexpr ListConstIterator& operator--() const  noexcept{ 
+                node = node -> prev; 
+                return *this;
+            }
+            const_reference operator*() const noexcept { 
+                return node->data;
+            }
+
+            Node * getNode() noexcept { 
+                return node;
+            }
+
+            constexpr bool operator!=(const ListConstIterator& l) const noexcept {
+                return node != l.node;
+             }
+
+
+            constexpr bool operator==(const ListConstIterator& l) const noexcept {
+                return node == l.node;
+             }
+        };
+
             ListIterator begin() noexcept { 
-                return ListIterator(head->next); 
+                return head->next; 
             } 
             ListIterator end() noexcept { 
                 return ListIterator(head);
+            }
+
+            ListConstIterator cbegin() const noexcept { 
+                return head->next ;
+            } 
+            ListConstIterator cend() const noexcept { 
+                return ListConstIterator(head);
             }
 
             constexpr const_reference front() const {
@@ -100,22 +146,43 @@ class list {
                     AllocTraits::deallocate(alloc,node,1);
                     throw;
                 }
-                if (sz) {
                 Node * cur = pos.getNode();
                 node -> next = cur; 
                 cur -> prev -> next = node;
-                cur -> prev = node;
                 node -> prev = cur -> prev;
-                } else { 
-                head -> next = node;
-                head -> prev = node;
-                node -> next = head;
-                node -> prev = head;
-                }
+                cur -> prev = node;
                 sz++;
                 return ListIterator(node);
             }
-        
+        void push_back(const_reference value) { 
+                insert(end(),value);
+        }
+
+        void push_front(const_reference value) { 
+            insert(begin(),value);
+        }
+        void pop_back() {
+            if (head -> prev) 
+                erase(--end());
+        }
+        void pop_front() { 
+            erase(begin());
+        }
+
+        void reverse() noexcept { 
+            auto it_end = --end();
+            for (auto it = begin(); it != it_end; ++it,--it_end) { 
+                std::swap(*it,*it_end);
+                if (it++ == it_end) return;
+            }
+        }
+
+        void swap(list& other) noexcept(noexcept(AllocTraits::is_always_equal::value)) { 
+            std::swap(head,other.head);
+            std::swap(sz,other.sz);
+            if (AllocTraits::propagate_on_container_swap::value && alloc != other.alloc) 
+                std::swap(alloc,other.alloc);
+        }
 
 
 
@@ -131,17 +198,13 @@ class list {
         explicit list(const Alloc& alloc = Alloc()): head(nullptr),alloc(alloc),sz(0) {
         head = AllocTraits::allocate(this->alloc,1);
         AllocTraits::construct(this->alloc,head);
+        head -> next = head;
+        head -> prev = head;
         }
 
         ~list() { 
-            Node * cur = head -> next;
-            for (size_type i = 0; i < sz; i++) { 
-                Node * del = cur;
-                AllocTraits::destroy(alloc,del);
-                cur = cur -> next;
-                AllocTraits::deallocate(alloc,del,1);
-            }
-            AllocTraits::deallocate(alloc,cur,1);
+            while (sz) erase(begin());
+            AllocTraits::deallocate(alloc,head,1);
         }
 
     // explicit list(): head(nullptr),alloc(Alloc()),sz(0) {
@@ -177,27 +240,16 @@ class list {
     }
 
     list(const list &l) : list(std::allocator_traits<Alloc>::select_on_container_copy_construction(l.alloc)) {
-        Node * cur_node = head;
-        Node * cur_node_copy = l.head -> next; 
-        for (size_type i = 0; i < l.sz; i++) {
-            Node * node =  AllocTraits::allocate(alloc,1);
-            AllocTraits::construct(alloc,node,node,node,cur_node_copy->data);
-            cur_node ->next = node;
-            node->prev = cur_node;
-            cur_node = node;
-            cur_node_copy = cur_node_copy-> next;
-        } 
-        sz = l.sz;
-        cur_node -> next = head; 
-        head -> prev = cur_node;
+        for (auto it = l.cbegin(); it != l.cend(); ++it) { 
+            push_back(*it);
+        }
     }
 
     list(list &&l) noexcept(noexcept(alloc(std::move(l.alloc)))) {
         if (AllocTraits::propagate_on_container_move_assignment(l.alloc)) {
             alloc = std::move(l.alloc);
         } 
-
-        // TODO:: insert elem
+        head = l.head;
         l.head = nullptr;
         l.sz = 0;
     }
@@ -206,7 +258,7 @@ class list {
         if (AllocTraits::propagate_on_container_move_assignment(l.alloc)) {
             alloc = std::move(l.alloc);
         } 
-        // TODO:: insert elem
+        head = l.head;
         l.head = nullptr;
         l.sz = 0;
         return *this;

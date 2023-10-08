@@ -235,22 +235,67 @@ int main() {
 
     s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
     l.print_data();
+    l.insert(l.begin(),"ffff");
+    l.push_back("ffff");
+    l.print_data();
     s21::list<std::string> v(l);
     std::cout << "\n";
-    v.print_data();
+     v.print_data();
+std::cout << "\n";
+     s21::list<std::string> m(v);
+     m.print_data();
+     m.erase(++(m.begin()));
+     std::cout << "====ERASE CHECK\n";
 
-    s21::list<std::string> m(v);
-    m.print_data();
-    m.erase(++m.begin());
-    m.print_data();
+          m.print_data();
     std::cout << "====CLEAR CHECK\n";
-    m.clear();
+ //   m.clear();
     std::cout << "====INSERT CHECK\n";
     std::cout << "BEFORE:\n";
     l.print_data();
     std::cout<< "AFTER:\n";
     l.insert(++l.end(),"new elem");
     l.print_data();
+   l.pop_back();
+    l.pop_back();
+    l.pop_back();
+    l.pop_back();
+    l.pop_back();
+    l.push_front("new elem");
+    l.pop_front();
+    l.pop_front();
+    l.pop_back();
+
+
+
+   l.print_data();
+   l.swap(m);
+   std::cout <<"AFTER SWAP FIRST\n";
+     l.print_data();
+   std::cout <<"AFTER SWAP SECOND\n";
+   m.print_data();
+   std::cout <<"copy constrcution\n";
+
+
+
+
+  s21::list<std::string> copy(l);
+   copy.print_data();
+   std::cout << "-----\n";
+   copy.push_back("1");
+   copy.push_back("2");
+   copy.push_back("3");
+   copy.push_back("4");
+   copy.push_back("5");
+    copy.push_back("6");
+   copy.print_data();
+   copy.reverse();
+   std::cout << "-----AFTER RESERVE\n";
+   copy.print_data();
+
+   
+
+
 
 
     // s21::list<std::string>::ListIterator it = m.begin();
