@@ -70,6 +70,7 @@ class list {
   class ListConstIterator {
    public:
     ListConstIterator() : node(nullptr) {}
+    ListConstIterator(const ListIterator<Y, Z>& other) : node(other.node) {}
     ListConstIterator(Node* new_node) : node(new_node) {}
     constexpr ListConstIterator& operator++() noexcept {
       node = node->next;

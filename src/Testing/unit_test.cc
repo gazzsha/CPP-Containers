@@ -1138,7 +1138,7 @@ TEST(ListTest, Erase_5) {
 
 TEST(List, Unique) {
   s21::list<int> our_list{1, 2, 2, 3, 3};
-  std::list<int> std_list{1, 2, 2, 3, 3};
+  std::list<int> std_list = {1, 2, 2, 3, 3};
   s21::list<int>::iterator our_it;
   std::list<int>::iterator std_it;
   our_list.unique();
@@ -1157,10 +1157,12 @@ TEST(List, Unique) {
 TEST(List, Sort) {
   s21::list<int> our_list{2, 4, 1, 3, 5};
   std::list<int> std_list{2, 4, 1, 3, 5};
+  s21::list<int>::iterator our_it;
+  std::list<int>::iterator std_it;
   our_list.sort();
   std_list.sort();
-  s21::list<int>::iterator our_it(our_list.begin());
-  std::list<int>::iterator std_it(std_list.begin());
+  our_it = our_list.begin();
+  std_it = std_list.begin();
   EXPECT_EQ(*our_it, *std_it);
   ++our_it;
   ++std_it;
@@ -1178,10 +1180,10 @@ TEST(List, Sort) {
 
 TEST(List, Insert_Many) {
   s21::list<int> our_list{1, 2, 3, 4, 5};
-  s21::list<int>::const_iterator our_it(our_list.cbegin());
+  s21::list<int>::iterator our_it = our_list.begin();
   ++our_it;
   our_list.insert_many(our_it, 7, 8, 9);
-  our_it = our_list.cbegin();
+  our_it = our_list.begin();
   EXPECT_EQ(*our_it, 1);
   ++our_it;
   EXPECT_EQ(*our_it, 7);
