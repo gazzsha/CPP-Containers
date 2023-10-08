@@ -28,15 +28,12 @@ class list {
    
     //using AllocTraits = std::allocator_traits<rebind_alloc<Node>>;
     public:
-
-
+        template <typename U,typename X>
         class ListIterator { 
-            private: 
-                Node * node;
             public:
             ListIterator() =  delete; 
             ListIterator(Node * new_node): node(new_node) {}
-            ListIterator(const ListIterator& li) noexcept: node(li.node) {}
+            ListIterator(const ListIterator<U,X>& li) noexcept: node(li.node) {}
             constexpr ListIterator& operator++() noexcept { 
                 node = node->next;
                 return *this;
@@ -71,16 +68,18 @@ class list {
             constexpr bool operator==(const ListIterator& l) const noexcept {
                 return node == l.node;
              }
+
+         private: 
+                Node * node;
+                friend class list<T>;
         };
 
 
+             template <typename Y,typename Z>
          class ListConstIterator { 
-            private: 
-                Node * node;
             public:
             ListConstIterator() =  delete; 
             ListConstIterator(Node * new_node): node(new_node) {}
-            ListConstIterator(const ListIterator& li) noexcept: node(li.node) {}
             constexpr ListConstIterator& operator++() noexcept { 
                 node = node->next;
                 return *this;
@@ -105,45 +104,128 @@ class list {
             constexpr bool operator==(const ListConstIterator& l) const noexcept {
                 return node == l.node;
              }
+            private: 
+                Node * node;
+                friend class list<T>;
         };
+            using iterator = ListIterator<T,Alloc>;
+            using const_iterator = ListConstIterator<T,Alloc>;
+            iterator begin() noexcept;
+            iterator end() noexcept;
+            const_iterator cbegin() const noexcept;
+            const_iterator cend() const noexcept;
+            constexpr const_reference front() const;
+            constexpr const_reference back() const;
+            constexpr bool empty() const noexcept;
+            constexpr size_type size() const noexcept;
 
-            ListIterator begin() noexcept { 
-                return ListIterator(head->next); 
+            constexpr size_type max_size() const noexcept;
+
+            void clear() noexcept;
+
+            iterator insert(iterator pos, const_reference value);
+        void push_back(const_reference value);
+
+        void push_front(const_reference value);
+        void pop_back();
+        void pop_front();
+
+        void reverse() noexcept;
+
+        void splice(const_iterator pos, list& other);
+
+        void swap(list& other) noexcept(noexcept(AllocTraits::is_always_equal::value));
+        
+        void unique();
+
+        template <typename... Args>
+        const_iterator insert_many(const_iterator pos, Args&&... args);
+
+        template <typename... Args>
+        void insert_many_back(Args&&... args);
+        template <typename... Args>
+        void insert_many_front(Args&&... args);
+
+        void merge(list& other);
+        void sort();
+        void erase(iterator pos) noexcept;
+        explicit list(const Alloc& alloc = Alloc());
+
+        ~list();
+    explicit list(size_type n);
+
+    explicit list(std::initializer_list<value_type> const &items);
+
+    list(const list &l);
+
+    list(list &&l) noexcept(noexcept(alloc(std::move(l.alloc))));
+
+    list operator=(list &&l) noexcept(noexcept(alloc = std::move(l.alloc)));
+
+
+    void print_data() { 
+        if (!sz) return;
+        head = head -> next; 
+        for ( size_type i =0 ; i < sz ; i++)
+         {
+            std::cout << i << " " << head->data << "\n";
+            head = head -> next; 
+         }
+    };
+
+
+
+    private: 
+        Node * head;
+        typename Alloc::template rebind<Node>::other alloc; 
+        size_type sz;
+     using AllocTraits = std::allocator_traits< typename std::allocator_traits<Alloc>::template rebind_alloc<Node>>;
+
+};
+
+template <typename T,typename Alloc>
+typename list<T,Alloc>::iterator list<T,Alloc>::begin() noexcept { 
+                return iterator(head->next); 
             } 
-            ListIterator end() noexcept { 
-                return ListIterator(head);
+template <typename T,typename Alloc>
+typename list<T,Alloc>::iterator list<T,Alloc>::end() noexcept { 
+                return iterator(head);
             }
-
-            ListConstIterator cbegin() const noexcept { 
-                return ListConstIterator(head->next) ;
+template <typename T,typename Alloc>
+typename list<T,Alloc>::const_iterator list<T,Alloc>::cbegin() const noexcept { 
+                return const_iterator(head->next) ;
             } 
-            ListConstIterator cend() const noexcept { 
-                return ListConstIterator(head);
+template <typename T,typename Alloc>
+typename list<T,Alloc>::const_iterator list<T,Alloc>::cend() const noexcept { 
+                return const_iterator(head);
             }
-
-            constexpr const_reference front() const {
+template <typename T,typename Alloc>
+ constexpr typename list<T,Alloc>::const_reference list<T,Alloc>::front() const {
                  return head->next->data; 
             }
-            constexpr const_reference back() const { 
+    template <typename T,typename Alloc>
+ constexpr typename list<T,Alloc>::const_reference list<T,Alloc>::back() const { 
                 return head->prev->data;
             }
-
-            constexpr bool empty() const noexcept { 
+    template <typename T,typename Alloc>
+            constexpr bool list<T,Alloc>::empty() const noexcept { 
                 return sz == 0 ? true : false;
             }
-
-            constexpr size_type size() const noexcept {
+    template <typename T,typename Alloc>
+               constexpr typename list<T,Alloc>::size_type list<T,Alloc>::size() const noexcept {
                 return sz;
             }
-            constexpr size_type max_size() const noexcept { 
+    template <typename T,typename Alloc>
+               constexpr typename list<T,Alloc>::size_type list<T,Alloc>::max_size() const noexcept { 
                 return AllocTraits::max_size(alloc);
             }
-
-            void clear() noexcept { 
+    template <typename T,typename Alloc>
+    void list<T,Alloc>::clear() noexcept { 
                 while (sz) erase(begin());
             }
 
-            ListIterator insert(ListIterator pos, const_reference value) { 
+    template <typename T,typename Alloc>
+typename list<T,Alloc>::iterator list<T,Alloc>::insert(iterator pos, const_reference value) { 
                 Node * node = AllocTraits::allocate(alloc,1);
                 try {
                     AllocTraits::construct(alloc,node,node,node,value);
@@ -157,24 +239,29 @@ class list {
                 node -> prev = cur -> prev;
                 cur -> prev = node;
                 sz++;
-                return ListIterator(node);
+                return iterator(node);
             }
-        void push_back(const_reference value) { 
+    template <typename T,typename Alloc>
+ void list<T,Alloc>::push_back(const_reference value) { 
                 insert(end(),value);
         }
-
-        void push_front(const_reference value) { 
+    template <typename T,typename Alloc>
+           void list<T,Alloc>::push_front(const_reference value) { 
             insert(begin(),value);
         }
-        void pop_back() {
+            
+    template <typename T,typename Alloc>
+               void list<T,Alloc>::pop_back() {
             if (head -> prev) 
                 erase(--end());
         }
-        void pop_front() { 
+    template <typename T,typename Alloc>
+          void list<T,Alloc>::pop_front() { 
             erase(begin());
         }
 
-        void reverse() noexcept { 
+    template <typename T,typename Alloc>
+           void list<T,Alloc>::reverse() noexcept { 
             size_type step = 0;
         for (auto it = this->begin(); step <= this->size(); ++it) {
               step++;
@@ -182,8 +269,8 @@ class list {
         }
         }
 
-
-        void splice(ListConstIterator pos, list& other) { 
+    template <typename T,typename Alloc>
+             void list<T,Alloc>::splice(const_iterator pos, list& other) { 
             Node * cur_other_begin = other.cbegin().getNode();
             Node * cur_other_end = (--other.cend()).getNode();
             cur_other_end -> next = pos.getNode(); 
@@ -196,14 +283,16 @@ class list {
             other.sz = 0; 
         }
 
-        void swap(list& other) noexcept(noexcept(AllocTraits::is_always_equal::value)) { 
+    template <typename T,typename Alloc>
+              void list<T,Alloc>::swap(list& other) noexcept(noexcept(AllocTraits::is_always_equal::value)) { 
             std::swap(head,other.head);
             std::swap(sz,other.sz);
             if (AllocTraits::propagate_on_container_swap::value && alloc != other.alloc) 
                 std::swap(alloc,other.alloc);
         }
-        
-        void unique() {
+
+    template <typename T,typename Alloc>
+        void list<T,Alloc>::unique() {
             if (empty()) return;
             for (auto it = begin(); it != end() && it.getNode() -> next != head; ++it) { 
                 if (it.getNode()->data == (it).getNode()->next->data) {
@@ -213,23 +302,8 @@ class list {
             }
         }
 
-        template <typename... Args>
-        ListConstIterator insert_many(ListConstIterator pos, Args&&... args) { 
-            list<value_type> temp {args...};
-             splice(pos,temp);
-            return ListConstIterator(cbegin().getNode());
-        }
-
-        template <typename... Args>
-        void insert_many_back(Args&&... args) { 
-            insert_many(cend(),std::forward<Args>(args)...);
-        }
-        template <typename... Args>
-        void insert_many_front(Args&&... args) { 
-            insert_many(cbegin(),std::forward<Args>(args)...);
-        }
-
-        void merge(list& other) {
+    template <typename T,typename Alloc>
+            void list<T,Alloc>::merge(list& other) {
             auto it_other = other.begin();
              for (auto it = begin(); it != end() && it_other != other.end();) { 
                 if (*it_other < *it) {
@@ -256,9 +330,8 @@ class list {
                     cur_adding -> next = cur;
                 }
         }
-
-
-        void sort() { 
+    template <typename T,typename Alloc>
+              void list<T,Alloc>::sort() { 
             auto it_end = end();
             while (--it_end != head ) { 
                 bool swapped = false;
@@ -280,10 +353,8 @@ class list {
                         return;
             }
         }
-
-
-
-        void erase(ListIterator pos) noexcept { 
+    template <typename T,typename Alloc>
+                void list<T,Alloc>::erase(iterator pos) noexcept { 
             if (pos == end()) return;
             Node * cur = pos.getNode();
             cur -> prev -> next = cur -> next;
@@ -292,23 +363,21 @@ class list {
             AllocTraits::deallocate(alloc,cur,1);
             --sz;
         }
-        explicit list(const Alloc& alloc = Alloc()): head(nullptr),alloc(alloc),sz(0) {
+    template <typename T,typename Alloc>
+      list<T,Alloc>::list(const Alloc& alloc): head(nullptr),alloc(alloc),sz(0) {
         head = AllocTraits::allocate(this->alloc,1);
         AllocTraits::construct(this->alloc,head);
         head -> next = head;
         head -> prev = head;
         }
-
-        ~list() { 
+  template <typename T,typename Alloc>
+          list<T,Alloc>::~list() { 
             while (sz) erase(begin());
             AllocTraits::deallocate(alloc,head,1);
         }
 
-    // explicit list(): head(nullptr),alloc(Alloc()),sz(0) {
-    //     head = AllocTraits::allocate(alloc,1);
-    //     AllocTraits::construct(alloc,head);
-    // }
-    explicit list(size_type n): list() { 
+  template <typename T,typename Alloc>
+        list<T,Alloc>::list(size_type n): list() { 
         Node * cur_node = head;
         for (size_type i = 0; i < n; ++i) { 
             Node * node = AllocTraits::allocate(alloc,1);
@@ -322,7 +391,8 @@ class list {
         head -> prev = cur_node;
     }
 
-    explicit list(std::initializer_list<value_type> const &items): list() { 
+  template <typename T,typename Alloc>
+list<T,Alloc>::list(std::initializer_list<value_type> const &items): list() { 
         Node * cur_node = head; 
         for (size_type i = 0; i < items.size(); ++i) { 
             Node * node = AllocTraits::allocate(alloc,1);
@@ -335,14 +405,15 @@ class list {
         cur_node -> next = head; 
         head->prev = cur_node;
     }
-
-    list(const list &l) : list(std::allocator_traits<Alloc>::select_on_container_copy_construction(l.alloc)) {
+  template <typename T,typename Alloc>
+list<T,Alloc>::list(const list &l) : list(std::allocator_traits<Alloc>::select_on_container_copy_construction(l.alloc)) {
         for (auto it = l.cbegin(); it != l.cend(); ++it) { 
             push_back(*it);
         }
     }
 
-    list(list &&l) noexcept(noexcept(alloc(std::move(l.alloc)))) {
+  template <typename T,typename Alloc>
+    list<T,Alloc>::list(list &&l) noexcept(noexcept(alloc(std::move(l.alloc)))) {
         if (AllocTraits::propagate_on_container_move_assignment(l.alloc)) {
             alloc = std::move(l.alloc);
         } 
@@ -350,8 +421,8 @@ class list {
         l.head = nullptr;
         l.sz = 0;
     }
-
-    list operator=(list &&l) noexcept(noexcept(alloc = std::move(l.alloc))) { 
+  template <typename T,typename Alloc>
+     list<T,Alloc> list<T,Alloc>::operator=(list &&l) noexcept(noexcept(alloc = std::move(l.alloc))) { 
         if (AllocTraits::propagate_on_container_move_assignment(l.alloc)) {
             alloc = std::move(l.alloc);
         } 
@@ -361,34 +432,23 @@ class list {
         return *this;
     }
 
-
-
-    void print_data() { 
-        if (!sz) return;
-        head = head -> next; 
-        for ( size_type i =0 ; i < sz ; i++)
-         {
-            std::cout << i << " " << head->data << "\n";
-            head = head -> next; 
-         }
-    };
-
-
-
-    private: 
-
-    // ---поля листe
-
-        Node * head;
-        typename Alloc::template rebind<Node>::other alloc; 
-        size_type sz;
-
-        // ----- поля листа
-
-     using AllocTraits = std::allocator_traits< typename std::allocator_traits<Alloc>::template rebind_alloc<Node>>;
-
-};
-
+  template <typename T,typename Alloc>
+            template <typename... Args>
+        typename list<T,Alloc>::const_iterator list<T,Alloc>::insert_many(const_iterator pos, Args&&... args) { 
+            list<value_type> temp {args...};
+             splice(pos,temp);
+            return const_iterator(cbegin().getNode());
+        }
+  template <typename T,typename Alloc>
+        template <typename... Args>
+        void list<T,Alloc>::insert_many_back(Args&&... args) { 
+            insert_many(cend(),std::forward<Args>(args)...);
+        }
+  template <typename T,typename Alloc>
+          template <typename... Args>
+        void list<T,Alloc>::insert_many_front(Args&&... args) { 
+            insert_many(cbegin(),std::forward<Args>(args)...);
+        }
 
 
 } // namespace s21
