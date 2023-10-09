@@ -100,7 +100,7 @@ class list {
   explicit list(std::initializer_list<value_type> const& items);
   list(const list& l);
   list(list&& l) noexcept(noexcept(alloc = std::move(l.alloc)));
-  list operator=(list&& l) noexcept(noexcept(alloc = std::move(l.alloc)));
+  list& operator=(list&& l) noexcept(noexcept(alloc = std::move(l.alloc)));
   ~list();
   iterator begin() noexcept;
   iterator end() noexcept;
@@ -131,15 +131,13 @@ class list {
   void merge(list& other);
   void sort();
   void erase(iterator pos) noexcept;
-//   void print_data() {
-//     if (!sz) return;
-//     head = head->next;
-//     for (size_type i = 0; i < sz; i++) {
-//       std::cout << i << " " << head->data << "\n";
-//       head = head->next;
-//     }
-  };
-
+  //   void print_data() {
+  //     if (!sz) return;
+  //     head = head->next;
+  //     for (size_type i = 0; i < sz; i++) {
+  //       std::cout << i << " " << head->data << "\n";
+  //       head = head->next;
+  //     }
  private:
   Node* head;
   typename Alloc::template rebind<Node>::other alloc;
@@ -394,7 +392,7 @@ list<T, Alloc>::list(const list& l)
 template <typename T, typename Alloc>
 list<T, Alloc>::list(list&& l) noexcept(noexcept(alloc = std::move(l.alloc))) {
   if (AllocTraits::propagate_on_container_move_assignment::value) {
-    alloc = std::move(l.alloc);
+    alloc = (std::move(l.alloc));
   }
   head = l.head;
   sz = l.sz;
@@ -402,14 +400,13 @@ list<T, Alloc>::list(list&& l) noexcept(noexcept(alloc = std::move(l.alloc))) {
   l.sz = 0;
 }
 template <typename T, typename Alloc>
-list<T, Alloc> list<T, Alloc>::operator=(list&& l) noexcept(
+list<T, Alloc>& list<T, Alloc>::operator=(list&& l) noexcept(
     noexcept(alloc = std::move(l.alloc))) {
+  clear();
   if (AllocTraits::propagate_on_container_move_assignment::value) {
     alloc = std::move(l.alloc);
   }
-  head = l.head;
-  l.head = nullptr;
-  l.sz = 0;
+  swap(l);
   return *this;
 }
 
