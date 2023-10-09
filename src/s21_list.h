@@ -30,34 +30,34 @@ class list {
     ListIterator() : node(nullptr) {}
     ListIterator(Node* new_node) : node(new_node) {}
     ListIterator(const ListIterator<U, X>& li) noexcept : node(li.node) {}
-    constexpr ListIterator& operator++() noexcept {
+    ListIterator& operator++() noexcept {
       node = node->next;
       return *this;
     }
-    constexpr ListIterator operator++(int) noexcept {
+    ListIterator operator++(int) noexcept {
       ListIterator copy = *this;
       copy.node = node->next;
       return copy;
     }
-    constexpr ListIterator operator--(int) noexcept {
+    ListIterator operator--(int) noexcept {
       ListIterator copy = *this;
       copy.node = node->prev;
       return copy;
     }
-    constexpr ListIterator& operator--() noexcept {
+    ListIterator& operator--() noexcept {
       node = node->prev;
       return *this;
     }
     reference operator*() noexcept { return node->data; }
     Node* getNode() noexcept { return node; }
-    constexpr bool operator!=(const ListIterator& l) const noexcept {
+    bool operator!=(const ListIterator& l) const noexcept {
       return node != l.node;
     }
     ListIterator& operator=(const ListIterator& l) {
       node = l.node;
       return *this;
     }
-    constexpr bool operator==(const ListIterator& l) const noexcept {
+    bool operator==(const ListIterator& l) const noexcept {
       return node == l.node;
     }
 
@@ -72,20 +72,20 @@ class list {
     ListConstIterator() : node(nullptr) {}
     ListConstIterator(const ListIterator<Y, Z>& other) : node(other.node) {}
     ListConstIterator(Node* new_node) : node(new_node) {}
-    constexpr ListConstIterator& operator++() noexcept {
+    ListConstIterator& operator++() noexcept {
       node = node->next;
       return *this;
     }
-    constexpr ListConstIterator& operator--() noexcept {
+    ListConstIterator& operator--() noexcept {
       node = node->prev;
       return *this;
     }
     const_reference operator*() const noexcept { return node->data; }
     Node* getNode() noexcept { return node; }
-    constexpr bool operator!=(const ListConstIterator& l) const noexcept {
+    bool operator!=(const ListConstIterator& l) const noexcept {
       return node != l.node;
     }
-    constexpr bool operator==(const ListConstIterator& l) const noexcept {
+    bool operator==(const ListConstIterator& l) const noexcept {
       return node == l.node;
     }
 
@@ -106,11 +106,11 @@ class list {
   iterator end() noexcept;
   const_iterator cbegin() const noexcept;
   const_iterator cend() const noexcept;
-  constexpr const_reference front() const;
-  constexpr const_reference back() const;
-  constexpr bool empty() const noexcept;
-  constexpr size_type size() const noexcept;
-  constexpr size_type max_size() const noexcept;
+  const_reference front() const;
+  const_reference back() const;
+  bool empty() const noexcept;
+  size_type size() const noexcept;
+  size_type max_size() const noexcept;
   void clear() noexcept;
   iterator insert(iterator pos, const_reference value);
   void push_back(const_reference value);
@@ -164,27 +164,23 @@ typename list<T, Alloc>::const_iterator list<T, Alloc>::cend() const noexcept {
   return const_iterator(head);
 }
 template <typename T, typename Alloc>
-constexpr typename list<T, Alloc>::const_reference list<T, Alloc>::front()
-    const {
+typename list<T, Alloc>::const_reference list<T, Alloc>::front() const {
   return head->next->data;
 }
 template <typename T, typename Alloc>
-constexpr typename list<T, Alloc>::const_reference list<T, Alloc>::back()
-    const {
+typename list<T, Alloc>::const_reference list<T, Alloc>::back() const {
   return head->prev->data;
 }
 template <typename T, typename Alloc>
-constexpr bool list<T, Alloc>::empty() const noexcept {
+bool list<T, Alloc>::empty() const noexcept {
   return sz == 0 ? true : false;
 }
 template <typename T, typename Alloc>
-constexpr typename list<T, Alloc>::size_type list<T, Alloc>::size()
-    const noexcept {
+typename list<T, Alloc>::size_type list<T, Alloc>::size() const noexcept {
   return sz;
 }
 template <typename T, typename Alloc>
-constexpr typename list<T, Alloc>::size_type list<T, Alloc>::max_size()
-    const noexcept {
+typename list<T, Alloc>::size_type list<T, Alloc>::max_size() const noexcept {
   return AllocTraits::max_size(alloc);
 }
 template <typename T, typename Alloc>

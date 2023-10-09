@@ -434,7 +434,6 @@
 //}
 
 
-#include <gtest/gtest.h>
 
 #include <list>
 #include <map>
@@ -442,6 +441,10 @@
 #include <set>
 #include <stack>
 #include <vector>
+#include <array>
+
+#include "s21_array.h"
+
 
 #include "s21_containers.h"
 
@@ -470,19 +473,63 @@
 //   return RUN_ALL_TESTS();
 // }
 
-int main() {
+// int main() {
 
-  auto f = [] (auto& v) { 
-    for (auto n : v) { 
-      std::cout << n << " ";
-    }
+//   auto f = [] (auto& v) { 
+//     for (auto n : v) { 
+//       std::cout << n << " ";
+//     }
+//   };
+
+//   s21::list<int> a{1,2,4,3,4};
+//   s21::list<int> b{3,4,5,3};
+//   b = std::move(a);
+//   f(b);
+//   //f(a);
+
+
+// }
+
+int main() { 
+
+  std::array<std::string,3> a {"aaaaaaaaaaaaaaaaa","cccc","cdfd"}; 
+  s21::array<std::string,3> b {"aaaaaaaaaaaaaaaaa","cccc","cdfd"};
+
+  std::array<std::string,3> c {"eweer","ererere","wrerer"};
+  c = std::move(a);
+  s21::array<std::string,3> d {"eweer","ererere","wrerer"};
+  d = std::move(b);
+
+  auto f = [] (auto v) { 
+    for (auto a : v ) std::cout << a << " ";
+    std::cout << "\n";
   };
 
-  s21::list<int> a{1,2,4,3,4};
-  s21::list<int> b{3,4,5,3};
-  b = std::move(a);
-  f(b);
-  //f(a);
+  d.print();
+ // d.print();
+ f(c);
+  a.swap(c);
+  b.swap(d);
 
+  std::cout << "=========\n" << a.size() << "-----" << c.size() << "\n";
+  std::cout << "=========\n" << b.size() << "-----" << d.size() << "\n";
+  std::cout << "=========\n";
+  f(a);
+  b.print();
+  f(c);
+  d.print();
+    std::cout << "=========\n";
+ std::array<int,3> t {1,2,3};
+ s21::array<int,3> tt {1,2,3};
+
+    f(t);
+    f(tt);
+    auto it = tt.end();
+       std::cout << "=========\n";
+       std::cout << *(--it);
+
+
+  
+  
 
 }

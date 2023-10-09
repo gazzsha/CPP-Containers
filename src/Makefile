@@ -7,6 +7,7 @@ TESTS = ./Testing/
 #SRC = $(wildcard *.cpp)
 UNAME := $(shell uname)
 SRC_TEST = $(wildcard $(TESTS)*.cc)
+SRC_TEST_HEADER = $(wildcard $(TESTS)*.h)
 TARGET = test
 
 GCOV_FLAGS = -g -fprofile-arcs -ftest-coverage -lgcov 
@@ -39,7 +40,7 @@ rm_buld_file:
 
 
 style: 
-	clang-format -i *.h $(SRC_TEST)
+	clang-format -i *.h $(SRC_TEST) $(SRC_TEST_HEADER)
 
 $(CLEAN) :
 	rm -rf tests *.a *.o $(TESTS).*o ./html_report/ gcov_report *.gcno *.gcda *.info *.out Build

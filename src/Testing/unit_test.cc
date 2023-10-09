@@ -1,13 +1,4 @@
-#include <gtest/gtest.h>
-
-#include <list>
-#include <map>
-#include <queue>
-#include <set>
-#include <stack>
-#include <vector>
-
-#include "../s21_containers.h"
+#include "unit_test.h"
 
 // VECTOR
 TEST(VectorTest, Constructor_default) {
