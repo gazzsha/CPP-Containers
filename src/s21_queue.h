@@ -1,6 +1,6 @@
 //<PROJECT>_<PATH>_<FILE>_H_
-#ifndef CPP2_S21_CONTAINERS_SRC_S21_QUEQU_H_  //
-#define CPP2_S21_CONTAINERS_SRC_S21_QUEQU_H_
+#ifndef CPP2_S21_CONTAINERS_SRC_S21_QUEUE_H_  //
+#define CPP2_S21_CONTAINERS_SRC_S21_QUEUE_H_
 
 #include "s21_list.h"
 
@@ -101,4 +101,4 @@ void queue<T, Container>::insert_many_back(Args &&...args) {
 }
 };  // namespace s21
 
-#endif  // CPP2_S21_CONTAINERS_SRC_S21_QUEQU_H_
+#endif  // CPP2_S21_CONTAINERS_SRC_S21_QUEUE_H_
