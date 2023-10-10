@@ -48,15 +48,16 @@ class vector {
   vector(size_type n);
   vector(const vector& v);
   vector(std::initializer_list<value_type> const& items);
-  vector(vector&& v) noexcept(noexcept(alloc(std::move(v.alloc))));
+  vector(vector&& v) noexcept(noexcept(alloc = std::move(v.alloc)));
   ~vector();
   vector& operator=(vector&& v) noexcept(noexcept(alloc = std::move(v.alloc)));
   constexpr reference operator[](size_type pos);
+  const reference operator[](size_type pos) const { return arr[pos]; }
   constexpr reference at(size_type pos);
-  constexpr const_reference front();
-  constexpr const_reference back();
+  constexpr const_reference front() const;
+  constexpr const_reference back() const;
   value_type* data();
-  constexpr bool empty() noexcept;
+  constexpr bool empty() const noexcept;
   constexpr size_type max_size() const noexcept;
   void reserve(size_type size);
   void shrink_to_fit();
@@ -184,10 +185,10 @@ vector<value_type, Alloc>::vector(
 
 template <typename value_type, typename Alloc>
 vector<value_type, Alloc>::vector(vector&& v) noexcept(
-    noexcept(alloc(std::move(v.alloc))))
-    : arr(v.arr), sz(v.size), cap(v.cap) {
+    noexcept(alloc = std::move(v.alloc)))
+    : arr(v.arr), sz(v.sz), cap(v.cap) {
   if (AllocTraits::propagate_on_container_move_assignment::value) {
-    alloc(std::move(v.alloc));
+    alloc = (std::move(v.alloc));
   }
   v.sz = 0;
   v.cap = 0;
@@ -227,7 +228,7 @@ vector<value_type, Alloc>& vector<value_type, Alloc>::operator=(
 template <typename value_type, typename Alloc>
 constexpr typename vector<value_type, Alloc>::reference
 vector<value_type, Alloc>::at(size_type pos) {
-  if (pos > size()) throw std::out_of_range("Out of range");
+  if (pos >= sz) throw std::out_of_range("Out of range");
   return arr[pos];
 }
 
@@ -239,13 +240,13 @@ vector<value_type, Alloc>::operator[](size_type pos) {
 
 template <typename value_type, typename Alloc>
 constexpr typename vector<value_type, Alloc>::const_reference
-vector<value_type, Alloc>::front() {
+vector<value_type, Alloc>::front() const {
   return arr[0b0];
 }
 
 template <typename value_type, typename Alloc>
 constexpr typename vector<value_type, Alloc>::const_reference
-vector<value_type, Alloc>::back() {
+vector<value_type, Alloc>::back() const {
   return arr[sz - 1];
 }
 
@@ -254,8 +255,8 @@ value_type* vector<value_type, Alloc>::data() {
   return arr;
 }
 template <typename value_type, typename Alloc>
-constexpr bool vector<value_type, Alloc>::empty() noexcept {
-  return !(begin() != end());
+constexpr bool vector<value_type, Alloc>::empty() const noexcept {
+  return sz ? false : true;
 }
 
 template <typename value_type, typename Alloc>
@@ -429,16 +430,16 @@ template <typename... Args>
 typename vector<value_type, Alloc>::iterator
 vector<value_type, Alloc>::insert_many(iterator pos, Args&&... args) {
   vector<value_type> temp{args...};
+  iterator cur_pos = begin() + (pos.getter() - begin().getter());
   for (auto i = static_cast<int>(temp.size() - 1); i >= 0; i--) {
-    insert(pos, temp.arr[i]);
+    cur_pos = insert(cur_pos, temp.arr[i]);
   }
-  iterator tmp = begin();
-  return tmp;
+  return cur_pos;
 }
 template <typename value_type, typename Alloc>
 template <typename... Args>
 void vector<value_type, Alloc>::insert_many_back(Args&&... args) {
-  insert_many(end(), (args)...);
+  insert_many(end(), std::forward<Args>(args)...);
 }
 
 template <typename value_type, typename Alloc>

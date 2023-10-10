@@ -14,14 +14,7 @@ class list {
   using reference = T&;
   using const_reference = const T&;
   using size_type = size_t;
-  struct Node {
-    Node* next;
-    Node* prev;
-    value_type data;
-    Node() : next(nullptr), prev(nullptr), data(T()) {}
-    Node(Node* first, Node* second, const_reference data)
-        : next(first), prev(second), data(data) {}
-  };
+  struct Node;
 
  public:
   template <typename U, typename X>
@@ -131,20 +124,40 @@ class list {
   void merge(list& other);
   void sort();
   void erase(iterator pos) noexcept;
-  //   void print_data() {
-  //     if (!sz) return;
-  //     head = head->next;
-  //     for (size_type i = 0; i < sz; i++) {
-  //       std::cout << i << " " << head->data << "\n";
-  //       head = head->next;
-  //     }
+  void print_data() {
+    if (!sz) return;
+    head = head->next;
+    for (size_type i = 0; i < sz; i++) {
+      std::cout << i << " " << head->data << "\n";
+      head = head->next;
+    }
+  }
+
  private:
+  struct Node {
+    Node* next;
+    Node* prev;
+    value_type data;
+    Node();
+    Node(Node* first, Node* second, const_reference data);
+  };
   Node* head;
   typename Alloc::template rebind<Node>::other alloc;
   size_type sz;
   using AllocTraits = std::allocator_traits<
       typename std::allocator_traits<Alloc>::template rebind_alloc<Node>>;
 };
+
+template <typename T, typename Alloc = std::allocator<T>>
+list<T, Alloc>::Node::Node() : next(nullptr), prev(nullptr), data(T()) {}
+
+template <typename T, typename Alloc = std::allocator<T>>
+list<T, Alloc>::Node::Node(Node* first, Node* second, const_reference data)
+    : next(first), prev(second), data(data) {}
+
+// template <typename T, typename Alloc = std::allocator<T>>
+// template <typename U, typename X>
+// list<T, Alloc>::ListIterator<U, X>::ListIterator(): node(nullptr) {}
 
 template <typename T, typename Alloc>
 typename list<T, Alloc>::iterator list<T, Alloc>::begin() noexcept {
