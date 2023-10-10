@@ -36,9 +36,6 @@ build_file:
 
 rm_buld_file:
 	rm -rf Build
-
-
-
 style: 
 	clang-format -i *.h $(SRC_TEST) $(SRC_TEST_HEADER)
 
