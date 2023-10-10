@@ -16,34 +16,43 @@ class vector {
   using AllocTraits = std::allocator_traits<Alloc>;
 
  public:
-  class const_iterator {
+  template <typename U, typename X>
+  class VectorIterator {
+   public:
+    VectorIterator() noexcept;
+    VectorIterator(value_type* new_ptr) noexcept;
+    reference operator*();
+    value_type* getter() noexcept;
+    VectorIterator& operator++();
+    VectorIterator& operator--();
+    VectorIterator operator-(const size_type& ind);
+    VectorIterator operator+(const size_type& ind);
+    bool operator!=(const VectorIterator& other) const noexcept;
+    bool operator==(const VectorIterator& other) const noexcept;
+
    private:
     value_type* ptr;
+    friend class vector<T, Alloc>;
+  };
 
+  template <typename Y, typename Z>
+  class VectorConstIterator {
    public:
-    explicit const_iterator(value_type* new_ptr) noexcept;
+    VectorConstIterator(value_type* new_ptr) noexcept;
+    VectorConstIterator(const VectorIterator<Y, Z>& other);
+    VectorConstIterator operator+(const size_type& pos);
     const_reference operator*() const noexcept;
-  };
+    bool operator==(const VectorConstIterator& other) const noexcept;
+    value_type* getter() noexcept;
 
-  class iterator {
    private:
     value_type* ptr;
-
-   public:
-    // constuction
-    constexpr iterator() noexcept;
-    explicit iterator(value_type* new_ptr) noexcept;
-    value_type& operator*() const noexcept;
-    value_type* getter() const noexcept;
-    // operators
-    iterator operator++() noexcept;
-    iterator operator--() noexcept;
-    iterator operator-(const size_type& ind) noexcept;
-    iterator operator+(const size_type& ind) noexcept;
-    constexpr bool operator!=(const iterator& other) noexcept;
+    friend class vector<T, Alloc>;
   };
-  constexpr iterator begin() noexcept;
-  constexpr iterator end() noexcept;
+
+  using iterator = VectorIterator<T, Alloc>;
+  using const_iterator = VectorConstIterator<T, Alloc>;
+
   vector() noexcept;
   vector(size_type n);
   vector(const vector& v);
@@ -51,14 +60,19 @@ class vector {
   vector(vector&& v) noexcept(noexcept(alloc = std::move(v.alloc)));
   ~vector();
   vector& operator=(vector&& v) noexcept(noexcept(alloc = std::move(v.alloc)));
+
+  iterator begin() noexcept;
+  iterator end() noexcept;
+  const_iterator cbegin() const noexcept;
+  const_iterator cend() const noexcept;
   constexpr reference operator[](size_type pos);
-  const reference operator[](size_type pos) const { return arr[pos]; }
-  constexpr reference at(size_type pos);
-  constexpr const_reference front() const;
-  constexpr const_reference back() const;
-  value_type* data();
-  constexpr bool empty() const noexcept;
-  constexpr size_type max_size() const noexcept;
+  constexpr const_reference operator[](size_type pos) const;
+  reference at(size_type pos);
+  const_reference front() const;
+  const_reference back() const;
+  value_type* data() noexcept;
+  bool empty() const noexcept;
+  size_type max_size() const noexcept;
   void reserve(size_type size);
   void shrink_to_fit();
   void clear() noexcept;
@@ -75,7 +89,7 @@ class vector {
       noexcept(AllocTraits::propagate_on_container_swap::value ||
                AllocTraits::is_always_equal::value));
   template <typename... Args>
-  iterator insert_many(iterator pos, Args&&... args);
+  iterator insert_many(const_iterator pos, Args&&... args);
   template <typename... Args>
   void insert_many_back(Args&&... args);
 
@@ -86,55 +100,118 @@ class vector {
   size_t cap;
 };
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-constexpr vector<value_type, Alloc>::iterator::iterator() noexcept
-    : ptr(nullptr){};
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+vector<value_type, Alloc>::VectorIterator<U, X>::VectorIterator() noexcept
+    : ptr(nullptr) {}
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-vector<value_type, Alloc>::iterator::iterator(value_type* new_ptr) noexcept
-    : ptr(new_ptr){};
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+vector<value_type, Alloc>::VectorIterator<U, X>::VectorIterator(
+    value_type* new_ptr) noexcept
+    : ptr(new_ptr) {}
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-value_type& vector<value_type, Alloc>::iterator::operator*() const noexcept {
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+typename vector<value_type, Alloc>::reference
+vector<value_type, Alloc>::VectorIterator<U, X>::operator*() {
   return *ptr;
 }
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-value_type* vector<value_type, Alloc>::iterator::getter() const noexcept {
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+value_type* vector<value_type, Alloc>::VectorIterator<U, X>::getter() noexcept {
   return ptr;
 }
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::iterator::operator++() noexcept {
-  iterator tmp(++ptr);
-  return tmp;
+
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+typename vector<value_type, Alloc>::VectorIterator<U, X>&
+vector<value_type, Alloc>::VectorIterator<U, X>::operator++() {
+  ++ptr;
+  return *this;
 }
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::iterator::operator--() noexcept {
-  iterator tmp(--ptr);
-  return tmp;
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+typename vector<value_type, Alloc>::VectorIterator<U, X>&
+vector<value_type, Alloc>::VectorIterator<U, X>::operator--() {
+  --ptr;
+  return *this;
 }
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::iterator::operator-(const size_type& ind) noexcept {
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+typename vector<value_type, Alloc>::VectorIterator<U, X>
+vector<value_type, Alloc>::VectorIterator<U, X>::operator-(
+    const size_type& ind) {
   iterator tmp(ptr - ind);
   return tmp;
 }
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::iterator::operator+(const size_type& ind) noexcept {
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+typename vector<value_type, Alloc>::VectorIterator<U, X>
+vector<value_type, Alloc>::VectorIterator<U, X>::operator+(
+    const size_type& ind) {
   iterator tmp(ptr + ind);
   return tmp;
 }
 
-template <typename value_type, typename Alloc = std::allocator<value_type>>
-constexpr bool vector<value_type, Alloc>::iterator::operator!=(
-    const iterator& other) noexcept {
+template <typename value_type, typename Alloc>
+template <typename U, typename X>
+bool vector<value_type, Alloc>::VectorIterator<U, X>::operator!=(
+    const VectorIterator& other) const noexcept {
   return ptr != other.ptr;
+}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+bool vector<value_type, Alloc>::VectorIterator<Y, Z>::operator==(
+    const VectorIterator& other) const noexcept {
+  return ptr == other.ptr;
+}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+vector<value_type, Alloc>::VectorConstIterator<Y, Z>::VectorConstIterator(
+    value_type* new_ptr) noexcept
+    : ptr(new_ptr) {}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+vector<value_type, Alloc>::VectorConstIterator<Y, Z>::VectorConstIterator(
+    const VectorIterator<Y, Z>& other)
+    : ptr(other.ptr) {}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+typename vector<value_type, Alloc>::const_reference vector<
+    value_type, Alloc>::VectorConstIterator<Y, Z>::operator*() const noexcept {
+  return *ptr;
+}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+bool vector<value_type, Alloc>::VectorConstIterator<Y, Z>::operator==(
+    const VectorConstIterator& other) const noexcept {
+  return ptr == other.ptr;
+}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+vector<value_type, Alloc>::VectorConstIterator<Y, Z>
+vector<value_type, Alloc>::VectorConstIterator<Y, Z>::operator+(
+    const size_type& pos) {
+  const_iterator temp = (ptr + pos);
+  return temp;
+}
+
+template <typename value_type, typename Alloc>
+template <typename Y, typename Z>
+value_type*
+vector<value_type, Alloc>::VectorConstIterator<Y, Z>::getter() noexcept {
+  return ptr;
 }
 
 template <typename value_type, typename Alloc>
@@ -226,10 +303,31 @@ vector<value_type, Alloc>& vector<value_type, Alloc>::operator=(
 }
 
 template <typename value_type, typename Alloc>
-constexpr typename vector<value_type, Alloc>::reference
-vector<value_type, Alloc>::at(size_type pos) {
-  if (pos >= sz) throw std::out_of_range("Out of range");
-  return arr[pos];
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::begin() noexcept {
+  iterator it(arr);
+  return it;
+}
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::iterator
+vector<value_type, Alloc>::end() noexcept {
+  iterator it(arr + sz);
+  return it;
+}
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::const_iterator
+vector<value_type, Alloc>::cbegin() const noexcept {
+  const_iterator it(arr);
+  return it;
+}
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::const_iterator
+vector<value_type, Alloc>::cend() const noexcept {
+  const_iterator it(arr + sz);
+  return it;
 }
 
 template <typename value_type, typename Alloc>
@@ -240,29 +338,42 @@ vector<value_type, Alloc>::operator[](size_type pos) {
 
 template <typename value_type, typename Alloc>
 constexpr typename vector<value_type, Alloc>::const_reference
+vector<value_type, Alloc>::operator[](size_type pos) const {
+  return arr[pos];
+}
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::reference vector<value_type, Alloc>::at(
+    size_type pos) {
+  if (pos >= sz) throw std::out_of_range("Out of range");
+  return arr[pos];
+}
+
+template <typename value_type, typename Alloc>
+typename vector<value_type, Alloc>::const_reference
 vector<value_type, Alloc>::front() const {
   return arr[0b0];
 }
 
 template <typename value_type, typename Alloc>
-constexpr typename vector<value_type, Alloc>::const_reference
+typename vector<value_type, Alloc>::const_reference
 vector<value_type, Alloc>::back() const {
   return arr[sz - 1];
 }
 
 template <typename value_type, typename Alloc>
-value_type* vector<value_type, Alloc>::data() {
+value_type* vector<value_type, Alloc>::data() noexcept {
   return arr;
 }
 template <typename value_type, typename Alloc>
-constexpr bool vector<value_type, Alloc>::empty() const noexcept {
+bool vector<value_type, Alloc>::empty() const noexcept {
   return sz ? false : true;
 }
 
 template <typename value_type, typename Alloc>
-constexpr typename vector<value_type, Alloc>::size_type
+typename vector<value_type, Alloc>::size_type
 vector<value_type, Alloc>::max_size() const noexcept {
-  return static_cast<size_type>((std::pow(2, 63))) / sizeof(value_type) - 1;
+  return AllocTraits::max_size(alloc);
 }
 
 template <typename value_type, typename Alloc>
@@ -428,7 +539,7 @@ void vector<value_type, Alloc>::swap(vector& other) noexcept(
 template <typename value_type, typename Alloc>
 template <typename... Args>
 typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::insert_many(iterator pos, Args&&... args) {
+vector<value_type, Alloc>::insert_many(const_iterator pos, Args&&... args) {
   vector<value_type> temp{args...};
   iterator cur_pos = begin() + (pos.getter() - begin().getter());
   for (auto i = static_cast<int>(temp.size() - 1); i >= 0; i--) {
@@ -442,30 +553,6 @@ void vector<value_type, Alloc>::insert_many_back(Args&&... args) {
   insert_many(end(), std::forward<Args>(args)...);
 }
 
-template <typename value_type, typename Alloc>
-constexpr typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::begin() noexcept {
-  iterator it(arr);
-  return it;
-}
-
-template <typename value_type, typename Alloc>
-constexpr typename vector<value_type, Alloc>::iterator
-vector<value_type, Alloc>::end() noexcept {
-  iterator it(arr + sz);
-  return it;
-}
-
-template <typename value_type, typename Alloc>
-vector<value_type, Alloc>::const_iterator::const_iterator(
-    value_type* new_ptr) noexcept
-    : ptr(new_ptr){};
-
-template <typename value_type, typename Alloc>
-typename vector<value_type, Alloc>::const_reference
-vector<value_type, Alloc>::const_iterator::operator*() const noexcept {
-  return *ptr;
-}
 }  // namespace s21
 
 #endif  // CPP2_S21_CONTAINERS_SRC_S21_VECTOR_H_

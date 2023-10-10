@@ -756,69 +756,69 @@ TEST(VectorTest, Begin_ValidVector) {
   EXPECT_EQ(v[0], 10);
 }
 
-// TEST(VectorTest, Begin_EmptyVector) {
-//   s21::vector<int> v;
-//   auto it = v.begin();
-//   // The begin() of an empty vector should be the end() too, so iterator
-//   should
-//   // be equal to end()
-//   EXPECT_EQ(it, v.end());
-// }
+TEST(VectorTest, Begin_EmptyVector) {
+  s21::vector<int> v;
+  auto it = v.begin();
+  // The begin() of an empty vector should be the end() too, so iterator
+  // should
+  // be equal to end()
+  EXPECT_EQ(it, v.end());
+}
 
-// TEST(VectorTest, End_ValidVector) {
-//   s21::vector<int> v = {1, 2, 3, 4, 5};
-//   auto it = v.end();
-//   // end() iterator should not be dereferenced; comparing it to another
-//   iterator
-//   // should work
-//   auto beginIt = v.begin();
-//   EXPECT_NE(it, beginIt);
-// }
+TEST(VectorTest, End_ValidVector) {
+  s21::vector<int> v = {1, 2, 3, 4, 5};
+  auto it = v.end();
+  // end() iterator should not be dereferenced; comparing it to another
+  // iterator
+  // should work
+  auto beginIt = v.begin();
+  EXPECT_NE(it, beginIt);
+}
 
-// TEST(VectorTest, End_EmptyVector) {
-//   s21::vector<int> v;
-//   auto it = v.end();
-//   // The end() of an empty vector should be the begin() too, so iterator
-//   should
-//   // be equal to begin()
-//   EXPECT_EQ(it, v.begin());
-// }
+TEST(VectorTest, End_EmptyVector) {
+  s21::vector<int> v;
+  auto it = v.end();
+  // The end() of an empty vector should be the begin() too, so iterator
+  // should
+  // be equal to begin()
+  EXPECT_EQ(it, v.begin());
+}
 
-// TEST(VectorTest, CBegin_ValidVector) {
-//   const s21::vector<int> v = {1, 2, 3, 4, 5};
-//   auto it = v.cbegin();
-//   EXPECT_EQ(*it, 1);
-//   // Modify the data through the iterator and check if the vector is not
-//   updated
-//   // (should be const_iterator) Uncommenting the following line should result
-//   in
-//   // a compilation error. *it = 10;
-// }
+TEST(VectorTest, CBegin_ValidVector) {
+  const s21::vector<int> v = {1, 2, 3, 4, 5};
+  auto it = v.cbegin();
+  EXPECT_EQ(*it, 1);
+  // Modify the data through the iterator and check if the vector is not
+  // updated
+  // (should be const_iterator) Uncommenting the following line should result
+  // in
+  // a compilation error. *it = 10;
+}
 
-// TEST(VectorTest, CBegin_EmptyVector) {
-//   const s21::vector<int> v;
-//   auto it = v.cbegin();
-//   // The cbegin() of an empty vector should be the cend() too, so iterator
-//   // should be equal to cend()
-//   EXPECT_EQ(it, v.cend());
-// }
+TEST(VectorTest, CBegin_EmptyVector) {
+  const s21::vector<int> v;
+  auto it = v.cbegin();
+  // The cbegin() of an empty vector should be the cend() too, so iterator
+  // should be equal to cend()
+  EXPECT_EQ(it, v.cend());
+}
 
-// TEST(VectorTest, CEnd_ValidVector) {
-//   const s21::vector<int> v = {1, 2, 3, 4, 5};
-//   auto it = v.cend();
-//   // cend() iterator should not be dereferenced; comparing it to another
-//   // iterator should work
-//   auto beginIt = v.cbegin();
-//   EXPECT_EQ(it, beginIt + 5);
-// }
+TEST(VectorTest, CEnd_ValidVector) {
+  const s21::vector<int> v = {1, 2, 3, 4, 5};
+  auto it = v.cend();
+  // cend() iterator should not be dereferenced; comparing it to another
+  // iterator should work
+  auto beginIt = v.cbegin();
+  EXPECT_EQ(it, beginIt + 5);
+}
 
-// TEST(VectorTest, CEnd_EmptyVector) {
-//   const s21::vector<int> v;
-//   auto it = v.cend();
-//   // The cend() of an empty vector should be the cbegin() too, so iterator
-//   // should be equal to cbegin()
-//   EXPECT_EQ(it, v.cbegin());
-// }
+TEST(VectorTest, CEnd_EmptyVector) {
+  const s21::vector<int> v;
+  auto it = v.cend();
+  // The cend() of an empty vector should be the cbegin() too, so iterator
+  // should be equal to cbegin()
+  EXPECT_EQ(it, v.cbegin());
+}
 
 TEST(VectorTest, Empty_EmptyVector) {
   const s21::vector<int> v;
@@ -1018,25 +1018,25 @@ TEST(VectorTest, Swap_EmptyAndNonEmptyVectors) {
   EXPECT_TRUE(v2.empty());
 }
 
-// TEST(VectorTest, InsertMany) {
-//   s21::vector<int> vec = {1, 2, 3, 7, 8};
-//   s21::vector<int>::const_iterator pos = vec.cbegin() + 3;
+TEST(VectorTest, InsertMany) {
+  s21::vector<int> vec = {1, 2, 3, 7, 8};
+  s21::vector<int>::const_iterator pos = vec.cbegin() + 3;
 
-//   vec.insert_many(pos, 4, 5, 6);
+  vec.insert_many(pos, 4, 5, 6);
 
-//   // Check the size of the vector after insertion
-//   EXPECT_EQ(vec.size(), 8);
+  // Check the size of the vector after insertion
+  EXPECT_EQ(vec.size(), 8);
 
-//   // Check the elements after insertion
-//   EXPECT_EQ(vec[0], 1);
-//   EXPECT_EQ(vec[1], 2);
-//   EXPECT_EQ(vec[2], 3);
-//   EXPECT_EQ(vec[3], 4);
-//   EXPECT_EQ(vec[4], 5);
-//   EXPECT_EQ(vec[5], 6);
-//   EXPECT_EQ(vec[6], 7);
-//   EXPECT_EQ(vec[7], 8);
-// }
+  // Check the elements after insertion
+  EXPECT_EQ(vec[0], 1);
+  EXPECT_EQ(vec[1], 2);
+  EXPECT_EQ(vec[2], 3);
+  EXPECT_EQ(vec[3], 4);
+  EXPECT_EQ(vec[4], 5);
+  EXPECT_EQ(vec[5], 6);
+  EXPECT_EQ(vec[6], 7);
+  EXPECT_EQ(vec[7], 8);
+}
 
 TEST(VectorTest, InsertManyBack) {
   s21::vector<int> vec = {1, 2, 3};

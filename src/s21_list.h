@@ -35,7 +35,7 @@ class list {
 
    private:
     Node* node;
-    friend class list<T>;
+    friend class list<T, Alloc>;
   };
 
   template <typename Y, typename Z>
@@ -53,7 +53,7 @@ class list {
 
    private:
     Node* node;
-    friend class list<T>;
+    friend class list<T, Alloc>;
   };
   using iterator = ListIterator<T, Alloc>;
   using const_iterator = ListConstIterator<T, Alloc>;

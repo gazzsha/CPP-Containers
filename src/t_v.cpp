@@ -1,192 +1,192 @@
-// #include <iostream>
-// #include "s21_vector.h"
-// #include <vector>
-// #include <algorithm>
+#include <iostream>
+#include "s21_vector.h"
+#include <vector>
+#include <algorithm>
 
-// int main() {
+int main() {
 
-//     s21_vector<int> n(10);
-//     s21_vector <int> v = n;
-//     std::vector<int> vv(10);
+    s21::vector<int> n(10);
+    s21::vector <int> v = n;
+    std::vector<int> vv(10);
 
-//    std::cout << v.capacity();
-//    std::cout << v.at(5);
-//    v[9] = 10;
+   std::cout << v.capacity();
+   std::cout << v.at(5);
+   v[9] = 10;
 
-//     for (auto i = 0; i < v.size(); i++) {
-//         std::cout << v[i] << " ";
-//     }
+    for (auto i = 0; i < v.size(); i++) {
+        std::cout << v[i] << " ";
+    }
 
-//     std::cout << "\n";
-//     s21_vector<int>::iterator it = v.begin();
-//     *it = 2131;
-//     std::cout << *it;
-//     s21_vector<std::string> ss;
-//    std::for_each(v.begin(), v.end(), [](const int n) { std::cout << n << ' ';
-//    }); std::cout << "\n"; std::cout << ss.empty();
+    std::cout << "\n";
+    s21::vector<int>::iterator it = v.begin();
+    *it = 2131;
+    std::cout << *it;
+    s21::vector<std::string> ss;
+   std::for_each(v.begin(), v.end(), [](const int n) { std::cout << n << ' ';
+   }); std::cout << "\n"; std::cout << ss.empty();
 
-//    std::cout << "\n";
+   std::cout << "\n";
 
-//    s21_vector<std::string> c;
-//    std::vector<std::string> cc;
-//    std::cout << c.max_size() << " --- " << cc.max_size();
-//    std::cout << "\n";
-//     std::vector<std::string> ss1(5);
-//    s21_vector<std::string> ss_v(5);
-//   std::cout << ss1[1];
-//   std::cout << ss_v[1];
-//      std::cout << "\n";
-//  // for (auto n : ss1) std::cout<<n;
+   s21::vector<std::string> c;
+   std::vector<std::string> cc;
+   std::cout << c.max_size() << " --- " << cc.max_size();
+   std::cout << "\n";
+    std::vector<std::string> ss1(5);
+   s21::vector<std::string> ss_v(5);
+  std::cout << ss1[1];
+  std::cout << ss_v[1];
+     std::cout << "\n";
+ // for (auto n : ss1) std::cout<<n;
 
-//    std::cout << ss1.capacity() << " - " << ss_v.capacity() << "\n";
-//    ss1.reserve(10);
-//    ss_v.reserve(10);
-//      std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
-//      ss1.size() << " - " << ss_v.size() << "\n"; ss1.shrink_to_fit();
-//      ss_v.shrink_to_fit();
-//      std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
-//      ss1.size() << " - " << ss_v.size() << "\n"; ss1.clear(); ss_v.clear();
-//      std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
-//      ss1.size() << " - " << ss_v.size() << "\n";
+   std::cout << ss1.capacity() << " - " << ss_v.capacity() << "\n";
+   ss1.reserve(10);
+   ss_v.reserve(10);
+     std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
+     ss1.size() << " - " << ss_v.size() << "\n"; ss1.shrink_to_fit();
+     ss_v.shrink_to_fit();
+     std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
+     ss1.size() << " - " << ss_v.size() << "\n"; ss1.clear(); ss_v.clear();
+     std::cout << ss1.capacity() << " - " << ss_v.capacity() << " | " <<
+     ss1.size() << " - " << ss_v.size() << "\n";
 
-//     std::cout << "-------------------------\n";
+    std::cout << "-------------------------\n";
 
-//     auto pr = [](auto& n) { for (const auto v : n) std::cout << v << " "; };
+    auto pr = [](auto& n) { for (const auto v : n) std::cout << v << " "; };
 
-//     s21_vector<int> is_v(5);
-//     std::vector<int> is(5);
+    s21::vector<int> is_v(5);
+    std::vector<int> is(5);
 
-//     pr(is_v);
-//     std::cout << "\n";
-//     pr(is);
-//      std::cout << "\n";
+    pr(is_v);
+    std::cout << "\n";
+    pr(is);
+     std::cout << "\n";
 
-//     is_v.pop_back();
-//     is.pop_back();
+    is_v.pop_back();
+    is.pop_back();
 
-//     pr(is_v);
-//     std::cout << "\n";
-//     pr(is);
-//      std::cout << "\n";
-//      std::cout << is.capacity() << " - " << is_v.capacity() << " | " <<
-//      is.size() << " - " << is_v.size() << "\n"; s21_vector<int>::iterator
-//      it1_v = is_v.end(); std::vector<int>::iterator it1 = is.end();
-//      *(--it1_v) = 5;
-//      *(--it1) = 5;
-//          std::cout << "\n";
-//      pr(is_v);
-//     std::cout << "\n";
-//     pr(is);
-//      std::cout << "\n";
-//      is.push_back(100);
-//      is_v.push_back(100);
-//           is.push_back(50);
-//      is_v.push_back(50);
-//           is.push_back(20);
-//      is_v.push_back(20);
-//           std::cout << "\n";
-//      pr(is_v);
-//     std::cout << "\n";
-//     pr(is);
-//      std::cout << "\n";
-//      std::cout << is.capacity() << " - " << is_v.capacity() << " | " <<
-//      is.size() << " - " << is_v.size() << "\n";
+    pr(is_v);
+    std::cout << "\n";
+    pr(is);
+     std::cout << "\n";
+     std::cout << is.capacity() << " - " << is_v.capacity() << " | " <<
+     is.size() << " - " << is_v.size() << "\n"; s21::vector<int>::iterator
+     it1_v = is_v.end(); std::vector<int>::iterator it1 = is.end();
+     *(--it1_v) = 5;
+     *(--it1) = 5;
+         std::cout << "\n";
+     pr(is_v);
+    std::cout << "\n";
+    pr(is);
+     std::cout << "\n";
+     is.push_back(100);
+     is_v.push_back(100);
+          is.push_back(50);
+     is_v.push_back(50);
+          is.push_back(20);
+     is_v.push_back(20);
+          std::cout << "\n";
+     pr(is_v);
+    std::cout << "\n";
+    pr(is);
+     std::cout << "\n";
+     std::cout << is.capacity() << " - " << is_v.capacity() << " | " <<
+     is.size() << " - " << is_v.size() << "\n";
 
-//     //  is.emplace_back(10,20,20);
-//     //  pr(is);
+    //  is.emplace_back(10,20,20);
+    //  pr(is);
 
-//     std::vector<std::string> a(5);
-//     a.push_back("abc");
-//     pr(a);
-//     std::cout<<"size : " << a.size() << "\n";
-//   //  a.emplace_back("abc","abbc");
-//     pr(a);
-//         std::cout<<"size : " << a.size() << "\n";
-//     std::cout << "\n";
-//      s21_vector<std::string> b(5);
-//     b.push_back("abc");
-//         std::cout<<"size : " << b.size() << "\n";
-//     pr(b);
-//   //  b.emplace_back("abc","abbc");
-//     pr(b);
-//         std::cout<<"size : " << b.size() << "\n";
-//     std::cout << "\n";
-//     pr(is);
-//     std::cout << is.size() << " " << is.capacity() << "\n";
-//     is.erase(is.end() - 1);
-//     std::cout << "\n";
-//     pr(is);
-//      std::cout << is.size() << " " << is.capacity() << "\n";
+    std::vector<std::string> a(5);
+    a.push_back("abc");
+    pr(a);
+    std::cout<<"size : " << a.size() << "\n";
+  //  a.emplace_back("abc","abbc");
+    pr(a);
+        std::cout<<"size : " << a.size() << "\n";
+    std::cout << "\n";
+     s21::vector<std::string> b(5);
+    b.push_back("abc");
+        std::cout<<"size : " << b.size() << "\n";
+    pr(b);
+  //  b.emplace_back("abc","abbc");
+    pr(b);
+        std::cout<<"size : " << b.size() << "\n";
+    std::cout << "\n";
+    pr(is);
+    std::cout << is.size() << " " << is.capacity() << "\n";
+    is.erase(is.end() - 1);
+    std::cout << "\n";
+    pr(is);
+     std::cout << is.size() << " " << is.capacity() << "\n";
 
-//      std::cout << "------------------\n";
+     std::cout << "------------------\n";
 
-//      std::vector<std::string> z;
-//      s21_vector<std::string> z_v;
-//      z.push_back("abc");
-//      z.push_back("cdv");
-//      z.push_back("321");
+     std::vector<std::string> z;
+     s21::vector<std::string> z_v;
+     z.push_back("abc");
+     z.push_back("cdv");
+     z.push_back("321");
 
-//       z_v.push_back("abc");
-//      z_v.push_back("cdv");
-//       z_v.push_back("321");
-//      pr(z);
-//     std::cout << "\n";
+      z_v.push_back("abc");
+     z_v.push_back("cdv");
+      z_v.push_back("321");
+     pr(z);
+    std::cout << "\n";
 
-//      pr(z_v);
-// std::cout << "\n";
-//       std::cout << z.size() << " " << z.capacity() << "\n";
-//       std::cout << z_v.size() << " " << z_v.capacity() << "\n";
-//  //     z_v.erase(z_v.begin() + 1);
-//       //std::cout << *(z_v.begin() + 1) << "\n";
-//       pr(z_v);
-//       std::cout << "\n";
-//       std::cout << "===========\n";
-//       auto it_v = z_v.insert(z_v.end(),"100");
-//       pr(z_v);
-//      std::cout << *it_v << "\n";
-//       std::cout << "\n";
-//       auto it_o = z.insert(z.end(),"100");
-//       pr(z);
-//       std::cout << *it_o<<"\n";
-//         std::cout << "===========\n";
-//         s21_vector<std::string>  mm = {"anc","dff","ff"};
-//         std::vector<std::string>  m = {"anc","dff","ff"};
-//         pr(mm);
-//               std::cout << "\n";
+     pr(z_v);
+std::cout << "\n";
+      std::cout << z.size() << " " << z.capacity() << "\n";
+      std::cout << z_v.size() << " " << z_v.capacity() << "\n";
+ //     z_v.erase(z_v.begin() + 1);
+      //std::cout << *(z_v.begin() + 1) << "\n";
+      pr(z_v);
+      std::cout << "\n";
+      std::cout << "===========\n";
+      auto it_v = z_v.insert(z_v.end(),"100");
+      pr(z_v);
+     std::cout << *it_v << "\n";
+      std::cout << "\n";
+      auto it_o = z.insert(z.end(),"100");
+      pr(z);
+      std::cout << *it_o<<"\n";
+        std::cout << "===========\n";
+        s21::vector<std::string>  mm = {"anc","dff","ff"};
+        std::vector<std::string>  m = {"anc","dff","ff"};
+        pr(mm);
+              std::cout << "\n";
 
-//        mm.reserve(10);
+       mm.reserve(10);
 
-//        auto itvv =  mm.insert_many(mm.end(),"aaa","bbbb","ccccc");
+       auto itvv =  mm.insert_many(mm.end(),"aaa","bbbb","ccccc");
 
-//        std::cout << *itvv << "\n";
+       std::cout << *itvv << "\n";
 
-//         pr(mm);
+        pr(mm);
 
-//         mm.insert_many_back("A1","B2","B3");
+        mm.insert_many_back("A1","B2","B3");
 
-//         std::cout << "\n";
-//         pr(mm);
+        std::cout << "\n";
+        pr(mm);
 
-//         std::cout << "\n";
-//         pr(m);
-//        auto nn =  m.erase(m.end()-1);
+        std::cout << "\n";
+        pr(m);
+       auto nn =  m.erase(m.end()-1);
 
-//     std::cout << *nn << "===";
-//         std::cout << "\n";
+    std::cout << *nn << "===";
+        std::cout << "\n";
 
-//         pr(m);
+        pr(m);
 
-//     // int * p = v.data();
-//     // std::cout << *(p+9);
-//     // std::vector<int>::iterator it = vv.begin();
-//     // std::cout << *it;
-//     // s21_vector<int>::iterator it;
-//     // std::cout << *it;
+    // int * p = v.data();
+    // std::cout << *(p+9);
+    // std::vector<int>::iterator it = vv.begin();
+    // std::cout << *it;
+    // s21::vector<int>::iterator it;
+    // std::cout << *it;
 
-//     // std::vector<int> b(55);
-//     // std::cout << b.at(100);
+    // std::vector<int> b(55);
+    // std::cout << b.at(100);
 
-// }
+}
 
 // #include <vector>
 // #include "s21_containers.h"
@@ -200,7 +200,7 @@
 // #include <iostream>
 // #include <vector>
 
-// #include "s21_vector.h"
+// #include "s21::vector.h"
 // struct Base {
 //   Base() { print(); }
 //   virtual void print() { std::cout << "Base\n"; }
@@ -226,172 +226,172 @@
 //   }
 // }
 ////// LIST ==============
-                    #include "s21_vector.h"
-                    #include "s21_list.h"
-                    #include <iostream>
-                    #include <list>
-                    #include <string>
-                    #include <iterator>
+                    // #include "s21::vector.h"
+                    // #include "s21_list.h"
+                    // #include <iostream>
+                    // #include <list>
+                    // #include <string>
+                    // #include <iterator>
 
 
-                    template <typename value_type>
-                    bool compare_lists(s21::list<value_type> my_list,
-                                       std::list<value_type> std_list) {
-                      bool result = true;
-                      if (my_list.size() == std_list.size()) {
-                        auto my_it = my_list.begin();
-                        auto std_it = std_list.begin();
-                        for (size_t i = 0; i != my_list.size(); ++i) {
-                          if (*my_it != *std_it) {
-                            result = false;
-                            break;
-                          }
-                          ++my_it;
-                          ++std_it;
-                        }
-                      } else {
-                        result = false;
-                      }
-                      return result;
-                    }
-
-
-
-                    int main() { 
-
-                        s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
-                        l.print_data();
-                        l.insert(l.begin(),"ffff");
-                        l.push_back("fffff");
-                        l.print_data();
-                        s21::list<std::string> v(l);
-                        std::cout << "\n";
-                         v.print_data();
-                    std::cout << "\n";
-                         s21::list<std::string> m(v);
-                         m.print_data();
-                         m.erase(++(m.begin()));
-                         std::cout << "====ERASE CHECK\n";
-
-                              m.print_data();
-                        std::cout << "====CLEAR CHECK\n";
-                     //   m.clear();
-                        std::cout << "====INSERT CHECK\n";
-                        std::cout << "BEFORE:\n";
-                        l.print_data();
-                        std::cout<< "AFTER:\n";
-                        l.insert(++l.end(),"new elem");
-                        l.print_data();
-                       l.pop_back();
-                        l.pop_back();
-                        l.pop_back();
-                        l.pop_back();
-                        l.pop_back();
-                        l.push_front("new elem");
-                        l.pop_front();
-                        l.pop_front();
-                        l.pop_back();
+                    // template <typename value_type>
+                    // bool compare_lists(s21::list<value_type> my_list,
+                    //                    std::list<value_type> std_list) {
+                    //   bool result = true;
+                    //   if (my_list.size() == std_list.size()) {
+                    //     auto my_it = my_list.begin();
+                    //     auto std_it = std_list.begin();
+                    //     for (size_t i = 0; i != my_list.size(); ++i) {
+                    //       if (*my_it != *std_it) {
+                    //         result = false;
+                    //         break;
+                    //       }
+                    //       ++my_it;
+                    //       ++std_it;
+                    //     }
+                    //   } else {
+                    //     result = false;
+                    //   }
+                    //   return result;
+                    // }
 
 
 
-                       l.print_data();
-                       l.swap(m);
-                       std::cout <<"AFTER SWAP FIRST\n";
-                         l.print_data();
-                       std::cout <<"AFTER SWAP SECOND\n";
-                       m.print_data();
-                       std::cout <<"copy constrcution\n";
+                    // int main() { 
+
+                    //     s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
+                    //     l.print_data();
+                    //     l.insert(l.begin(),"ffff");
+                    //     l.push_back("fffff");
+                    //     l.print_data();
+                    //     s21::list<std::string> v(l);
+                    //     std::cout << "\n";
+                    //      v.print_data();
+                    // std::cout << "\n";
+                    //      s21::list<std::string> m(v);
+                    //      m.print_data();
+                    //      m.erase(++(m.begin()));
+                    //      std::cout << "====ERASE CHECK\n";
+
+                    //           m.print_data();
+                    //     std::cout << "====CLEAR CHECK\n";
+                    //  //   m.clear();
+                    //     std::cout << "====INSERT CHECK\n";
+                    //     std::cout << "BEFORE:\n";
+                    //     l.print_data();
+                    //     std::cout<< "AFTER:\n";
+                    //     l.insert(++l.end(),"new elem");
+                    //     l.print_data();
+                    //    l.pop_back();
+                    //     l.pop_back();
+                    //     l.pop_back();
+                    //     l.pop_back();
+                    //     l.pop_back();
+                    //     l.push_front("new elem");
+                    //     l.pop_front();
+                    //     l.pop_front();
+                    //     l.pop_back();
+
+
+
+                    //    l.print_data();
+                    //    l.swap(m);
+                    //    std::cout <<"AFTER SWAP FIRST\n";
+                    //      l.print_data();
+                    //    std::cout <<"AFTER SWAP SECOND\n";
+                    //    m.print_data();
+                    //    std::cout <<"copy constrcution\n";
 
 
 
 
-                      s21::list<std::string> copy(l);
-                       copy.print_data();
-                       std::cout << "-----\n";
-                       copy.push_back("1");
-                       copy.push_back("2");
-                       copy.push_back("3");
-                       copy.push_back("4");
-                       copy.push_back("5");
-                        copy.push_back("6");
-                       copy.print_data();
-                       copy.reverse();
-                       std::cout << "-----AFTER RESERVE\n";
-                       copy.print_data();
-                          std::cout << "-----SORT\n";
-                          s21::list<int> l_s {23,432,123,43,45654,21,32,3423,542,234,2,3,45,2,3434,542,2,0,-32,432};
-                          l_s.print_data(); 
-                          l_s.sort();
-                       std::cout << "-----AFTER SORT\n";
-                       l_s.print_data();
-                       std::cout << "-----NEW SORT\n";
-                        s21::list<int> l_s2 {1,3,5,6,2,4,-444,100000,200000,-213,32};
-                          l_s2.print_data(); 
-                           auto ittt = --l_s2.end();
-                              std::cout << "---" << *ittt << "\n";
-                          l_s2.sort();
-                       std::cout << "-----AFTER SORT\n";
-                       l_s2.print_data();
-                       std::cout << "-----AFTER MERGE\n";
-                       l_s.merge(l_s2);
-                       l_s.print_data();
-                       l_s2.print_data();
-                          std::cout << "---" << *ittt << "\n";
+                    //   s21::list<std::string> copy(l);
+                    //    copy.print_data();
+                    //    std::cout << "-----\n";
+                    //    copy.push_back("1");
+                    //    copy.push_back("2");
+                    //    copy.push_back("3");
+                    //    copy.push_back("4");
+                    //    copy.push_back("5");
+                    //     copy.push_back("6");
+                    //    copy.print_data();
+                    //    copy.reverse();
+                    //    std::cout << "-----AFTER RESERVE\n";
+                    //    copy.print_data();
+                    //       std::cout << "-----SORT\n";
+                    //       s21::list<int> l_s {23,432,123,43,45654,21,32,3423,542,234,2,3,45,2,3434,542,2,0,-32,432};
+                    //       l_s.print_data(); 
+                    //       l_s.sort();
+                    //    std::cout << "-----AFTER SORT\n";
+                    //    l_s.print_data();
+                    //    std::cout << "-----NEW SORT\n";
+                    //     s21::list<int> l_s2 {1,3,5,6,2,4,-444,100000,200000,-213,32};
+                    //       l_s2.print_data(); 
+                    //        auto ittt = --l_s2.end();
+                    //           std::cout << "---" << *ittt << "\n";
+                    //       l_s2.sort();
+                    //    std::cout << "-----AFTER SORT\n";
+                    //    l_s2.print_data();
+                    //    std::cout << "-----AFTER MERGE\n";
+                    //    l_s.merge(l_s2);
+                    //    l_s.print_data();
+                    //    l_s2.print_data();
+                    //       std::cout << "---" << *ittt << "\n";
 
 
-                        auto f = []( auto & n ){ for ( auto& i : n) { std::cout << i <<"\n";}};
+                    //     auto f = []( auto & n ){ for ( auto& i : n) { std::cout << i <<"\n";}};
 
-                          std::list<int> ex {1,2,3,4,5};
-                          std::list<int> ex1 {11,22,33};
-                          auto tt = ex.end();
+                    //       std::list<int> ex {1,2,3,4,5};
+                    //       std::list<int> ex1 {11,22,33};
+                    //       auto tt = ex.end();
 
-                          ex.splice(tt,ex1);
-                          f(ex);
-                          f(ex1);
+                    //       ex.splice(tt,ex1);
+                    //       f(ex);
+                    //       f(ex1);
                           
-                             std::cout << "-----SPLICE\n";
-                            s21::list<int> ex_ {1,2,3,4,5};
-                          s21::list<int> ex_1 {11,22,33};
-                                auto tt_ = ex_.cend();
-                          ex_.splice(tt_,ex_1);
-                          f(ex_);
-                          f(ex_1);
+                    //          std::cout << "-----SPLICE\n";
+                    //         s21::list<int> ex_ {1,2,3,4,5};
+                    //       s21::list<int> ex_1 {11,22,33};
+                    //             auto tt_ = ex_.cend();
+                    //       ex_.splice(tt_,ex_1);
+                    //       f(ex_);
+                    //       f(ex_1);
 
-                      std::cout << "-----BEFORE UNIUE\n";
-                       // l_s.push_back(200000);
+                    //   std::cout << "-----BEFORE UNIUE\n";
+                    //    // l_s.push_back(200000);
 
-                        s21::list<int> l_ss {0,0,0};
+                    //     s21::list<int> l_ss {0,0,0};
 
-                         l_ss.print_data();
-                          std::cout << "-----AFTER UNIQUE\n";
-                          l_ss.unique();
-                          l_ss.print_data();
+                    //      l_ss.print_data();
+                    //       std::cout << "-----AFTER UNIQUE\n";
+                    //       l_ss.unique();
+                    //       l_ss.print_data();
 
-                     std::cout << "-----AFTER INSERT MANY\n";
-                        l_ss.insert_many(++l_ss.cbegin(),1,2,3,4,5,0);
-                        l_ss.print_data();
-                         std::cout << "-----AFTER INSERT MANY BACK\n";
-                         l_ss.insert_many_back(10,11,223,342);
-                         f(l_ss);
-                            std::cout << "-----AFTER INSERT MANY FRONT\n";
-                         l_ss.insert_many_front(999,99,213,3213213);
-                         f(l_ss);
+                    //  std::cout << "-----AFTER INSERT MANY\n";
+                    //     l_ss.insert_many(++l_ss.cbegin(),1,2,3,4,5,0);
+                    //     l_ss.print_data();
+                    //      std::cout << "-----AFTER INSERT MANY BACK\n";
+                    //      l_ss.insert_many_back(10,11,223,342);
+                    //      f(l_ss);
+                    //         std::cout << "-----AFTER INSERT MANY FRONT\n";
+                    //      l_ss.insert_many_front(999,99,213,3213213);
+                    //      f(l_ss);
 
 
-                         s21::vector <std::string> a {"aaa","vvvv"}; 
-                        // a.reserve(10);
-                         auto ff = [](auto n) { 
-                          for (auto& b : n) { 
-                            std::cout << b << " ";
+                    //      s21::vector <std::string> a {"aaa","vvvv"}; 
+                    //     // a.reserve(10);
+                    //      auto ff = [](auto n) { 
+                    //       for (auto& b : n) { 
+                    //         std::cout << b << " ";
                           
-                          }
-                          std::cout << "\n";
-                         };
+                    //       }
+                    //       std::cout << "\n";
+                    //      };
 
-                      a.insert_many_back("aaaaaaaa","bbbbbbb","ffffff");
-                        a.at(10);
-                        //std::cout << *(--it); 
-                         }
+                    //   a.insert_many_back("aaaaaaaa","bbbbbbb","ffffff");
+                    //     a.at(10);
+                    //     //std::cout << *(--it); 
+                    //      }
 
 
 
