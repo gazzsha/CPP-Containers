@@ -1,4 +1,7 @@
-#include"RB_tree.h"
+#include <iostream>
+#include <string>
+#include "RB_tree.h"
+#include "iterators.h"
 
 namespace s21 {
 template <typename key, typename T>
@@ -9,20 +12,34 @@ public:
     using value_type = std::pair<const key_type, mapped_type>;
     using reference = value_type&;
     using const_reference = const value_type&;
-    //using iterator = MapIterator<K, T> когда будет класс итератор
-    //using const_iterator = MapConstIterator<K, T> когда будет клас итератор
+    using iterator = MapIterator<key_type, T>;
+    using const_iterator = MapConstIterator<key_type, T>;
     using size_type = size_t;
 
     map();   // default constructor
+
     map(std::initializer_list<value_type> const &items);
-    map(key key, mapped_type type) : key_(key), type_(type) {}
     map(const map &m);             
     map(map &&m);
     s21::map<key, T> operator=(map &&m);
 
     // Destructor
     ~map();
+    
+
+    // pub methods
+    void clear();
+
+    std::pair<iterator, bool> insert(const value_type& value);
+    //std::pair<iterator, bool> insert(const value_type& value, Node<key, T>*& current_node, BaseNode* parent);
+    Node<key, T> Node_tree_;
 private:
-    RB_tree<value_type, mapped_type> RB_tree_;
+    //BaseNode BaseRoot_tree_;
+    //Node<key, T> Node_tree_;
 };
+
+
+
 } // namespace s21
+
+#include "s21_map.tpp"
