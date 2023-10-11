@@ -9,8 +9,6 @@ class BaseNode;
 template <typename K, typename V>
 class Node;
 
-
-
 template <typename K, typename V>
 class BaseNode {
 public:
@@ -27,7 +25,8 @@ template <typename K, typename V>
 class Node : public BaseNode<K, V> {
 public:
     Node();
-    Node(K key_, V value_, Node<K, V>* parent_);
+    Node(K key_, V value_, Node<K, V>* parent_, Node<K, V>* leaf_tree);
+    Node(Node<K, V>* leaf_tree);
     K key;
     V value;
 private:

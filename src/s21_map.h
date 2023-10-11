@@ -1,5 +1,4 @@
 #include <iostream>
-
 #include <string>
 #include "RB_tree.h"
 #include "iterators.h"
@@ -31,8 +30,8 @@ public:
     //void clear();
 
     std::pair<iterator, bool> insert(const value_type& value);
+    Node<K, V>* leaf_tree;  // nil leaf
     Node<K, V>* Node_tree_;
-    Node<K, V> leaf_tree();  // nil leaf
 private:
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>*& current_node, Node<K, V>* parent);
 };
