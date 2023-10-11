@@ -3,28 +3,32 @@
 #include <iostream>
 namespace s21 {
 
+template <typename K, typename V>
+class Node;
+
+template <typename K, typename V>
 class BaseNode {
 public:
     BaseNode();
-    BaseNode* left;
-    BaseNode* right;
-    BaseNode* parent;
+    Node<K,V>* left;
+    Node<K,V>* right;
+    Node<K,V>* parent;
     bool red;
 private:
 
 };
 
 template <typename K, typename V>
-class Node : public BaseNode {
+class Node : public BaseNode<K,V> {
 public:
     Node();
-    Node(K key_, V value_, BaseNode* parent_);
+    Node(K key_, V value_, Node<K,V>* parent_);
     K key;
     V value;
 private:
 
 };
-} // namespace s21
+} // namespace s21  
 
 #include "RB_tree.tpp"
 

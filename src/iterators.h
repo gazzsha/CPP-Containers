@@ -6,19 +6,19 @@ namespace s21 {
 template<typename key_type, typename mapped_type>
 class MapIterator {
 public:
-    MapIterator(BaseNode* node);
+    MapIterator(Node<key_type, mapped_type>* node);
 private:
-    BaseNode* current_node;
+    Node<key_type, mapped_type>* current_node;
 
 };
 
 template<typename key_type, typename mapped_type>
 class MapConstIterator {
 public:
-    MapConstIterator(const BaseNode* node);
+    MapConstIterator(const Node<key_type, mapped_type>* node);
 
 private:
-    const BaseNode* current_node;
+    const Node<key_type, mapped_type>* current_node;
 
 };
 }

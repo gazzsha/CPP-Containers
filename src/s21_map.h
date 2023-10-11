@@ -1,4 +1,5 @@
 #include <iostream>
+
 #include <string>
 #include "RB_tree.h"
 #include "iterators.h"
@@ -28,10 +29,10 @@ public:
     
 
     // pub methods
-    void clear();
+    //void clear();
 
     std::pair<iterator, bool> insert(const value_type& value);
-    //std::pair<iterator, bool> insert(const value_type& value, Node<key, T>*& current_node, BaseNode* parent);
+    std::pair<iterator, bool> insert(const value_type& value, Node<key, T>*& current_node, Node<key,T>* parent);
     Node<key, T> Node_tree_;
 private:
     //BaseNode BaseRoot_tree_;

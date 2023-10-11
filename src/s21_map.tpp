@@ -27,15 +27,16 @@ map<key, T> map<key, T>::operator=(map &&m) {
     // Реализация оператора перемещения
 }
 
-// template <typename key, typename T>
-// std::pair<typename map<key, T>::iterator, bool> map<key, T>::insert(const value_type& value) {
-//     return insert(value, Node_tree_, nullptr);
-// }
-
 template <typename key, typename T>
 std::pair<typename map<key, T>::iterator, bool> map<key, T>::insert(const value_type& value) {
-    Node_tree_.left = new Node<key, T>(value.first, value.second, nullptr);
-    return std::make_pair(iterator(Node_tree_.left), true);
+    Node<key, T>* temp = &Node_tree_;
+     return insert(value, temp, nullptr);
+ }
+
+template <typename key, typename T>
+std::pair<typename map<key, T>::iterator, bool> map<key, T>::insert(const value_type& value, Node<key, T>*& current_node, Node<key,T>* parent) {
+    current_node->left = new Node<key, T>(value.first, value.second, parent);
+    return std::make_pair(iterator(current_node->left), true);
 }
 
 }  // namespace s21
