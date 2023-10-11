@@ -5,16 +5,16 @@
 #include "iterators.h"
 
 namespace s21 {
-template <typename key, typename T>
+template <typename K, typename V>
 class map {
 public:
-    using key_type = key;
-    using mapped_type = T;
+    using key_type = K;
+    using mapped_type = V;
     using value_type = std::pair<const key_type, mapped_type>;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator = MapIterator<key_type, T>;
-    using const_iterator = MapConstIterator<key_type, T>;
+    using iterator = MapIterator<K, V>;
+    using const_iterator = MapConstIterator<K, V>;
     using size_type = size_t;
 
     map();   // default constructor
@@ -22,24 +22,20 @@ public:
     map(std::initializer_list<value_type> const &items);
     map(const map &m);             
     map(map &&m);
-    s21::map<key, T> operator=(map &&m);
+    s21::map<K, V> operator=(map &&m);
 
     // Destructor
     ~map();
     
-
     // pub methods
     //void clear();
 
     std::pair<iterator, bool> insert(const value_type& value);
-    std::pair<iterator, bool> insert(const value_type& value, Node<key, T>*& current_node, Node<key,T>* parent);
-    Node<key, T> Node_tree_;
+    Node<K, V>* Node_tree_;
+    Node<K, V> leaf_tree();  // nil leaf
 private:
-    //BaseNode BaseRoot_tree_;
-    //Node<key, T> Node_tree_;
+    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>*& current_node, Node<K, V>* parent);
 };
-
-
 
 } // namespace s21
 

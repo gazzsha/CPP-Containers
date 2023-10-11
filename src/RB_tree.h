@@ -4,7 +4,12 @@
 namespace s21 {
 
 template <typename K, typename V>
+class BaseNode;
+
+template <typename K, typename V>
 class Node;
+
+
 
 template <typename K, typename V>
 class BaseNode {
@@ -13,16 +18,16 @@ public:
     Node<K,V>* left;
     Node<K,V>* right;
     Node<K,V>* parent;
-    bool red;
+    bool red = true;
 private:
 
 };
 
 template <typename K, typename V>
-class Node : public BaseNode<K,V> {
+class Node : public BaseNode<K, V> {
 public:
     Node();
-    Node(K key_, V value_, Node<K,V>* parent_);
+    Node(K key_, V value_, Node<K, V>* parent_);
     K key;
     V value;
 private:
