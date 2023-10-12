@@ -35,6 +35,7 @@ int main() {
 
     m.insert(std::make_pair(std::string("lala"), 20));
 
+
     std::cout << m.Node_tree_->key << '\n';
     std::cout << m.Node_tree_->value << '\n';
     std::cout << (m.Node_tree_->red ? "RED" : "BLACK") << '\n';

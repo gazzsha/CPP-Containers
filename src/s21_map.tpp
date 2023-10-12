@@ -53,7 +53,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
     } else {
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
-            balanceTree(current_node->right);
+            //balanceTree(current_node->right);
             return std::make_pair(iterator(current_node->right), true);
         } else {
             return insert(value, current_node->right, current_node);
@@ -77,7 +77,7 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 newNode->parent->red = false;
                 uncle->red = false;
                 newNode->parent->parent->red = true;
-                if (Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
+                if(Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
             } else {
                 if (newNode == newNode->parent->right) {
                     newNode = newNode->parent;
@@ -94,7 +94,7 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 newNode->parent->red = false;
                 uncle->red = false;
                 newNode->parent->parent->red = true;
-                if (Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
+                if(Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
             } else {
                 if (newNode == newNode->parent->left) {
                     newNode = newNode->parent;
