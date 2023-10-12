@@ -5,7 +5,7 @@ namespace s21 {
 // Node<key, T> map<key, T>::leaf_tree;
 
 template <typename K, typename V>
-map<K, V>::map() : Node_tree_(new Node<K, V>(leaf_tree)) , leaf_tree(new Node<K, V>()) {}   // DEFAULT CONSTRUCTOR
+map<K, V>::map() : Node_tree_(nullptr) , leaf_tree(new Node<K, V>()) {}   // DEFAULT CONSTRUCTOR
 
 template <typename K, typename V>
 map<K, V>::~map() {} // DESTRUCTOR
@@ -38,9 +38,8 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value, Node<K, V>*& current_node, Node<K, V>* parent){
     
-    if (Node_tree_ == leaf_tree) {
-        Node_tree_ = new Node<K, V>(value.first, value.second, leaf_tree, leaf_tree);
-        Node_tree_->red = false;
+    if (!Node_tree_) {
+        Node_tree_ = new Node<K, V>(value.first, value.second, leaf_tree);
         return std::make_pair(iterator(Node_tree_), true);
     }
     if (value.second < current_node->value) {
@@ -50,7 +49,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
         } else {
             return insert(value, current_node->left, current_node);
         }
-    } else if (value.second >= current_node->value) {
+    } else {
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
             return std::make_pair(iterator(current_node->right), true);
@@ -58,6 +57,6 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
             return insert(value, current_node->right, current_node);
         }
     }
-    return std::make_pair(iterator(Node_tree_), true);
+    
 }
 }  // namespace s21

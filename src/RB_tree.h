@@ -4,29 +4,15 @@
 namespace s21 {
 
 template <typename K, typename V>
-class BaseNode;
-
-template <typename K, typename V>
-class Node;
-
-template <typename K, typename V>
-class BaseNode {
-public:
-    BaseNode();
-    Node<K,V>* left;
-    Node<K,V>* right;
-    Node<K,V>* parent;
-    bool red = true;
-private:
-
-};
-
-template <typename K, typename V>
-class Node : public BaseNode<K, V> {
+class Node{
 public:
     Node();
-    Node(K key_, V value_, Node<K, V>* parent_, Node<K, V>* leaf_tree);
-    Node(Node<K, V>* leaf_tree);
+    Node(K key_, V value_, Node<K, V>* parent_, Node<K, V>* leaf_tree);  // CONSTRUCTOR FOR NEW NODE
+    Node(K key_, V value_, Node<K, V>* leaf_tree);                       // CONSTURCTOR FOR ROOT
+    Node<K, V>* left;
+    Node<K, V>* right;
+    Node<K, V>* parent;
+    bool red = true;
     K key;
     V value;
 private:
