@@ -77,7 +77,7 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 newNode->parent->red = false;
                 uncle->red = false;
                 newNode->parent->parent->red = true;
-                newNode = newNode->parent->parent;
+                if (Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
             } else {
                 if (newNode == newNode->parent->right) {
                     newNode = newNode->parent;
@@ -94,7 +94,7 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 newNode->parent->red = false;
                 uncle->red = false;
                 newNode->parent->parent->red = true;
-                newNode = newNode->parent->parent;
+                if (Node_tree_ != newNode->parent->parent) newNode = newNode->parent->parent;
             } else {
                 if (newNode == newNode->parent->left) {
                     newNode = newNode->parent;
@@ -110,27 +110,41 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
 }
 
 template <typename K, typename V>
-void map<K, V>::leftRotate(Node<K, V>*& Node_) {
-    Node<K, V>* temp_node = Node_->right;
-    temp_node->parent = Node_->parent;
-    Node_->parent->left = temp_node; 
-    Node_->right = leaf_tree;
-    Node_->parent = temp_node;
-    temp_node->left = Node_;
+void map<K, V>::leftRotate(Node<K, V>*& node) {
+    Node<K, V>* temp = node->right;
+    node->right = temp->left;
+    if (temp->left != leaf_tree) {
+        temp->left->parent = node;
+    }
+    temp->parent = node->parent;
+    if (node->parent == nullptr) {
+        Node_tree_ = temp;
+    } else if (node == node->parent->left) {
+        node->parent->left = temp;
+    } else {
+        node->parent->right = temp;
+    }
+    temp->left = node;
+    node->parent = temp;
 }
 
 template <typename K, typename V>
-void map<K, V>::rightRotate(Node<K, V>*& Node_) {
-    Node<K, V>* temp_node = Node_->left;
-    if(Node_ == Node_tree_) {
-        Node_tree_ = temp_node;
-        temp_node->parent = nullptr;
-    }else {
-        temp_node->parent = Node_->parent;
+void map<K, V>::rightRotate(Node<K, V>*& node) {
+    Node<K, V>* temp = node->left;
+    node->left = temp->right;
+    if (temp->right != leaf_tree) {
+        temp->right->parent = node;
     }
-    temp_node->right = Node_;
-    Node_->parent = temp_node;
-    Node_->left = leaf_tree;
+    temp->parent = node->parent;
+    if (node->parent == nullptr) {
+        Node_tree_ = temp;
+    } else if (node == node->parent->left) {
+        node->parent->left = temp;
+    } else {
+        node->parent->right = temp;
+    }
+    temp->right = node;
+    node->parent = temp;
 }
 
 
