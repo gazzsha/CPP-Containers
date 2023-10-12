@@ -45,6 +45,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
     if (value.second < current_node->value) {
         if (current_node->left == leaf_tree) {
             current_node->left = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
+            balanceTree(current_node->left);
             return std::make_pair(iterator(current_node->left), true);
         } else {
             return insert(value, current_node->left, current_node);
@@ -52,6 +53,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
     } else {
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
+            balanceTree(current_node->right);
             return std::make_pair(iterator(current_node->right), true);
         } else {
             return insert(value, current_node->right, current_node);
@@ -75,11 +77,15 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 newNode->parent->red = false;
                 uncle->red = false;
                 newNode->parent->parent->red = true;
+                newNode = newNode->parent->parent;
             } else {
                 if (newNode == newNode->parent->right) {
                     newNode = newNode->parent;
                     leftRotate(newNode);
                 }
+                newNode->parent->red = false;
+                newNode->parent->parent->red = true;
+                rightRotate(newNode->parent->parent);
             }
         }
         else {
@@ -89,22 +95,43 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 uncle->red = false;
                 newNode->parent->parent->red = true;
                 newNode = newNode->parent->parent;
+            } else {
+                if (newNode == newNode->parent->left) {
+                    newNode = newNode->parent;
+                    rightRotate(newNode);
+                }
+                newNode->parent->red = false;
+                newNode->parent->parent->red = true;
+                leftRotate(newNode->parent->parent);
             }
         } 
     }
+    Node_tree_->red = false;
 }
 
 template <typename K, typename V>
-void map<K, V>::leftRotate(Node<K, V>*& Node) {
-    
+void map<K, V>::leftRotate(Node<K, V>*& Node_) {
+    Node<K, V>* temp_node = Node_->right;
+    temp_node->parent = Node_->parent;
+    Node_->parent->left = temp_node; 
+    Node_->right = leaf_tree;
+    Node_->parent = temp_node;
+    temp_node->left = Node_;
 }
 
 template <typename K, typename V>
-void map<K, V>::rightRotate(Node<K, V>*& Node) {
-
+void map<K, V>::rightRotate(Node<K, V>*& Node_) {
+    Node<K, V>* temp_node = Node_->left;
+    if(Node_ == Node_tree_) {
+        Node_tree_ = temp_node;
+        temp_node->parent = nullptr;
+    }else {
+        temp_node->parent = Node_->parent;
+    }
+    temp_node->right = Node_;
+    Node_->parent = temp_node;
+    Node_->left = leaf_tree;
 }
 
-template <typename K, typename V>
-void map<K, V>::swapValues(Node<K, V>*& Node);
 
 }  // namespace s21
