@@ -19,7 +19,13 @@ int main() {
 
     std::cout << m.Node_tree_->right->key << '\n';
     std::cout << m.Node_tree_->right->value << '\n';
-    std::cout << (m.Node_tree_->right->value ? "RED" : "BLACK") << '\n';
+    std::cout << (m.Node_tree_->right->red ? "RED" : "BLACK") << '\n';
+    std::cout << '\n';
+
+
+    std::cout << m.Node_tree_->right->parent->key << '\n';
+    std::cout << m.Node_tree_->right->parent->value << '\n';
+    std::cout << (m.Node_tree_->right->parent->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
     // std::cout << m.Node_tree_->right->right << '\n';
@@ -29,7 +35,7 @@ int main() {
 
     std::cout << m.Node_tree_->left->key << '\n';
     std::cout << m.Node_tree_->left->value << '\n';
-    std::cout << (m.Node_tree_->left->value ? "RED" : "BLACK") << '\n';
+    std::cout << (m.Node_tree_->left->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
     // std::cout << m.Node_tree_->left << '\n';
@@ -39,7 +45,7 @@ int main() {
 
     std::cout << m.Node_tree_->right->left->key << '\n';
     std::cout << m.Node_tree_->right->left->value << '\n';
-    std::cout << (m.Node_tree_->right->left->value ? "RED" : "BLACK") << '\n';
+    std::cout << (m.Node_tree_->right->left->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
     std::cout << m.Node_tree_->right->left->parent->key << '\n';
