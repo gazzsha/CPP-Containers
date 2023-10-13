@@ -31,9 +31,9 @@ int main() {
     // std::cout << (m.Node_tree_->left->right->red ? "RED" : "BLACK") << '\n';
     // std::cout << '\n';
 
-    m.insert(std::make_pair(std::string("mama"), 8));
+    //m.insert(std::make_pair(std::string("mama"), 8));
 
-    m.insert(std::make_pair(std::string("lala"), 20));
+    // m.insert(std::make_pair(std::string("lala"), 20));
 
 
     std::cout << m.Node_tree_->key << '\n';
@@ -56,14 +56,14 @@ int main() {
     std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
-    std::cout << m.Node_tree_->left->right->key << '\n';
-    std::cout << m.Node_tree_->left->right->value << '\n';
-    std::cout << (m.Node_tree_->left->right->red ? "RED" : "BLACK") << '\n';
-    std::cout << '\n';
+    // std::cout << m.Node_tree_->left->right->key << '\n';
+    // std::cout << m.Node_tree_->left->right->value << '\n';
+    // std::cout << (m.Node_tree_->left->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
 
-    std::cout << m.Node_tree_->right->left->key << '\n';
-    std::cout << m.Node_tree_->right->left->value << '\n';
-    std::cout << (m.Node_tree_->right->left->red ? "RED" : "BLACK") << '\n';
-    std::cout << '\n';
+    // std::cout << m.Node_tree_->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
 
 }

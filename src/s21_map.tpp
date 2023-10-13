@@ -53,7 +53,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
     } else {
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
-            //balanceTree(current_node->right);
+            balanceTree(current_node->right);
             return std::make_pair(iterator(current_node->right), true);
         } else {
             return insert(value, current_node->right, current_node);
@@ -70,7 +70,7 @@ bool map<K, V>::nodeExist(Node<K, V>*& node){
 template <typename K, typename V>
 void map<K, V>::balanceTree(Node<K, V>*& newNode) {
     Node<K, V>* uncle;
-    while (newNode->parent->red) {
+    while (newNode->parent != nullptr && newNode->parent->parent != nullptr && newNode->parent->red) {
         if (newNode->parent == newNode->parent->parent->left) {
             uncle = newNode->parent->parent->right;
             if (uncle->red) {
@@ -109,6 +109,8 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
     Node_tree_->red = false;
 }
 
+
+
 template <typename K, typename V>
 void map<K, V>::leftRotate(Node<K, V>*& node) {
     Node<K, V>* temp = node->right;
@@ -131,19 +133,9 @@ void map<K, V>::leftRotate(Node<K, V>*& node) {
 template <typename K, typename V>
 void map<K, V>::rightRotate(Node<K, V>*& node) {
     Node<K, V>* temp = node->left;
-    node->left = temp->right;
-    if (temp->right != leaf_tree) {
-        temp->right->parent = node;
-    }
-    temp->parent = node->parent;
-    if (node->parent == nullptr) {
-        Node_tree_ = temp;
-    } else if (node == node->parent->left) {
-        node->parent->left = temp;
-    } else {
-        node->parent->right = temp;
-    }
     temp->right = node;
+    node->left = leaf_tree;
+    temp->parent = node->parent;
     node->parent = temp;
 }
 

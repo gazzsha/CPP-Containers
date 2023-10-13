@@ -36,8 +36,8 @@ private:
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>*& current_node, Node<K, V>* parent);
     bool nodeExist(Node<K, V>*& node);
     void balanceTree(Node<K, V>*& newNode);
-    void leftRotate(Node<K, V>*& Node_);
-    void rightRotate(Node<K, V>*& Node_);
+    void leftRotate(Node<K, V>*& newNode);
+    void rightRotate(Node<K, V>*& newNode);
 };
 
 } // namespace s21
