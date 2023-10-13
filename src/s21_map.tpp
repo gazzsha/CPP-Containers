@@ -136,17 +136,30 @@ template <typename K, typename V>
 void map<K, V>::rightRotate(Node<K, V>*& node) {
     Node<K, V>* grand_ = node->parent->parent;
     Node<K, V>* parent_ = node->parent;
+    //Node<K, V>* temp_left = ;
+    Node<K, V>* temp_right = node;
+    
     if (parent_ == grand_->left) {
         parent_->right = grand_;
-        grand_->left = leaf_tree;
-        parent_->parent = grand_->parent;
+        if (grand_ == Node_tree_){
+            Node_tree_->parent = parent_;
+            Node_tree_ = parent_;
+            parent_->parent = leaf_tree;
+        }
+        else parent_->parent = grand_->parent;
+        grand_->right = leaf_tree;
         parent_->parent->left = parent_;
         grand_->parent = parent_;
     }
     else {
         parent_->left = grand_;
+        if (grand_ == Node_tree_) {
+            Node_tree_->parent = parent_;
+            Node_tree_ = parent_;
+            parent_->parent = Node_tree_->left;
+        }
+        else parent_->parent = grand_->parent;
         grand_->right = leaf_tree;
-        parent_->parent = grand_->parent;
         parent_->parent->right = parent_;
         grand_->parent = parent_;
     }
