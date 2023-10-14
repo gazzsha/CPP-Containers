@@ -180,11 +180,16 @@ int main() {
     std::cout << (m.Node_tree_->right->right->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
-
-    std::cout << m.Node_tree_->left->left->key << '\n';
-    std::cout << m.Node_tree_->left->left->value << '\n';
-    std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
+    std::cout << m.Node_tree_->right->right->left->key << '\n';
+    std::cout << m.Node_tree_->right->right->left->value << '\n';
+    std::cout << (m.Node_tree_->right->right->left->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
+
+
+    // std::cout << m.Node_tree_->left->left->key << '\n';
+    // std::cout << m.Node_tree_->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
 
     // std::cout << m.Node_tree_->right->left->left->key << '\n';
     // std::cout << m.Node_tree_->right->left->left->value << '\n';

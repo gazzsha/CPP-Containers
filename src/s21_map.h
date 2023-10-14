@@ -33,11 +33,13 @@ public:
     Node<K, V>* leaf_tree;  // nil leaf
     Node<K, V>* Node_tree_;
 private:
-    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>*& current_node, Node<K, V>* parent);
+    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent);
     bool nodeExist(Node<K, V>*& node);
-    void balanceTree(Node<K, V>*& newNode);
+    void balanceTree(Node<K, V>* newNode);
     void leftRotate(Node<K, V>*& node);
     void rightRotate(Node<K, V>*& node);
+    void rotateLeft(Node<K, V>* x);
+    void rotateRight(Node<K, V>* x);
 };
 
 } // namespace s21
