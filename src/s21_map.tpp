@@ -71,19 +71,20 @@ template <typename K, typename V>
 void map<K, V>::balanceTree(Node<K, V>*& newNode) {
     Node<K, V>* uncle;
     Node<K, V>* tempNode = newNode;
-
-    while (tempNode->parent != nullptr && tempNode->parent->parent != nullptr && tempNode->parent->red) {
+    bool recursive_up = 0;
+    while (tempNode->parent->parent != leaf_tree && tempNode->parent->red) {
         if (tempNode->parent == tempNode->parent->parent->left) {
             uncle = tempNode->parent->parent->right;
             if (uncle->red) {
                 tempNode->parent->red = false;
                 uncle->red = false;
                 tempNode->parent->parent->red = true;
-                if(Node_tree_ != tempNode->parent->parent) tempNode = tempNode->parent->parent;
+                tempNode = tempNode->parent->parent;
             } else {
                 if (tempNode == tempNode->parent->right) {
                     leftRotate(tempNode);
                     tempNode = tempNode->left;
+                    recursive_up = 1;
                 }
                 tempNode->parent->red = false;
                 tempNode->parent->parent->red = true;
@@ -96,11 +97,12 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
                 tempNode->parent->red = false;
                 uncle->red = false;
                 tempNode->parent->parent->red = true;
-                if(Node_tree_ != tempNode->parent->parent) tempNode = tempNode->parent->parent;
+                tempNode = tempNode->parent->parent;
             } else {
                 if (tempNode == tempNode->parent->left) {
                     leftRotate(tempNode);
                     tempNode = tempNode->right;
+                    recursive_up = 1;
                 }
                 tempNode->parent->red = false;
                 tempNode->parent->parent->red = true;
@@ -113,6 +115,7 @@ void map<K, V>::balanceTree(Node<K, V>*& newNode) {
 
 
 
+
 template <typename K, typename V>
 void map<K, V>::leftRotate(Node<K, V>*& node) {
     Node<K, V>* grand_ = node->parent->parent;
@@ -120,15 +123,18 @@ void map<K, V>::leftRotate(Node<K, V>*& node) {
     if(node == node->parent->right) {
         grand_->left = node;
         node->parent = grand_;
-        node->left = parent_;
         parent_->parent = node;
-        parent_->right = leaf_tree;
+        parent_->right = node->left;
+        parent_->right->parent = parent_;
+        node->left = parent_;
+
     } else {
         grand_->right = node;
         node->parent = grand_;
-        node->right = parent_;
         parent_->parent = node;
-        parent_->left = leaf_tree;
+        parent_->left = node->right;
+        parent_->left->parent = parent_;
+        node->right = parent_;
     }
 }
 
@@ -136,34 +142,69 @@ template <typename K, typename V>
 void map<K, V>::rightRotate(Node<K, V>*& node) {
     Node<K, V>* grand_ = node->parent->parent;
     Node<K, V>* parent_ = node->parent;
-    //Node<K, V>* temp_left = ;
-    Node<K, V>* temp_right = node;
     
     if (parent_ == grand_->left) {
-        parent_->right = grand_;
-        if (grand_ == Node_tree_){
-            Node_tree_->parent = parent_;
+        if (grand_->parent) {
+            if (grand_ == grand_->parent->right) grand_->parent->right = parent_;
+            else grand_->parent->left = parent_;
+            parent_->parent = grand_->parent;
+        } else {
             Node_tree_ = parent_;
             parent_->parent = leaf_tree;
         }
-        else parent_->parent = grand_->parent;
-        grand_->right = leaf_tree;
-        parent_->parent->left = parent_;
+        grand_->left = parent_->right;
+        grand_->left->parent = grand_;
         grand_->parent = parent_;
-    }
-    else {
-        parent_->left = grand_;
-        if (grand_ == Node_tree_) {
-            Node_tree_->parent = parent_;
+        parent_->right = grand_;
+    } else {
+        if (grand_->parent) {
+            if (grand_ == grand_->parent->right) grand_->parent->right = parent_;
+            else grand_->parent->left = parent_;
+            parent_->parent = grand_->parent;
+        } else {
             Node_tree_ = parent_;
-            parent_->parent = Node_tree_->left;
+            parent_->parent = leaf_tree;
         }
-        else parent_->parent = grand_->parent;
-        grand_->right = leaf_tree;
-        parent_->parent->right = parent_;
+        grand_->right = parent_->left;
+        grand_->right->parent = grand_;
         grand_->parent = parent_;
+        parent_->left = grand_;
+
     }
 }
 
 
+
 }  // namespace s21
+
+
+
+// template <typename K, typename V>
+// void map<K, V>::rightRotate(Node<K, V>*& node) {
+//     Node<K, V>* grand_ = node->parent->parent;
+//     Node<K, V>* parent_ = node->parent;
+    
+//     if (parent_ == grand_->left) {
+//         grand_->left = parent_->right;
+//         parent_->right->parent = grand_;
+//         parent_->right = grand_;
+//         if (grand_ == Node_tree_) {
+//             Node_tree_ = parent_;
+//             parent_->parent = leaf_tree;
+//         } else {
+//             parent_->parent = grand_->parent;
+//             grand_->parent = parent_;
+//         }
+//     } else {
+//         grand_->right = parent_->left;
+//         parent_->left->parent = grand_;
+//         parent_->left = grand_;
+//         if (grand_ == Node_tree_) {
+//             Node_tree_ = parent_;
+//             parent_->parent = leaf_tree;
+//         } else {
+//             parent_->parent = grand_->parent;
+//             grand_->parent = parent_;
+//         }
+//     }
+// }

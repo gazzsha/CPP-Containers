@@ -25,11 +25,22 @@ int main() {
 
     m.insert(std::make_pair(std::string("mafdsma"), 16));
 
-     m.insert(std::make_pair(std::string("madma"), 18));
+    m.insert(std::make_pair(std::string("madma"), 18));
 
-     m.insert(std::make_pair(std::string("maama"), 20));
+    m.insert(std::make_pair(std::string("maama"), 20));
 
-     m.insert(std::make_pair(std::string("maama"), 19));
+    m.insert(std::make_pair(std::string("maama"), 19));
+
+
+
+    // m.insert(std::make_pair(std::string("mafdsma"), 16));
+
+    //  m.insert(std::make_pair(std::string("madma"), 18));
+
+    //  m.insert(std::make_pair(std::string("maama"), 20));
+
+    //  m.insert(std::make_pair(std::string("maama"), 19));
+
     // m.insert(std::make_pair(std::string("mama"), 7));
 
     // std::cout << m.Node_tree_->left->key << '\n';
@@ -175,10 +186,98 @@ int main() {
     std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
     std::cout << '\n';
 
+    // std::cout << m.Node_tree_->right->left->left->key << '\n';
+    // std::cout << m.Node_tree_->right->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->left->right->key << '\n';
+    // std::cout << m.Node_tree_->right->left->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->left->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->left->left->key << '\n';
+    // std::cout << m.Node_tree_->right->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+
+    // std::cout << m.Node_tree_->right->right->key << '\n';
+    // std::cout << m.Node_tree_->right->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->right->left->left->key << '\n';
+    // std::cout << m.Node_tree_->right->right->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->right->left->right->key << '\n';
+    // std::cout << m.Node_tree_->right->right->left->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->left->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
 
     // std::cout << m.Node_tree_->right->right->right->key << '\n';
     // std::cout << m.Node_tree_->right->right->right->value << '\n';
     // std::cout << (m.Node_tree_->right->right->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->right->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->right->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->right->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    //     std::cout << m.Node_tree_->right->right->right->right->key << '\n';
+    // std::cout << m.Node_tree_->right->right->right->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->right->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->left->left->key << '\n';
+    // std::cout << m.Node_tree_->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->left->right->key << '\n';
+    // std::cout << m.Node_tree_->left->right->value << '\n';
+    // std::cout << (m.Node_tree_->left->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+
+    // std::cout << m.Node_tree_->right->key << '\n';
+    // std::cout << m.Node_tree_->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+
+    // std::cout << m.Node_tree_->right->right->key << '\n';
+    // std::cout << m.Node_tree_->right->right->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->right->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+    // std::cout << m.Node_tree_->left->left->key << '\n';
+    // std::cout << m.Node_tree_->left->left->value << '\n';
+    // std::cout << (m.Node_tree_->left->left->red ? "RED" : "BLACK") << '\n';
+    // std::cout << '\n';
+
+
+    // std::cout << m.Node_tree_->right->right->left->key << '\n';
+    // std::cout << m.Node_tree_->right->right->left->value << '\n';
+    // std::cout << (m.Node_tree_->right->right->left->red ? "RED" : "BLACK") << '\n';
     // std::cout << '\n';
 
 
