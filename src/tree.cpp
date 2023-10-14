@@ -284,7 +284,4 @@ int main() {
     // std::cout << m.Node_tree_->right->right->left->value << '\n';
     // std::cout << (m.Node_tree_->right->right->left->red ? "RED" : "BLACK") << '\n';
     // std::cout << '\n';
-
-
-
 }

@@ -34,12 +34,10 @@ public:
     Node<K, V>* Node_tree_;
 private:
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent);
-    bool nodeExist(Node<K, V>*& node);
+    bool nodeExist(Node<K, V>* node);
     void balanceTree(Node<K, V>* newNode);
-    void leftRotate(Node<K, V>*& node);
-    void rightRotate(Node<K, V>*& node);
-    void rotateLeft(Node<K, V>* x);
-    void rotateRight(Node<K, V>* x);
+    void leftRotate(Node<K, V>* node);
+    void rightRotate(Node<K, V>* node);
 };
 
 } // namespace s21
