@@ -7,8 +7,9 @@ template<typename key_type, typename mapped_type>
 class MapIterator {
 public:
     MapIterator(Node<key_type, mapped_type>* node);
+        Node<key_type, mapped_type>* current_node;
 private:
-    Node<key_type, mapped_type>* current_node;
+   // Node<key_type, mapped_type>* current_node;
 
 };
 

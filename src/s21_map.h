@@ -1,5 +1,7 @@
 #include <iostream>
 #include <string>
+#include <iomanip>
+#include <algorithm>
 #include "RB_tree.h"
 #include "iterators.h"
 
@@ -28,16 +30,26 @@ public:
     
     // pub methods
     //void clear();
-
+    bool empty();
+    size_type size();
+    size_type max_size();
     std::pair<iterator, bool> insert(const value_type& value);
+    void erase(iterator pos);
+    void printTree();
+    void print_node_tree() {std::cout << Node_tree_;}
+private:
     Node<K, V>* leaf_tree;  // nil leaf
     Node<K, V>* Node_tree_;
-private:
+
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent);
+    void insertBalanceTree(Node<K, V>* newNode);
+    void smallPivot(Node<K, V>* node);
+    void bigPivot(Node<K, V>* node);
+    void printTree(Node<K, V>* node, int level);
+    size_type size(Node<K, V>* node);
     bool nodeExist(Node<K, V>* node);
-    void balanceTree(Node<K, V>* newNode);
-    void leftRotate(Node<K, V>* node);
-    void rightRotate(Node<K, V>* node);
+    void deleteBalanceTree(Node<K, V>* node);
+
 };
 
 } // namespace s21
