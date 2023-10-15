@@ -18,7 +18,7 @@ int main() {
 
     m.insert(std::make_pair(std::string("madaasdf"), 18));
 
-    s21::map<std::string, int>::iterator it = m.insert(std::make_pair(std::string("mdfasda"), 20)).first;
+    m.insert(std::make_pair(std::string("mdfasda"), 20));
 
     m.insert(std::make_pair(std::string("maama"), 19));
 
@@ -28,11 +28,11 @@ int main() {
 
     m.insert(std::make_pair(std::string("masasdsma"), 24));
 
-    m.insert(std::make_pair(std::string("mfsma"), 25));
+    s21::map<std::string, int>::iterator it = m.insert(std::make_pair(std::string("mfsma"), 25)).first;
 
     m.insert(std::make_pair(std::string("maama"), 26));
 
-    //m.erase(it);
+    m.erase(it);
 
     m.printTree();
 

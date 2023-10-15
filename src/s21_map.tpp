@@ -237,7 +237,7 @@ void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
                 brother->red = node->parent->red;
                 node->parent->red = false;
                 brother->right->red = false;
-                bigPivot(brother->parent);
+                bigPivot(brother);
                 node = Node_tree_;
             }
         } else {
@@ -245,7 +245,7 @@ void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
             if (brother->red) {
                 brother->red = false;
                 node->parent->red = true;
-                bigPivot(brother->right);
+                bigPivot(brother->left);
                 brother = node->parent->left;
             }
 
@@ -262,7 +262,7 @@ void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
                 brother->red = node->parent->red;
                 node->parent->red = false;
                 brother->left->red = false;
-                bigPivot(brother->parent);
+                bigPivot(brother);
                 node = Node_tree_;
             }
         }
