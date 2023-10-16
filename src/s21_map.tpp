@@ -27,35 +27,51 @@ map<K, V> map<K, V>::operator=(map &&m) {
 template <typename K, typename V>
 map<K, V>::~map() {} // DESTRUCTOR
 
-
 template <typename K, typename V>
-std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value) {
-    return insert(value, Node_tree_, nullptr);
+std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert_or_assign(const K& key, const V& obj) {
+    return insert(std::make_pair(key, obj), Node_tree_, nullptr, 1);
 }
 
 template <typename K, typename V>
-std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent){
+std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const K& key, const V& obj) {
+    return insert(std::make_pair(key, obj), 0);
+}
+
+
+template <typename K, typename V>
+std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value) {
+    return insert(value, Node_tree_, nullptr, 0);
+}
+
+template <typename K, typename V>
+std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign){
     Node<K, V>* temp;
     if (!Node_tree_) {
         Node_tree_ = new Node<K, V>(value.first, value.second, leaf_tree);
         return std::make_pair(iterator(Node_tree_), true);
     }
-    if (value.second < current_node->value) {
+    if (value.first < current_node->key && value.first != current_node->key) {
         if (current_node->left == leaf_tree) {
             current_node->left = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
             insertBalanceTree(current_node->left);
             return std::make_pair(iterator(current_node->left), true);
         } else {
-            return insert(value, current_node->left, current_node);
+            return insert(value, current_node->left, current_node, assign);
         }
-    } else {
+    } else if (value.first != current_node->key){
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K, V>(value.first, value.second, current_node, leaf_tree);
             insertBalanceTree(current_node->right);
             return std::make_pair(iterator(current_node->right), true);
         } else {
-            return insert(value, current_node->right, current_node);
+            return insert(value, current_node->right, current_node, assign);
         }
+    } else {
+        if (assign == 0){
+            return std::make_pair(iterator(current_node), false);
+        }
+        current_node->value = value.second;
+        return std::make_pair(iterator(current_node), true);
     }
 }
 
@@ -104,21 +120,31 @@ template <typename K, typename V>
 void map<K, V>::smallPivot(Node<K, V>* node) {
     Node<K, V>* grand_ = node->parent->parent;
     Node<K, V>* parent_ = node->parent;
-    if(node == node->parent->right) {
-        grand_->left = node;
-        node->parent = grand_;
-        parent_->parent = node;
-        parent_->right = node->left;
-        parent_->right->parent = parent_;
-        node->left = parent_;
 
+    if(node == node->parent->right){
+        parent_->right = node->left;
+        if (node->right != leaf_tree) node->left->parent = parent_;
+        node->parent = parent_->parent;
+        if (parent_->parent) {
+            if (parent_ == parent_->parent->left)
+                parent_->parent->left = node;
+            else
+                parent_->parent->right = node;
+        }
+        node->left = parent_;
+        if (parent_ != leaf_tree) parent_->parent = node;
     } else {
-        grand_->right = node;
-        node->parent = grand_;
-        parent_->parent = node;
         parent_->left = node->right;
-        parent_->left->parent = parent_;
+        if (node->right != leaf_tree) node->right->parent = parent_;
+        node->parent = parent_->parent;
+        if (parent_->parent) {
+            if (parent_ == parent_->parent->right)
+                parent_->parent->right = node;
+            else
+                parent_->parent->left = node;
+        }
         node->right = parent_;
+        if (parent_ != leaf_tree) parent_->parent = node;
     }
 }
 
@@ -177,8 +203,6 @@ bool map<K, V>::nodeExist(Node<K, V>* node){
     return node != leaf_tree;
 }
 
-
-
 template <typename K, typename V>
 void map<K, V>::erase(iterator pos) {
     Node<K, V>* x_node, * y_node; 
@@ -187,8 +211,8 @@ void map<K, V>::erase(iterator pos) {
     if (pos.current_node->left == leaf_tree || pos.current_node->right == leaf_tree) {
         y_node = pos.current_node;
     } else {
-        y_node = pos.current_node->right;
-        while (y_node->left != leaf_tree) y_node = y_node->left;
+        y_node = pos.current_node->left;
+        while (y_node->right != leaf_tree) y_node = y_node->right;
     }
 
     if (y_node->left != leaf_tree) x_node = y_node->left;
@@ -207,62 +231,63 @@ void map<K, V>::erase(iterator pos) {
 
     if (!y_node->red) deleteBalanceTree(x_node);
 
-    free (y_node);
+    delete y_node;
 }
 
 
 template <typename K, typename V>
 void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
-    Node<K, V>* brother;
-    while (node != Node_tree_ && !node->red) {
+    bool flag_small_pivot = 0;
+    while (node != Node_tree_ && node->red == false) {
         if (node == node->parent->left) {
-            brother = node->parent->right;
-            if (brother->red) {
+            Node<K, V>* brother = node->parent->right;
+            if (brother->red == true) {
                 brother->red = false;
                 node->parent->red = true;
                 bigPivot(brother->right);
                 brother = node->parent->right;
             }
 
-            if (!brother->left->red && !brother->right->red) {
+            if (brother->left->red == false && brother->right->red == false) {
                 brother->red = true;
                 node = node->parent;
             } else {
-                if (!brother->right->red) {
+                if (brother->right->red == false) {
                     brother->left->red = false;
                     brother->red = true;
                     smallPivot(brother->left);
-                    brother = brother->right;
+                    brother = brother->parent;
+                    flag_small_pivot = 1;
                 }
                 brother->red = node->parent->red;
                 node->parent->red = false;
                 brother->right->red = false;
-                bigPivot(brother);
+                bigPivot(brother->right );
                 node = Node_tree_;
             }
         } else {
-            brother = node->parent->left;
-            if (brother->red) {
+            Node<K, V>* brother = node->parent->left;
+            if (brother->red == true) {
                 brother->red = false;
                 node->parent->red = true;
                 bigPivot(brother->left);
                 brother = node->parent->left;
             }
-
-            if (!brother->left->red && !brother->right->red) {
+            if (brother->left->red == false && brother->right->red == false) {
                 brother->red = true;
                 node = node->parent;
             } else {
-                if (!brother->left->red) {
+                if (brother->left->red == false) {
                     brother->right->red = false;
                     brother->red = true;
                     smallPivot(brother->right);
-                    brother = brother->left;
+                    brother = brother->parent;
+                    flag_small_pivot = 1;
                 }
                 brother->red = node->parent->red;
                 node->parent->red = false;
                 brother->left->red = false;
-                bigPivot(brother);
+                bigPivot(brother->left);                
                 node = Node_tree_;
             }
         }

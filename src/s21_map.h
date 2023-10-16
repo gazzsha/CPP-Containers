@@ -34,6 +34,8 @@ public:
     size_type size();
     size_type max_size();
     std::pair<iterator, bool> insert(const value_type& value);
+    std::pair<iterator, bool> insert(const K& key, const V& obj);
+    std::pair<iterator, bool> insert_or_assign(const K& key, const V& obj);
     void erase(iterator pos);
     void printTree();
     void print_node_tree() {std::cout << Node_tree_;}
@@ -41,7 +43,7 @@ private:
     Node<K, V>* leaf_tree;  // nil leaf
     Node<K, V>* Node_tree_;
 
-    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent);
+    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign);
     void insertBalanceTree(Node<K, V>* newNode);
     void smallPivot(Node<K, V>* node);
     void bigPivot(Node<K, V>* node);
