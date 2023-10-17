@@ -22,10 +22,10 @@ class array {
   size_type sz;
 
  public:
-  array();
-  array(std::initializer_list<value_type> const &items);
-  array(const array &a);
-  array(array &&a) noexcept;
+  constexpr array();
+  constexpr array(std::initializer_list<value_type> const &items);
+  constexpr array(const array &a);
+  constexpr array(array &&a) noexcept;
   ~array();
   array &operator=(array &&a) noexcept;
   constexpr reference at(size_type pos);
@@ -43,33 +43,30 @@ class array {
   void swap(array &other) noexcept(noexcept(std::is_nothrow_swappable_v<T>));
   void fill(const_reference value);
   array &operator=(const array &a);
-  void print() {
-    for (auto i = 0; i < N; i++) {
-      std::cout << arr[i] << " ";
-    }
-    std::cout << "\n";
-  }
+  // void print() {
+  //   for (auto i = 0; i < N; i++) {
+  //     std::cout << arr[i] << " ";
+  //   }
+  //   std::cout << "\n";
+  // }
 };
 
 template <typename T, size_t N>
-array<T, N>::array() : sz(N) {}
+constexpr array<T, N>::array() : sz(N) {}
 
 template <typename T, size_t N>
-array<T, N>::array(std::initializer_list<value_type> const &items)
+constexpr array<T, N>::array(std::initializer_list<value_type> const &items)
     : sz(items.size()) {
-  size_t i = 0;
-  for (auto it = items.begin(); it != items.end(); ++it, ++i) {
-    arr[i] = *it;
-  }
+  std::copy(items.begin(), items.end(), arr);
 }
 
 template <typename T, size_t N>
-array<T, N>::array(const array &a) : sz(a.sz) {
+constexpr array<T, N>::array(const array &a) : sz(a.sz) {
   std::copy(std::begin(a.arr), std::end(a.arr), std::begin(arr));
 }
 
 template <typename T, size_t N>
-array<T, N>::array(array &&a) noexcept : sz(a.sz) {
+constexpr array<T, N>::array(array &&a) noexcept : sz(a.sz) {
   std::move(std::begin(a.arr), std::end(a.arr), std::begin(arr));
 }
 
