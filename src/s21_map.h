@@ -23,13 +23,13 @@ public:
     map(std::initializer_list<value_type> const &items);
     map(const map &m);             
     map(map &&m);
-    s21::map<K, V> operator=(map &&m);
+    map<K, V>& operator=(map &&m);
 
     // Destructor
     ~map();
     
     // pub methods
-    //void clear();
+    void clear();
     bool empty();
     size_type size();
     size_type max_size();
@@ -38,9 +38,10 @@ public:
     std::pair<iterator, bool> insert_or_assign(const K& key, const V& obj);
     void erase(iterator pos);
     void printTree();
-    void print_node_tree() {std::cout << Node_tree_;}
+    void print_laef() {std::cout << leaf_tree;}
 private:
-    Node<K, V>* leaf_tree;  // nil leaf
+    static Node<K, V>* leaf_tree;  // nil leaf
+    //static Node<K, V> leaf;
     Node<K, V>* Node_tree_;
 
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign);
@@ -51,6 +52,9 @@ private:
     size_type size(Node<K, V>* node);
     bool nodeExist(Node<K, V>* node);
     void deleteBalanceTree(Node<K, V>* node);
+    void copyNodes(Node<K, V>* sourceNode, Node<K, V>*& targetNode);
+    void moveNodes(Node<K, V>*& sourceNode, Node<K, V>*& targetNode);
+    void clear(Node<K, V>* delete_ptr);
 
 };
 

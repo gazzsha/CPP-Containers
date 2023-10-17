@@ -1,31 +1,87 @@
 
 namespace s21 {
 
-template <typename K, typename V>
-map<K, V>::map() : Node_tree_(nullptr) , leaf_tree(new Node<K, V>()) {}   // DEFAULT CONSTRUCTOR
+
+// template <typename K, typename V>
+// Node<K, V> map<K, V>::leaf = Node<K, V>();
+
 
 template <typename K, typename V>
-map<K, V>::map(std::initializer_list<value_type> const &items) {
-    // создать мапу + загрузить initializer_list в rb_дерево
+Node<K, V>* map<K, V>::leaf_tree = new Node<K, V>;
+
+
+template <typename K, typename V>
+map<K, V>::map() : Node_tree_(nullptr) {}   // DEFAULT CONSTRUCTOR
+
+template <typename K, typename V>
+map<K, V>::map(std::initializer_list<value_type> const &items) : Node_tree_(nullptr) {
+    for (const value_type &item : items) {
+        insert(item);
+    }
 }
 
 template <typename K, typename V>
-map<K, V>::map(const map &m) { // : RB_tree(m.get_rb_tree){
-    // создать в мапе rb_дерево такое же, как в m
+map<K, V>::map(const map &m) : map() {
+    copyNodes(m.Node_tree_, Node_tree_);
 }
 
 template <typename K, typename V>
-map<K, V>::map(map &&m) {
-    // Реализация конструктора перемещения
+map<K, V>::map(map &&m) : Node_tree_(nullptr){
+    moveNodes(m.Node_tree_, this->Node_tree_);
 } 
 
 template <typename K, typename V>
-map<K, V> map<K, V>::operator=(map &&m) {
-    // Реализация оператора присваивания
+map<K, V>::~map() {
+    clear();
 }
 
 template <typename K, typename V>
-map<K, V>::~map() {} // DESTRUCTOR
+map<K, V>& map<K, V>::operator=(map &&m) {
+    moveNodes(m.Node_tree_, Node_tree_);
+    return *this;
+}
+
+template <typename K, typename V>
+void map<K, V>::moveNodes(Node<K, V>*& sourceNode, Node<K, V>*& targetNode) {
+    targetNode = sourceNode;
+    sourceNode = nullptr;
+}
+
+template <typename K, typename V>
+void map<K, V>::clear(Node<K, V>* delete_ptr) {
+    if (delete_ptr && delete_ptr != leaf_tree) {
+        if (delete_ptr->right && delete_ptr->right != leaf_tree) {
+            clear(delete_ptr->right);
+        }
+        if (delete_ptr->left && delete_ptr->left != leaf_tree) {
+            clear(delete_ptr->left);
+        }
+        delete delete_ptr;
+    }
+}
+
+template <typename K, typename V>
+void map<K, V>::clear(){
+    clear(Node_tree_);
+    //delete leaf_tree;
+    //leaf_tree = nullptr;
+    Node_tree_ = nullptr;
+}
+
+template <typename K, typename V>
+void map<K, V>::copyNodes(Node<K, V>* sourceNode, Node<K, V>*& targetNode) {
+    if (sourceNode) {
+        
+        targetNode = new Node<K, V>(sourceNode->key, sourceNode->value, sourceNode->parent, sourceNode->red);
+    }
+
+    if (sourceNode->right) {
+        copyNodes(sourceNode->right, targetNode->right);
+    }
+    if (sourceNode->left) {
+        copyNodes(sourceNode->left, targetNode->left);
+    }
+}
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert_or_assign(const K& key, const V& obj) {
@@ -77,7 +133,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
 
 template <typename K, typename V>
 void map<K, V>::insertBalanceTree(Node<K, V>* newNode) {
-    while (newNode != Node_tree_ && newNode->parent->red) {
+    while (newNode != Node_tree_ && newNode->parent->red && newNode->parent->parent != nullptr) {
         if (newNode->parent == newNode->parent->parent->left) {
             Node<K, V>* uncle = newNode->parent->parent->right;
             if (uncle->red) {
@@ -182,7 +238,7 @@ void map<K, V>::bigPivot(Node<K, V>* node) {
 
 template <typename K, typename V>
 void map<K, V>::printTree(Node<K, V>* node, int level) {
-    if (node) {
+    if (node != leaf_tree && node) {
         if (node->right) {
             printTree(node->right, level + 4);
         }
@@ -195,6 +251,9 @@ void map<K, V>::printTree(Node<K, V>* node, int level) {
             std::cout << std::setw(level) << " " << " \\\n";
             printTree(node->left, level + 4);
         }
+    } else {
+        std::cout << std::setw(level) << " ";
+        std::cout << leaf_tree->value << (leaf_tree->red ? " (R)" : " (B)") << "\n ";
     }
 }
 
@@ -237,7 +296,6 @@ void map<K, V>::erase(iterator pos) {
 
 template <typename K, typename V>
 void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
-    bool flag_small_pivot = 0;
     while (node != Node_tree_ && node->red == false) {
         if (node == node->parent->left) {
             Node<K, V>* brother = node->parent->right;
@@ -257,7 +315,6 @@ void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
                     brother->red = true;
                     smallPivot(brother->left);
                     brother = brother->parent;
-                    flag_small_pivot = 1;
                 }
                 brother->red = node->parent->red;
                 node->parent->red = false;
@@ -282,7 +339,6 @@ void map<K, V>::deleteBalanceTree(Node<K, V>* node) {
                     brother->red = true;
                     smallPivot(brother->right);
                     brother = brother->parent;
-                    flag_small_pivot = 1;
                 }
                 brother->red = node->parent->red;
                 node->parent->red = false;
