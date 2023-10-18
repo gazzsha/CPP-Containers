@@ -1,26 +1,32 @@
 #ifndef SRC_ITERATORS_H_
 #define SRC_ITERATORS_H_
 
-// #include "RB_tree.h"
+//#include "s21_map.h"
 namespace s21 {   
 template<typename key_type, typename mapped_type>
 class MapIterator {
 public:
     MapIterator(Node<key_type, mapped_type>* node);
-        Node<key_type, mapped_type>* current_node;
-        //~MapIterator() {if (current_node) delete current_node;}
+    MapIterator(Node<key_type, mapped_type>* leaf_tree, int a);
+    MapIterator<key_type, mapped_type>& operator++();
+    MapIterator<key_type, mapped_type>& operator--();
+    Node<key_type, mapped_type>* current_node;
+    //Node<key_type, mapped_type>* parent = current_node->parent;
 private:
-   // Node<key_type, mapped_type>* current_node;
-    //~MapIterator() {if (current_node) delete current_node;}
+    Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
+    Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
 };
 
 template<typename key_type, typename mapped_type>
 class MapConstIterator {
 public:
     MapConstIterator(const Node<key_type, mapped_type>* node);
-
-private:
+    MapConstIterator<key_type, mapped_type>& operator--();
+    MapConstIterator<key_type, mapped_type>& operator++();
     const Node<key_type, mapped_type>* current_node;
+private:
+    // Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
+    // Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
 
 };
 }

@@ -16,9 +16,8 @@ public:
     bool red = true;
     K key;
     V value;
-    //~Node();
+    ~Node();
 private:
-Node<K, V>* leaf_tree_;
 
 };
 } // namespace s21  
