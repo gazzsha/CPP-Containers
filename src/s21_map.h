@@ -31,20 +31,20 @@ public:
     iterator begin() { return iterator(begin_node); }
     iterator end() { return iterator(end_node); }
 
-    void clear();
-    bool empty();
-    size_type size();
-    size_type max_size();
+    void clear() noexcept;
+    bool empty() noexcept;
+    size_type size() noexcept;
+    size_type max_size() noexcept;
     std::pair<iterator, bool> insert(const value_type& value);
     std::pair<iterator, bool> insert(const K& key, const V& obj);
     std::pair<iterator, bool> insert_or_assign(const K& key, const V& obj);
-    void erase(iterator pos);
-    void printTree();
-    void swap(map& other);
-    void merge(map& other);
+    void erase(iterator pos) noexcept;
+    void printTree() noexcept;
+    void swap(map& other) noexcept;
+    void merge(map& other) noexcept;
     V& at(const K& key);
-    V& operator[](const K& key);
-    bool contains(const K& key);
+    V& operator[](const K& key) noexcept;
+    bool contains(const K& key) noexcept;
 private:
     Node<K, V>* Node_tree_;
     static Node<K, V>* leaf_tree;  // nil leaf
@@ -53,16 +53,16 @@ private:
     Node<K, V>* end_node;
 
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign);
-    void insertBalanceTree(Node<K, V>* newNode);
-    void smallPivot(Node<K, V>* node);
-    void bigPivot(Node<K, V>* node);
-    void printTree(Node<K, V>* node, int level);
-    size_type size(Node<K, V>* node);
-    bool nodeExist(Node<K, V>* node);
-    void deleteBalanceTree(Node<K, V>* node);
+    void insertBalanceTree(Node<K, V>* newNode) noexcept;
+    void smallPivot(Node<K, V>* node) noexcept;
+    void bigPivot(Node<K, V>* node) noexcept;
+    void printTree(Node<K, V>* node, int level) noexcept;
+    size_type size(Node<K, V>* node) noexcept;
+    bool nodeExist(Node<K, V>* node) noexcept;
+    void deleteBalanceTree(Node<K, V>* node) noexcept;
     void copyNodes(Node<K, V>* sourceNode, Node<K, V>*& targetNode);
-    void moveNodes(Node<K, V>*& sourceNode, Node<K, V>*& targetNode);
-    void clear(Node<K, V>* delete_ptr);
+    void moveNodes(Node<K, V>*& sourceNode, Node<K, V>*& targetNode) noexcept;
+    void clear(Node<K, V>* delete_ptr) noexcept;
 
 };
 
