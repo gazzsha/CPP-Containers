@@ -279,6 +279,15 @@ void map<K, V>::printTree(Node<K, V>* node, int level) {
         std::cout << leaf_tree->value << (leaf_tree->red ? " (R)" : " (B)") << "\n ";
     }
 }
+
+template <typename K, typename V>
+bool map<K, V>::contains(const K& key) {
+    for (auto it = begin(); it <= end(); ++it) {
+        if(it.current_node->key == key) return 1;
+    }
+    return 0;
+}
+
 template <typename K, typename V>
 void map<K, V>::swap(map& other) {
     Node<K, V>* temp = Node_tree_;
@@ -288,7 +297,9 @@ void map<K, V>::swap(map& other) {
 
 template <typename K, typename V>
 void map<K, V>::merge(map& other) {
-
+    for (auto it = other.begin(); it <= other.end(); ++it) {
+        insert(std::make_pair(it.current_node->key, it.current_node->value));
+    }
 }
 
 template <typename K, typename V>

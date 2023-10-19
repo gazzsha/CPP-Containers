@@ -44,6 +44,7 @@ public:
     void merge(map& other);
     V& at(const K& key);
     V& operator[](const K& key);
+    bool contains(const K& key);
 private:
     Node<K, V>* Node_tree_;
     static Node<K, V>* leaf_tree;  // nil leaf

@@ -13,6 +13,12 @@ const bool MapIterator<key_type, mapped_type>::operator<=(MapIterator<key_type, 
 }
 
 template<typename key_type, typename mapped_type>
+const bool MapConstIterator<key_type, mapped_type>::operator<=(MapConstIterator<key_type, mapped_type> node) {
+    if (current_node && node.current_node) return current_node->key <= node.current_node->key;
+    return 0;
+}
+
+template<typename key_type, typename mapped_type>
 MapIterator<key_type, mapped_type>& MapIterator<key_type, mapped_type>::operator++() {
 if (current_node == nullptr) {
     return *this;

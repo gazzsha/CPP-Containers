@@ -48,10 +48,11 @@ int main() {
     // for (auto it = m.begin(); it <= m.end(); ++it) {
     //     std::cout << it.current_node->key << '\n';
     // }
-      ++ittt;
+      //++ittt;
     //  ++ittt;
     //  ++ittt;
-    //m.swap(myMap);
+    m.merge(myMap);
+    std::cout << m.contains(5);
     m.printTree();
     std::cout << "-----------------------------------" << '\n';
     
