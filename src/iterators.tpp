@@ -1,25 +1,10 @@
 namespace s21 {
     
 template<typename key_type, typename mapped_type>
-MapIterator<key_type, mapped_type>::MapIterator(Node<key_type, mapped_type>* node) : current_node(node){}
+Iterator<key_type, mapped_type>::Iterator(Node<key_type, mapped_type>* node) : current_node(node){}
 
 template<typename key_type, typename mapped_type>
-MapConstIterator<key_type, mapped_type>::MapConstIterator(const Node<key_type, mapped_type>* node) : current_node(node){}
-
-template<typename key_type, typename mapped_type>
-const bool MapIterator<key_type, mapped_type>::operator<=(MapIterator<key_type, mapped_type> node) {
-    if (current_node && node.current_node) return current_node->key <= node.current_node->key;
-    return 0;
-}
-
-template<typename key_type, typename mapped_type>
-const bool MapConstIterator<key_type, mapped_type>::operator<=(MapConstIterator<key_type, mapped_type> node) {
-    if (current_node && node.current_node) return current_node->key <= node.current_node->key;
-    return 0;
-}
-
-template<typename key_type, typename mapped_type>
-MapIterator<key_type, mapped_type>& MapIterator<key_type, mapped_type>::operator++() {
+Iterator<key_type, mapped_type>& Iterator<key_type, mapped_type>::operator++() {
 if (current_node == nullptr) {
     return *this;
 }
@@ -39,7 +24,7 @@ return *this;
 }
 
 template<typename key_type, typename mapped_type>
-MapIterator<key_type, mapped_type>& MapIterator<key_type, mapped_type>::operator--() {
+Iterator<key_type, mapped_type>& Iterator<key_type, mapped_type>::operator--() {
     if (current_node == nullptr) {
         return *this;
     }
@@ -59,7 +44,22 @@ MapIterator<key_type, mapped_type>& MapIterator<key_type, mapped_type>::operator
 }
 
 template<typename key_type, typename mapped_type>
-MapConstIterator<key_type, mapped_type>& MapConstIterator<key_type, mapped_type>::operator++() {
+mapped_type& Iterator<key_type, mapped_type>::operator*() {
+    return current_node->value;
+}
+
+template<typename key_type, typename mapped_type>
+const bool Iterator<key_type, mapped_type>::operator<=(Iterator<key_type, mapped_type> node) {
+    if (current_node && node.current_node) return current_node->key <= node.current_node->key;
+    return 0;
+}
+
+template<typename key_type, typename mapped_type>
+ConstIterator<key_type, mapped_type>::ConstIterator(const Node<key_type, mapped_type>* node) : current_node(node){}
+
+
+template<typename key_type, typename mapped_type>
+ConstIterator<key_type, mapped_type>& ConstIterator<key_type, mapped_type>::operator++() {
 if (current_node == nullptr) {
     return *this;
 }
@@ -78,7 +78,7 @@ return *this;
 }
 
 template<typename key_type, typename mapped_type>
-MapConstIterator<key_type, mapped_type>& MapConstIterator<key_type, mapped_type>::operator--() {
+ConstIterator<key_type, mapped_type>& ConstIterator<key_type, mapped_type>::operator--() {
 if (current_node == nullptr) {
     return *this;
 }
@@ -97,7 +97,13 @@ return *this;
 }
 
 template<typename key_type, typename mapped_type>
-Node<key_type, mapped_type>* MapIterator<key_type, mapped_type>::findMin(Node<key_type, mapped_type>* node) {
+const bool ConstIterator<key_type, mapped_type>::operator<=(ConstIterator<key_type, mapped_type> node) {
+    if (current_node && node.current_node) return current_node->key <= node.current_node->key;
+    return 0;
+}
+
+template<typename key_type, typename mapped_type>
+Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node) noexcept {
     while (node->left->left != nullptr) {
         node = node->left;
     }
@@ -105,24 +111,7 @@ Node<key_type, mapped_type>* MapIterator<key_type, mapped_type>::findMin(Node<ke
 }
 
 template<typename key_type, typename mapped_type>
-Node<key_type, mapped_type>* MapIterator<key_type, mapped_type>::findMax(Node<key_type, mapped_type>* node) {
-    while (node->right->right != nullptr) {
-        node = node->right;
-    }
-    return node;
-}
-
-
-template<typename key_type, typename mapped_type>
-Node<key_type, mapped_type>* MapConstIterator<key_type, mapped_type>::findMin(Node<key_type, mapped_type>* node) {
-    while (node->left->left != nullptr) {
-        node = node->left;
-    }
-    return node;
-}
-
-template<typename key_type, typename mapped_type>
-Node<key_type, mapped_type>* MapConstIterator<key_type, mapped_type>::findMax(Node<key_type, mapped_type>* node) {
+Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node) noexcept {
     while (node->right->right != nullptr) {
         node = node->right;
     }

@@ -1,34 +1,41 @@
 #ifndef SRC_ITERATORS_H_
 #define SRC_ITERATORS_H_
 
-//#include "s21_map.h"
 namespace s21 {   
 template<typename key_type, typename mapped_type>
-class MapIterator {
+class Iterator {
 public:
-    MapIterator(Node<key_type, mapped_type>* node);
-    MapIterator(Node<key_type, mapped_type>* leaf_tree, int a);
-    MapIterator<key_type, mapped_type>& operator++();
-    MapIterator<key_type, mapped_type>& operator--();
-    const bool operator<=(MapIterator<key_type, mapped_type> node);
+    Iterator(Node<key_type, mapped_type>* node);
+    Iterator<key_type, mapped_type>& operator++();
+    Iterator<key_type, mapped_type>& operator--();
+    mapped_type& operator*();
+    const bool operator<=(Iterator<key_type, mapped_type> node);
     Node<key_type, mapped_type>* current_node;
 private:
-    Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
-    Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
+    
+    template <typename K, typename V>
+    friend Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node) noexcept;
+
+    template <typename K, typename V>
+    friend Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node) noexcept;
 };
 
 template<typename key_type, typename mapped_type>
-class MapConstIterator {
+class ConstIterator {
 public:
-    MapConstIterator(const Node<key_type, mapped_type>* node);
-    MapConstIterator<key_type, mapped_type>& operator--();
-    MapConstIterator<key_type, mapped_type>& operator++();
-    const bool operator<=(MapConstIterator<key_type, mapped_type> node);
+    ConstIterator(const Node<key_type, mapped_type>* node);
+    ConstIterator<key_type, mapped_type>& operator++();
+    ConstIterator<key_type, mapped_type>& operator--();
+    ConstIterator<key_type, mapped_type>& operator*();
+    const bool operator<=(ConstIterator<key_type, mapped_type> node);
     const Node<key_type, mapped_type>* current_node;
 private:
-    Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
-    Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
+    
+    template <typename K, typename V>
+    friend Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node) noexcept;
 
+    template <typename K, typename V>
+    friend Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node) noexcept;
 };
 }
 

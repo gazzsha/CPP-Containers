@@ -53,16 +53,12 @@ void map<K, V>::clear() noexcept {
 
 template <typename K, typename V>
 bool map<K, V>::empty() noexcept {
-    return !Node_tree_;
+    return Node_tree_;
 }
 
 template <typename K, typename V>
 typename map<K, V>::size_type map<K, V>::size() noexcept {
-    size_t size_map = 0;
-    for (auto it = begin(); it <= end(); ++it) {
-        ++size_map;
-    }
-    return size_map;
+    return size(Node_tree_);
 }
 
 template <typename K, typename V>
@@ -77,7 +73,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const K& key, const V& obj) {
-    return insert(std::make_pair(key, obj),Node_tree_, nullptr, 0);
+    return insert(std::make_pair(key, obj), 0);
 }
 
 template <typename K, typename V>
@@ -327,6 +323,14 @@ void map<K, V>::printTree(Node<K, V>* node, int level) noexcept {
 }
 
 template <typename K, typename V>
+typename map<K, V>::size_type map<K, V>::size(Node<K, V>* node) noexcept {
+    if (!node || node == leaf_tree) {
+        return 0;
+    }
+    return size(node->left) + size(node->right) + 1;
+}
+
+template <typename K, typename V>
 bool map<K, V>::nodeExist(Node<K, V>* node) noexcept {
     return node != leaf_tree;
 }
@@ -422,12 +426,12 @@ void map<K, V>::clear(Node<K, V>* delete_ptr) noexcept {
     }
 }
 
-// template <typename K, typename V>
-// template <class... Args>
-// std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
-//     std::vector<std::pair<iterator, bool>> results;
-//     return results;
-// }
+template <typename K, typename V>
+template <class... Args>
+std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
+    std::vector<std::pair<iterator, bool>> results;
+    return results;
+}
 
 
 

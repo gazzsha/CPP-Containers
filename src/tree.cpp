@@ -1,4 +1,6 @@
 #include "s21_map.h"
+#include <map>
+//#include "s21_set.h"
 
 int main() {
     s21::map<int, int> m;
@@ -6,6 +8,14 @@ int main() {
     m.insert(std::make_pair(12, 12));
     //std::initializer_list<std::make_pair(int , int)> ;
     m.insert(std::make_pair(14, 14));
+    //m.insert(144, 144);
+
+    s21::map<int, std::string> s21_map = {
+      {1, "aboba"}, {2, "shleppa"}, {3, "amogus"}, {4, "abobus"}};
+    std::map<int, std::string> std_map = {
+      {1, "aboba"}, {2, "shleppa"}, {3, "amogus"}, {4, "abobus"}};
+  //std::cout << s21_map.size() << "  "<< std_map.size() << '\n';
+  //std::cout << s21_map.empty() << "   " << std_map.empty() << '\n';
 
 
 
@@ -43,20 +53,46 @@ int main() {
     s21::map<int, int> m_temp = m;
     //m_temp.printTree();
     //m.print_laef();
-    s21::map<int, int>::iterator ittt = m.begin().current_node;
-    s21::map<int, int>::iterator itt_e = m.end().current_node;
+     s21::map<int, int>::iterator ittt = m.begin();
+    // s21::map<int, int>::iterator itt_e = m.end().current_node;
     // for (auto it = m.begin(); it <= m.end(); ++it) {
     //     std::cout << it.current_node->key << '\n';
     // }
-      //++ittt;
+    //   ++ittt;
+    //   ++ittt;
     //  ++ittt;
-    //  ++ittt;
+    //std::cout << m.size();
 
     // auto results = myMap.insert_many(
     //     std::make_pair(4, "One"),
     //     std::make_pair(5, "Two"),
     //     std::make_pair(6, "Three")
     // );
+
+  s21::map<char, int> s21_map_1 = {{'b', 228}, {'c', 1337}};
+  s21::map<char, int> s21_map_2 = {
+      {'b', 228},
+      {'c', 1337},
+      {'d', 322},
+      {'a', 5},
+  };
+
+  std::cout << s21_map_1.insert('d', 322).second;
+  std::cout <<s21_map_1.insert('d', 14).second;
+
+  std::pair<char, int> pair1('a', 5);
+  std::pair<char, int> pair2('a', 28);
+
+  std::cout << s21_map_1.insert(pair1).second;
+  std::cout <<s21_map_1.insert(pair2).second;
+
+  auto it1 = s21_map_1.begin();
+  auto it2 = s21_map_2.begin();
+ // while (it1 <= s21_map_1.end()) {
+    std::cout << *it1;
+    std::cout << *it2;
+  //}
+
 
 
     //m.merge(myMap);
