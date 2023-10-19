@@ -22,7 +22,11 @@ map<K, V>::map(std::initializer_list<value_type> const &items) : Node_tree_(null
 
 template <typename K, typename V>
 map<K, V>::map(const map &m) : map() {
-    copyNodes(m.Node_tree_, Node_tree_);
+    try {
+        copyNodes(m.Node_tree_, Node_tree_);
+    } catch (...) {
+        clear(Node_tree_);
+    }
 }
 
 template <typename K, typename V>
@@ -422,6 +426,12 @@ void map<K, V>::clear(Node<K, V>* delete_ptr) noexcept {
     }
 }
 
+template <typename K, typename V>
+template <class... Args>
+std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
+    std::vector<std::pair<iterator, bool>> results;
+    return results;
+}
 
 
 

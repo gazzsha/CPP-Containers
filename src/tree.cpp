@@ -40,7 +40,7 @@ int main() {
 
     //m.erase(it_q.current_node);
     //m.print_laef();
-    //s21::map<int, int> m_temp = m;
+    s21::map<int, int> m_temp = m;
     //m_temp.printTree();
     //m.print_laef();
     s21::map<int, int>::iterator ittt = m.begin().current_node;
@@ -51,14 +51,22 @@ int main() {
       //++ittt;
     //  ++ittt;
     //  ++ittt;
-    m.merge(myMap);
-    std::cout << m.contains(5);
+
+    // auto results = myMap.insert_many(
+    //     std::make_pair(4, "One"),
+    //     std::make_pair(5, "Two"),
+    //     std::make_pair(6, "Three")
+    // );
+
+
+    //m.merge(myMap);
+    //std::cout << m.contains(5);
     m.printTree();
     std::cout << "-----------------------------------" << '\n';
     
-    //m.printTree();
+    m_temp.printTree();
     // std::cout << "-----------------------------------" << '\n';
-     myMap.printTree();
+     //myMap.printTree();
      //std::cout << ittt.current_node->value << '\n';
      //std::cout << itt_e.current_node->value << '\n';
 }
