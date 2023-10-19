@@ -3,42 +3,19 @@
 #include <iomanip>
 #include <algorithm>
 #include "RB_tree.h"
-//#include "iterators.h"
+#include "iterators.h"
 
 namespace s21 {
 template <typename K, typename V>
 class map {
 public:
-    class MapIterator {
-    public:
-        MapIterator(Node<K, V>* node);
-        MapIterator& operator++();
-        MapIterator& operator--();
-        Node<K, V>* current_node;
-    private:
-        Node<K, V>* findMin(Node<K, V>* node);
-        Node<K, V>* findMax(Node<K, V>* node);
-    };
-
-    class MapConstIterator {
-    public:
-        MapConstIterator(const Node<K, V>* node);
-        MapConstIterator& operator--();
-        MapConstIterator& operator++();
-        const Node<K, V>* current_node;
-    private:
-        // Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
-        // Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
-    };
-
-
     using key_type = K;
     using mapped_type = V;
     using value_type = std::pair<const key_type, mapped_type>;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator = MapIterator;
-    using const_iterator = MapConstIterator;
+    using iterator = MapIterator<K, V>;
+    using const_iterator = MapConstIterator<K, V>;
     using size_type = size_t;
 
     map();   // default constructor
@@ -65,11 +42,13 @@ public:
     void printTree();
     void swap(map& other);
     void merge(map& other);
+    V& at(const K& key);
+    V& operator[](const K& key);
 private:
     Node<K, V>* Node_tree_;
     static Node<K, V>* leaf_tree;  // nil leaf
     static Node<K, V> leaf;
-     Node<K, V>* begin_node;
+    Node<K, V>* begin_node;
     Node<K, V>* end_node;
 
     std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign);

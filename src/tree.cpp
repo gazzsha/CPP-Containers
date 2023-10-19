@@ -33,7 +33,7 @@ int main() {
     s21::map<int, int>::iterator it_d = m.insert(std::make_pair(26, 26)).first;
     //m.erase(it_d.current_node);
     //m.erase(it_d_d.current_node);
-    // s21::map<int, int> myMap = { {1, 1}, {2, 2}, {3, 3} };
+     s21::map<int, int> myMap = { {1, 1}, {2, 2}, {3, 3} };
     // m.insert_or_assign(std::string("12"), 30);
 
     //m.erase(it.current_node);
@@ -43,18 +43,21 @@ int main() {
     //s21::map<int, int> m_temp = m;
     //m_temp.printTree();
     //m.print_laef();
-    //s21::map<int, int>::iterator ittt = m.begin().current_node;
-    //s21::map<int, int>::iterator itt_e = m.end().current_node;
-
-    //++ittt;
-     //++ittt;
-     //++ittt;
-     //++ittt;
+    s21::map<int, int>::iterator ittt = m.begin().current_node;
+    s21::map<int, int>::iterator itt_e = m.end().current_node;
+    // for (auto it = m.begin(); it <= m.end(); ++it) {
+    //     std::cout << it.current_node->key << '\n';
+    // }
+      ++ittt;
+    //  ++ittt;
+    //  ++ittt;
+    //m.swap(myMap);
+    m.printTree();
     std::cout << "-----------------------------------" << '\n';
     
-    m.printTree();
+    //m.printTree();
     // std::cout << "-----------------------------------" << '\n';
-    // myMap.printTree();
+     myMap.printTree();
      //std::cout << ittt.current_node->value << '\n';
      //std::cout << itt_e.current_node->value << '\n';
 }

@@ -10,6 +10,7 @@ public:
     MapIterator(Node<key_type, mapped_type>* leaf_tree, int a);
     MapIterator<key_type, mapped_type>& operator++();
     MapIterator<key_type, mapped_type>& operator--();
+    const bool operator<=(MapIterator<key_type, mapped_type> node);
     Node<key_type, mapped_type>* current_node;
     //Node<key_type, mapped_type>* parent = current_node->parent;
 private:
@@ -25,8 +26,8 @@ public:
     MapConstIterator<key_type, mapped_type>& operator++();
     const Node<key_type, mapped_type>* current_node;
 private:
-    // Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
-    // Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
+    Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node);
+    Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node);
 
 };
 }

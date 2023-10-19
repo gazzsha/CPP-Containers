@@ -242,57 +242,22 @@ void map<K, V>::bigPivot(Node<K, V>* node) {
     }
 }
 
-template<typename K, typename V>
-map<K, V>::MapIterator::MapIterator(Node<K, V>* node) : current_node(node) {}
-
-template<typename K, typename V>
-map<K, V>::MapConstIterator::MapConstIterator(const Node<K, V>* node) : current_node(node) {}
-
-template<typename K, typename V>
-typename map<K, V>::MapIterator& map<K, V>::MapIterator::operator++() {
-    if (current_node == nullptr) {
-        return *this;
+template <typename K, typename V>
+V& map<K, V>::at(const K& key) {
+    for (auto it = begin(); it <= end(); ++it) {
+        if (it.current_node->key == key) return it.current_node->value;
     }
-    
-    if (current_node->right->right != nullptr) {
-        current_node = findMin(current_node->right);
-    } else {
-        Node<K, V>* parent = current_node->parent;
-        while (parent != nullptr && current_node == parent->right) {
-            current_node = parent;
-            parent = parent->parent;
-        }
-        current_node = parent;
+    throw std::out_of_range("Key not found");
+}
+
+template <typename K, typename V>
+V& map<K, V>::operator[](const K& key) {
+    for (auto it = begin(); it <= end(); ++it) {
+        if (it.current_node->key == key) return it.current_node->value;
     }
-    
-    return *this;
+    return insert(std::make_pair(key, V())).first.current_node->value;
 }
 
-template<typename K, typename V>
-typename map<K, V>::MapConstIterator& map<K, V>::MapConstIterator::operator++() {
-    return *this;
-}
-
-template<typename K, typename V>
-typename map<K, V>::MapConstIterator& map<K, V>::MapConstIterator::operator--() {
-    return *this;
-}
-
-template<typename K, typename V>
-Node<K, V>* map<K, V>::MapIterator::findMin(Node<K, V>* node) {
-    while (node->left != nullptr) {
-        node = node->left;
-    }
-    return node;
-}
-
-template<typename K, typename V>
-Node<K, V>* map<K, V>::MapIterator::findMax(Node<K, V>* node) {
-    while (node->right != nullptr) {
-        node = node->right;
-    }
-    return node;
-}
 
 template <typename K, typename V>
 void map<K, V>::printTree(Node<K, V>* node, int level) {
@@ -316,7 +281,9 @@ void map<K, V>::printTree(Node<K, V>* node, int level) {
 }
 template <typename K, typename V>
 void map<K, V>::swap(map& other) {
-
+    Node<K, V>* temp = Node_tree_;
+    Node_tree_ = other.Node_tree_;
+    other.Node_tree_ = temp;
 }
 
 template <typename K, typename V>
