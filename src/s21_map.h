@@ -29,8 +29,21 @@ public:
     ~map();
     
     // pub methods
-    iterator begin() { return iterator(begin_node); }
-    iterator end() { return iterator(end_node); }
+    iterator begin() { 
+        if (!Node_tree_) throw std::out_of_range("nope");
+        Node<K, V>* temp = Node_tree_;
+        while (temp->left->left != nullptr) {
+        temp = temp->left;
+    }
+        return iterator(temp); 
+        }
+    iterator end() { if (!Node_tree_) throw std::out_of_range("nope");
+                  Node<K, V>* temp = Node_tree_;
+        while (temp->right->right != nullptr) {
+        temp = temp->right;
+    }
+        return iterator(temp);    
+     }
 
     void clear() noexcept;
     bool empty() noexcept;
@@ -45,7 +58,7 @@ public:
     void merge(map& other) noexcept;
     V& at(const K& key);
     V& operator[](const K& key) noexcept;
-    bool contains(const K& key) noexcept;
+    bool contains(const K& key);
     
     //template <class... Args>
     //std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
@@ -54,6 +67,7 @@ public:
     static Node<K, V> leaf;
     Node<K, V>* begin_node;
     Node<K, V>* end_node;
+    size_t size_map;
 private:
     // Node<K, V>* Node_tree_;
     // static Node<K, V>* leaf_tree;  // nil leaf

@@ -7,7 +7,7 @@
 //#include "s21_vector.h"
 
 namespace s21 {
-template <typename K>
+template <typename K, typename V>
 class set {
 public:
     using key_type = K;

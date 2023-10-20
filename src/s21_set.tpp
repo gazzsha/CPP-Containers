@@ -22,6 +22,7 @@ map<K, V>::map(std::initializer_list<value_type> const &items) : Node_tree_(null
 
 template <typename K, typename V>
 map<K, V>::map(const map &m) : map() {
+    size_map = m.size_map;
     try {
         copyNodes(m.Node_tree_, Node_tree_);
     } catch (...) {
