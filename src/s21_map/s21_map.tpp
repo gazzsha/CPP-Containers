@@ -11,10 +11,10 @@ Node<K, V>* map<K, V>::leaf_tree = &leaf;
 
 
 template <typename K, typename V>
-map<K, V>::map() : Node_tree_(nullptr) {}
+map<K, V>::map() : Node_tree_(nullptr) , size_map(0) {}
 
 template <typename K, typename V>
-map<K, V>::map(std::initializer_list<value_type> const &items) : Node_tree_(nullptr) {
+map<K, V>::map(std::initializer_list<value_type> const &items) : Node_tree_(nullptr) , size_map(0){
     for (const value_type &item : items) {
         insert(item);
     }
@@ -27,16 +27,22 @@ map<K, V>::map(const map &m) : map() {
         copyNodes(m.Node_tree_, Node_tree_);
     } catch (...) {
         clear(Node_tree_);
+        size_map = 0;
     }
 }
 
 template <typename K, typename V>
-map<K, V>::map(map &&m) : Node_tree_(nullptr){
+map<K, V>::map(map &&m) : Node_tree_(nullptr) , size_map(0){
+    size_map = m.size_map;
+    m.size_map = 0;
     moveNodes(m.Node_tree_, this->Node_tree_);
+
 } 
 
 template <typename K, typename V>
-map<K, V>& map<K, V>::operator=(map &&m) {
+map<K, V>& map<K, V>::operator=(map &&m){
+    size_map = m.size_map;
+    m.size_map = 0;
     moveNodes(m.Node_tree_, Node_tree_);
     return *this;
 }
@@ -54,37 +60,41 @@ void map<K, V>::clear() noexcept {
 
 template <typename K, typename V>
 bool map<K, V>::empty() noexcept {
-    return Node_tree_;
+    return !Node_tree_;
 }
 
 template <typename K, typename V>
 typename map<K, V>::size_type map<K, V>::size() noexcept {
-    return size(Node_tree_);
+    return size_map;
 }
 
 template <typename K, typename V>
 typename map<K, V>::size_type map<K, V>::max_size() noexcept {
-    return std::numeric_limits<size_type>::max();
+    return std::numeric_limits<size_type>::max() / sizeof(Node<K, V>) / 2;
 }
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value) {
+    ++size_map;
     return insert(value, Node_tree_, nullptr, 0);
 }
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const K& key, const V& obj) {
-    return insert(std::make_pair(key, obj), 0);
+    ++size_map;
+    return insert(std::make_pair(key, obj),Node_tree_, nullptr, 0);
 }
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert_or_assign(const K& key, const V& obj) {
+    ++size_map;
     return insert(std::make_pair(key, obj), Node_tree_, nullptr, 1);
 }
 
 template <typename K, typename V>
 void map<K, V>::erase(iterator pos) noexcept {
     Node<K, V>* x_node, * y_node; 
+    --size_map;
     if(pos.current_node == end_node) end_node = pos.current_node->parent;
     if(pos.current_node == begin_node) begin_node = pos.current_node->parent;
     if (!pos.current_node || pos.current_node == leaf_tree) return;
@@ -110,6 +120,7 @@ void map<K, V>::erase(iterator pos) noexcept {
         pos.current_node->value = y_node->value;
     }
     if (!y_node->red) deleteBalanceTree(x_node);
+    
     delete y_node;
 }
 
@@ -120,9 +131,12 @@ void map<K, V>::printTree() noexcept {
 
 template <typename K, typename V>
 void map<K, V>::swap(map& other) noexcept {
+    size_t temp_s = size_map;
     Node<K, V>* temp = Node_tree_;
     Node_tree_ = other.Node_tree_;
     other.Node_tree_ = temp;
+    size_map = other.size_map;
+    other.size_map = temp_s;
 }
 
 template <typename K, typename V>
@@ -149,10 +163,12 @@ V& map<K, V>::operator[](const K& key) noexcept {
 }
 
 template <typename K, typename V>
-bool map<K, V>::contains(const K& key) noexcept {
+bool map<K, V>::contains(const K& key) {
+    try {
     for (auto it = begin(); it <= end(); ++it) {
         if(it.current_node->key == key) return 1;
     }
+    } catch (...) {}
     return 0;
 }
 
@@ -185,11 +201,12 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
             return insert(value, current_node->right, current_node, assign);
         }
     } else {
+        --size_map;
         if (assign == 0){
             return std::make_pair(iterator(current_node), false);
         }
         current_node->value = value.second;
-        return std::make_pair(iterator(current_node), true);
+        return std::make_pair(iterator(current_node), false);
     }
 }
 
@@ -324,14 +341,6 @@ void map<K, V>::printTree(Node<K, V>* node, int level) noexcept {
 }
 
 template <typename K, typename V>
-typename map<K, V>::size_type map<K, V>::size(Node<K, V>* node) noexcept {
-    if (!node || node == leaf_tree) {
-        return 0;
-    }
-    return size(node->left) + size(node->right) + 1;
-}
-
-template <typename K, typename V>
 bool map<K, V>::nodeExist(Node<K, V>* node) noexcept {
     return node != leaf_tree;
 }
@@ -427,12 +436,12 @@ void map<K, V>::clear(Node<K, V>* delete_ptr) noexcept {
     }
 }
 
-template <typename K, typename V>
-template <class... Args>
-std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
-    std::vector<std::pair<iterator, bool>> results;
-    return results;
-}
+// template <typename K, typename V>
+// template <class... Args>
+// std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
+//     std::vector<std::pair<iterator, bool>> results;
+//     return results;
+// }
 
 
 

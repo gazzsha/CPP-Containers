@@ -48,7 +48,7 @@ public:
     bool empty() noexcept;
     size_type size() noexcept;
     size_type max_size() noexcept;
-    std::pair<iterator, bool> insert(const value_type& value);
+    virtual std::pair<iterator, bool> insert(const value_type& value);
     void erase(iterator pos) noexcept;
     void printTree() noexcept;
     void swap(set& other) noexcept;
@@ -58,7 +58,7 @@ public:
     
     //template <class... Args>
     //std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
-private:
+protected:
     Node<K>* Node_tree_;
     static Node<K>* leaf_tree;  // nil leaf
     static Node<K> leaf;
@@ -66,7 +66,7 @@ private:
     Node<K>* end_node;
     size_t size_set = 0;
 
-    std::pair<iterator, bool> insert(const value_type& value, Node<K>* current_node, Node<K>* parent, int assign);
+    virtual std::pair<iterator, bool> insert(const value_type& value, Node<K>* current_node, Node<K>* parent, int assign);
     void insertBalanceTree(Node<K>* newNode) noexcept;
     void smallPivot(Node<K>* node) noexcept;
     void bigPivot(Node<K>* node) noexcept;

@@ -22,6 +22,6 @@ private:
 };
 } // namespace s21  
 
-#include "RB_tree.tpp"
+#include "RB_tree_map.tpp"
 
 #endif //SRC_RB_TREE_H_
