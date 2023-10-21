@@ -19,7 +19,7 @@ else
 endif
 all : $(CLEAN) $(LIBRARY) $(TARGET)
 $(TARGET) : 
-	g++ -std=c++17 $(FLAGS) $(SRC_TEST) $(TEST_FLAGS) -o tests
+	$(CXX) -std=c++17 $(FLAGS) $(SRC_TEST) $(TEST_FLAGS) -o tests
 	./tests
 
 
