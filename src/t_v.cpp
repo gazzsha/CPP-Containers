@@ -233,7 +233,6 @@
 //                     // #include <string>
 //                     // #include <iterator>
 
-
 //                     // template <typename value_type>
 //                     // bool compare_lists(s21::list<value_type> my_list,
 //                     //                    std::list<value_type> std_list) {
@@ -255,11 +254,10 @@
 //                     //   return result;
 //                     // }
 
+//                     // int main() {
 
-
-//                     // int main() { 
-
-//                     //     s21::list<std::string> l {"ab423423423432432c","bbc","ddd","321"};
+//                     //     s21::list<std::string> l
+//                     {"ab423423423432432c","bbc","ddd","321"};
 //                     //     l.print_data();
 //                     //     l.insert(l.begin(),"ffff");
 //                     //     l.push_back("fffff");
@@ -292,8 +290,6 @@
 //                     //     l.pop_front();
 //                     //     l.pop_back();
 
-
-
 //                     //    l.print_data();
 //                     //    l.swap(m);
 //                     //    std::cout <<"AFTER SWAP FIRST\n";
@@ -301,9 +297,6 @@
 //                     //    std::cout <<"AFTER SWAP SECOND\n";
 //                     //    m.print_data();
 //                     //    std::cout <<"copy constrcution\n";
-
-
-
 
 //                     //   s21::list<std::string> copy(l);
 //                     //    copy.print_data();
@@ -319,14 +312,16 @@
 //                     //    std::cout << "-----AFTER RESERVE\n";
 //                     //    copy.print_data();
 //                     //       std::cout << "-----SORT\n";
-//                     //       s21::list<int> l_s {23,432,123,43,45654,21,32,3423,542,234,2,3,45,2,3434,542,2,0,-32,432};
-//                     //       l_s.print_data(); 
+//                     //       s21::list<int> l_s
+//                     {23,432,123,43,45654,21,32,3423,542,234,2,3,45,2,3434,542,2,0,-32,432};
+//                     //       l_s.print_data();
 //                     //       l_s.sort();
 //                     //    std::cout << "-----AFTER SORT\n";
 //                     //    l_s.print_data();
 //                     //    std::cout << "-----NEW SORT\n";
-//                     //     s21::list<int> l_s2 {1,3,5,6,2,4,-444,100000,200000,-213,32};
-//                     //       l_s2.print_data(); 
+//                     //     s21::list<int> l_s2
+//                     {1,3,5,6,2,4,-444,100000,200000,-213,32};
+//                     //       l_s2.print_data();
 //                     //        auto ittt = --l_s2.end();
 //                     //           std::cout << "---" << *ittt << "\n";
 //                     //       l_s2.sort();
@@ -338,8 +333,8 @@
 //                     //    l_s2.print_data();
 //                     //       std::cout << "---" << *ittt << "\n";
 
-
-//                     //     auto f = []( auto & n ){ for ( auto& i : n) { std::cout << i <<"\n";}};
+//                     //     auto f = []( auto & n ){ for ( auto& i : n) {
+//                     std::cout << i <<"\n";}};
 
 //                     //       std::list<int> ex {1,2,3,4,5};
 //                     //       std::list<int> ex1 {11,22,33};
@@ -348,7 +343,7 @@
 //                     //       ex.splice(tt,ex1);
 //                     //       f(ex);
 //                     //       f(ex1);
-                          
+
 //                     //          std::cout << "-----SPLICE\n";
 //                     //         s21::list<int> ex_ {1,2,3,4,5};
 //                     //       s21::list<int> ex_1 {11,22,33};
@@ -377,32 +372,26 @@
 //                     //      l_ss.insert_many_front(999,99,213,3213213);
 //                     //      f(l_ss);
 
-
-//                     //      s21::vector <std::string> a {"aaa","vvvv"}; 
+//                     //      s21::vector <std::string> a {"aaa","vvvv"};
 //                     //     // a.reserve(10);
-//                     //      auto ff = [](auto n) { 
-//                     //       for (auto& b : n) { 
+//                     //      auto ff = [](auto n) {
+//                     //       for (auto& b : n) {
 //                     //         std::cout << b << " ";
-                          
+
 //                     //       }
 //                     //       std::cout << "\n";
 //                     //      };
 
 //                     //   a.insert_many_back("aaaaaaaa","bbbbbbb","ffffff");
 //                     //     a.at(10);
-//                     //     //std::cout << *(--it); 
+//                     //     //std::cout << *(--it);
 //                     //      }
-
-
-
-
 
 // //      s21::list<int> my_list{1, 2, 3, 4, 5};
 // //   std::list<int> std_list{1, 2, 3, 4, 5};
 // //   f(my_list);
 // //   f(std_list);
 // //   std::cout << "RESULT: " << compare_lists(my_list,std_list);
-
 
 // //  s21::list<int> my_list{1, 2, 3};
 // //   s21::list<int> my_list_copy(my_list);
@@ -417,27 +406,21 @@
 // //   std_list1.splice(std_list1.cbegin(), std_list2);
 // //    f(std_list2);
 
-
-
-
 //     // s21::list<std::string>::ListIterator it = m.begin();
 //     // std::cout << *(++it) << "\n";
 
 //     // std::cout << m.back() << "\n";
 //     // std::cout << m.empty()<< "\n";
-    
+
 //   //  m.front() = "first element";
 //     //std::cout << m.front() << "\n";
-
-
-
-
 
 //     // std::string a = "abc";
 //     // a.~string();
 //     // std::cout << a;
 
-//     // auto pr = [](auto& n) { for (const auto v : n) std::cout << v << " "; };
+//     // auto pr = [](auto& n) { for (const auto v : n) std::cout << v << " ";
+//     };
 
 //     // s21::vector<std::string> v = {"abc","bcd"};
 
@@ -449,8 +432,6 @@
 
 // // }
 
-
-
 // // #include <list>
 // // #include <map>
 // // #include <queue>
@@ -461,9 +442,7 @@
 
 // // #include "s21_array.h"
 
-
 // // #include "s21_containers.h"
-
 
 // // // TEST(Queue, Operator_Move) {
 // // //   s21::queue<int> our_queue_int = {1, 2, 3};
@@ -480,10 +459,6 @@
 // // //   // EXPECT_EQ(our_queue_int.empty(), std_queue_int.empty());
 // // // }
 
-
-
-
-
 // // int main(int argc, char* argv[]) {
 // //   testing::InitGoogleTest(&argc, argv);
 // //   return RUN_ALL_TESTS();
@@ -491,8 +466,8 @@
 
 // // int main() {
 
-// //   auto f = [] (auto& v) { 
-// //     for (auto n : v) { 
+// //   auto f = [] (auto& v) {
+// //     for (auto n : v) {
 // //       std::cout << n << " ";
 // //     }
 // //   };
@@ -503,12 +478,11 @@
 // //   f(b);
 // //   //f(a);
 
-
 // // }
 
-// // int main() { 
+// // int main() {
 
-// //   std::array<std::string,3> a {"aaaaaaaaaaaaaaaaa","cccc","cdfd"}; 
+// //   std::array<std::string,3> a {"aaaaaaaaaaaaaaaaa","cccc","cdfd"};
 // //   s21::array<std::string,3> b {"aaaaaaaaaaaaaaaaa","cccc","cdfd"};
 
 // //   std::array<std::string,3> c {"eweer","ererere","wrerer"};
@@ -516,7 +490,7 @@
 // //   s21::array<std::string,3> d {"eweer","ererere","wrerer"};
 // //   d = std::move(b);
 
-// //   auto f = [] (auto v) { 
+// //   auto f = [] (auto v) {
 // //     for (auto a : v ) std::cout << a << " ";
 // //     std::cout << "\n";
 // //   };
@@ -544,21 +518,20 @@
 // //        std::cout << "=========\n";
 // //        std::cout << *(--it);
 
-
-  
-  
-
 // // }
 
-
-#include <iostream>
-#include "s21_array.h"
 #include <array>
+#include <iostream>
+#include <vector>
 
-int main() { 
-  s21::array<int,1> b {1,2};
-  //b.print();
-  std::cout << b.size();
-  //std::cout << b[3];
-  //std::array<int,1> c {1,3};
+#include "s21_array.h"
+#include "s21_vector.h"
+
+int main() {
+  // s21::array<int,1> b {1,2};
+  // b.print();
+  // std::cout << b.size();
+  // std::cout << b[3];
+  // std::array<int,1> c {1,3};
+  std::vector<int> a(-1);
 }

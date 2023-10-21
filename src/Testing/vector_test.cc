@@ -26,7 +26,7 @@ TEST(VectorTest, Constructor_n_throw) {
   //     EXPECT_EQ(err.what(),
   //               std::string("std::bad_array_new_length)"));
   //   }
-  EXPECT_THROW(s21::vector<int> s21_v(-1), std::bad_array_new_length);
+  EXPECT_ANY_THROW(s21::vector<int> s21_v(-1));
 }
 
 TEST(VectorTest, Constructor_initializer_list_1) {

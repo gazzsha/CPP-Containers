@@ -1,5 +1,5 @@
 
-FLAGS = -Wall -Werror -Wextra -g #-fsanitize=address -g
+FLAGS = -Wall  -Werror -Wextra -g #-fsanitize=address -g
 #LIBRARY = s21_matrix_oop.a
 CLEAN = clean
 REPORT = gcov_report
@@ -19,7 +19,7 @@ else
 endif
 all : $(CLEAN) $(LIBRARY) $(TARGET)
 $(TARGET) : 
-	$(CXX) -std=c++17 $(FLAGS) $(SRC_TEST) $(TEST_FLAGS) -o tests
+	g++ -std=c++17 $(FLAGS) $(SRC_TEST) $(TEST_FLAGS) -o tests
 	./tests
 
 

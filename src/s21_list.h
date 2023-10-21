@@ -15,6 +15,7 @@ class list {
   using const_reference = const T&;
   using size_type = size_t;
   struct Node;
+  typename Alloc::template rebind<Node>::other alloc;
 
  public:
   template <typename U, typename X>
@@ -111,7 +112,6 @@ class list {
     Node(Node* first, Node* second, const_reference data);
   };
   Node* head;
-  typename Alloc::template rebind<Node>::other alloc;
   size_type sz;
   using AllocTraits = std::allocator_traits<
       typename std::allocator_traits<Alloc>::template rebind_alloc<Node>>;
@@ -120,7 +120,7 @@ class list {
 template <typename T, typename Alloc>
 list<T, Alloc>::Node::Node() : next(nullptr), prev(nullptr), data(T()) {}
 
-template <typename T, typename Alloc = std::allocator<T>>
+template <typename T, typename Alloc>
 list<T, Alloc>::Node::Node(Node* first, Node* second, const_reference data)
     : next(first), prev(second), data(data) {}
 
@@ -141,7 +141,7 @@ list<T, Alloc>::ListIterator<U, X>::ListIterator(
 
 template <typename T, typename Alloc>
 template <typename U, typename X>
-typename list<T, Alloc>::ListIterator<U, X>&
+typename list<T, Alloc>::template ListIterator<U, X>&
 list<T, Alloc>::ListIterator<U, X>::operator++() noexcept {
   node = node->next;
   return *this;
@@ -149,7 +149,7 @@ list<T, Alloc>::ListIterator<U, X>::operator++() noexcept {
 
 template <typename T, typename Alloc>
 template <typename U, typename X>
-typename list<T, Alloc>::ListIterator<U, X>
+typename list<T, Alloc>::template ListIterator<U, X>
 list<T, Alloc>::ListIterator<U, X>::operator++(int) noexcept {
   ListIterator copy = *this;
   copy.node = node->next;
@@ -158,7 +158,7 @@ list<T, Alloc>::ListIterator<U, X>::operator++(int) noexcept {
 
 template <typename T, typename Alloc>
 template <typename U, typename X>
-typename list<T, Alloc>::ListIterator<U, X>
+typename list<T, Alloc>::template ListIterator<U, X>
 list<T, Alloc>::ListIterator<U, X>::operator--(int) noexcept {
   ListIterator copy = *this;
   copy.node = node->prev;
@@ -167,7 +167,7 @@ list<T, Alloc>::ListIterator<U, X>::operator--(int) noexcept {
 
 template <typename T, typename Alloc>
 template <typename U, typename X>
-typename list<T, Alloc>::ListIterator<U, X>&
+typename list<T, Alloc>::template ListIterator<U, X>&
 list<T, Alloc>::ListIterator<U, X>::operator--() noexcept {
   node = node->prev;
   return *this;
@@ -196,7 +196,7 @@ bool list<T, Alloc>::ListIterator<U, X>::operator!=(
 
 template <typename T, typename Alloc>
 template <typename U, typename X>
-typename list<T, Alloc>::ListIterator<U, X>&
+typename list<T, Alloc>::template ListIterator<U, X>&
 list<T, Alloc>::ListIterator<U, X>::operator=(const ListIterator& l) {
   node = l.node;
   return *this;
@@ -226,7 +226,7 @@ list<T, Alloc>::ListConstIterator<Y, Z>::ListConstIterator(Node* new_node)
 
 template <typename T, typename Alloc>
 template <typename Y, typename Z>
-typename list<T, Alloc>::ListConstIterator<Y, Z>&
+typename list<T, Alloc>::template ListConstIterator<Y, Z>&
 list<T, Alloc>::ListConstIterator<Y, Z>::operator++() noexcept {
   node = node->next;
   return *this;
@@ -234,7 +234,7 @@ list<T, Alloc>::ListConstIterator<Y, Z>::operator++() noexcept {
 
 template <typename T, typename Alloc>
 template <typename Y, typename Z>
-typename list<T, Alloc>::ListConstIterator<Y, Z>&
+typename list<T, Alloc>::template ListConstIterator<Y, Z>&
 list<T, Alloc>::ListConstIterator<Y, Z>::operator--() noexcept {
   node = node->prev;
   return *this;
@@ -454,7 +454,7 @@ void list<T, Alloc>::erase(iterator pos) noexcept {
   --sz;
 }
 template <typename T, typename Alloc>
-list<T, Alloc>::list(const Alloc& alloc) : head(nullptr), alloc(alloc), sz(0) {
+list<T, Alloc>::list(const Alloc& alloc) : alloc(alloc), head(nullptr), sz(0) {
   head = AllocTraits::allocate(this->alloc, 1);
   AllocTraits::construct(this->alloc, head);
   head->next = head;

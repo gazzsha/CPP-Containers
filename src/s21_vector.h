@@ -14,6 +14,7 @@ class vector {
   using const_reference = const T&;
   using size_type = size_t;
   using AllocTraits = std::allocator_traits<Alloc>;
+  Alloc alloc;
 
  public:
   template <typename U, typename X>
@@ -94,7 +95,6 @@ class vector {
   void insert_many_back(Args&&... args);
 
  private:
-  Alloc alloc;
   T* arr;
   size_t sz;
   size_t cap;
@@ -126,7 +126,7 @@ value_type* vector<value_type, Alloc>::VectorIterator<U, X>::getter() noexcept {
 
 template <typename value_type, typename Alloc>
 template <typename U, typename X>
-typename vector<value_type, Alloc>::VectorIterator<U, X>&
+typename vector<value_type, Alloc>::template VectorIterator<U, X>&
 vector<value_type, Alloc>::VectorIterator<U, X>::operator++() {
   ++ptr;
   return *this;
@@ -134,7 +134,7 @@ vector<value_type, Alloc>::VectorIterator<U, X>::operator++() {
 
 template <typename value_type, typename Alloc>
 template <typename U, typename X>
-typename vector<value_type, Alloc>::VectorIterator<U, X>&
+typename vector<value_type, Alloc>::template VectorIterator<U, X>&
 vector<value_type, Alloc>::VectorIterator<U, X>::operator--() {
   --ptr;
   return *this;
@@ -142,7 +142,7 @@ vector<value_type, Alloc>::VectorIterator<U, X>::operator--() {
 
 template <typename value_type, typename Alloc>
 template <typename U, typename X>
-typename vector<value_type, Alloc>::VectorIterator<U, X>
+typename vector<value_type, Alloc>::template VectorIterator<U, X>
 vector<value_type, Alloc>::VectorIterator<U, X>::operator-(
     const size_type& ind) {
   iterator tmp(ptr - ind);
@@ -151,7 +151,7 @@ vector<value_type, Alloc>::VectorIterator<U, X>::operator-(
 
 template <typename value_type, typename Alloc>
 template <typename U, typename X>
-typename vector<value_type, Alloc>::VectorIterator<U, X>
+typename vector<value_type, Alloc>::template VectorIterator<U, X>
 vector<value_type, Alloc>::VectorIterator<U, X>::operator+(
     const size_type& ind) {
   iterator tmp(ptr + ind);
@@ -200,7 +200,7 @@ bool vector<value_type, Alloc>::VectorConstIterator<Y, Z>::operator==(
 
 template <typename value_type, typename Alloc>
 template <typename Y, typename Z>
-vector<value_type, Alloc>::VectorConstIterator<Y, Z>
+typename vector<value_type, Alloc>::template VectorConstIterator<Y, Z>
 vector<value_type, Alloc>::VectorConstIterator<Y, Z>::operator+(
     const size_type& pos) {
   const_iterator temp = (ptr + pos);
