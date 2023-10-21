@@ -76,33 +76,33 @@ typename map<K, V>::size_type map<K, V>::max_size() noexcept {
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value) {
     ++size_map;
-    return insert(value, Node_tree_, nullptr, 0);
+    return insert(value, Node_tree_, 0);
 }
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const K& key, const V& obj) {
     ++size_map;
-    return insert(std::make_pair(key, obj),Node_tree_, nullptr, 0);
+    return insert(std::make_pair(key, obj),Node_tree_, 0);
 }
 
 template <typename K, typename V>
 std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert_or_assign(const K& key, const V& obj) {
     ++size_map;
-    return insert(std::make_pair(key, obj), Node_tree_, nullptr, 1);
+    return insert(std::make_pair(key, obj), Node_tree_, 1);
 }
 
 template <typename K, typename V>
 void map<K, V>::erase(iterator pos) noexcept {
     Node<K, V>* x_node, * y_node; 
     --size_map;
-    if(pos.current_node == end_node) end_node = pos.current_node->parent;
-    if(pos.current_node == begin_node) begin_node = pos.current_node->parent;
-    if (!pos.current_node || pos.current_node == leaf_tree) return;
+    if(pos.get_current_node() == end_node) end_node = pos.get_current_node()->parent;
+    if(pos.get_current_node() == begin_node) begin_node = pos.get_current_node()->parent;
+    if (!pos.get_current_node() || pos.get_current_node() == leaf_tree) return;
 
-    if (pos.current_node->left == leaf_tree || pos.current_node->right == leaf_tree) {
-        y_node = pos.current_node;
+    if (pos.get_current_node()->left == leaf_tree || pos.get_current_node()->right == leaf_tree) {
+        y_node = pos.get_current_node();
     } else {
-        y_node = pos.current_node->left;
+        y_node = pos.get_current_node()->left;
         while (y_node->right != leaf_tree) y_node = y_node->right;
     }
 
@@ -115,9 +115,9 @@ void map<K, V>::erase(iterator pos) noexcept {
         else y_node->parent->right = x_node;
     } else Node_tree_ = x_node;
 
-    if (y_node != pos.current_node) {
-        pos.current_node->key = y_node->key;
-        pos.current_node->value = y_node->value;
+    if (y_node != pos.get_current_node()) {
+        pos.get_key() = y_node->key;
+        pos.get_value() = y_node->value;
     }
     if (!y_node->red) deleteBalanceTree(x_node);
     
@@ -142,14 +142,14 @@ void map<K, V>::swap(map& other) noexcept {
 template <typename K, typename V>
 void map<K, V>::merge(map& other) noexcept {
     for (auto it = other.begin(); it <= other.end(); ++it) {
-        insert(std::make_pair(it.current_node->key, it.current_node->value));
+        insert(std::make_pair(it.get_key(), it.get_value()));
     }
 }
 
 template <typename K, typename V>
 V& map<K, V>::at(const K& key) {
     for (auto it = begin(); it <= end(); ++it) {
-        if (it.current_node->key == key) return it.current_node->value;
+        if (it.get_key() == key) return it.get_value();
     }
     throw std::out_of_range("Key not found");
 }
@@ -157,16 +157,16 @@ V& map<K, V>::at(const K& key) {
 template <typename K, typename V>
 V& map<K, V>::operator[](const K& key) noexcept {
     for (auto it = begin(); it <= end(); ++it) {
-        if (it.current_node->key == key) return it.current_node->value;
+        if (it.get_key() == key) return it.get_value();
     }
-    return insert(std::make_pair(key, V())).first.current_node->value;
+    return insert(std::make_pair(key, V())).first.get_value();
 }
 
 template <typename K, typename V>
 bool map<K, V>::contains(const K& key) {
     try {
     for (auto it = begin(); it <= end(); ++it) {
-        if(it.current_node->key == key) return 1;
+        if(it.get_key() == key) return 1;
     }
     } catch (...) {}
     return 0;
@@ -174,8 +174,7 @@ bool map<K, V>::contains(const K& key) {
 
 
 template <typename K, typename V>
-std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign){
-    Node<K, V>* temp;
+std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type& value, Node<K, V>* current_node, int assign){
     if (!Node_tree_) {
         Node_tree_ = new Node<K, V>(value.first, value.second, leaf_tree);
         begin_node = Node_tree_;
@@ -189,7 +188,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
             if (begin_node->key > value.first) begin_node = current_node->left;
             return std::make_pair(iterator(current_node->left), true);
         } else {
-            return insert(value, current_node->left, current_node, assign);
+            return insert(value, current_node->left, assign);
         }
     } else if (value.first != current_node->key){
         if (current_node->right == leaf_tree) {
@@ -198,7 +197,7 @@ std::pair<typename map<K, V>::iterator, bool> map<K, V>::insert(const value_type
             if (end_node->key < value.first) end_node = current_node->right;
             return std::make_pair(iterator(current_node->right), true);
         } else {
-            return insert(value, current_node->right, current_node, assign);
+            return insert(value, current_node->right, assign);
         }
     } else {
         --size_map;
@@ -257,7 +256,6 @@ void map<K, V>::insertBalanceTree(Node<K, V>* newNode) noexcept {
 
 template <typename K, typename V>
 void map<K, V>::smallPivot(Node<K, V>* node) noexcept {
-    Node<K, V>* grand_ = node->parent->parent;
     Node<K, V>* parent_ = node->parent;
 
     if(node == node->parent->right){

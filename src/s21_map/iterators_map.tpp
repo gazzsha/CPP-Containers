@@ -49,7 +49,7 @@ mapped_type& Iterator<key_type, mapped_type>::operator*() {
 }
 
 template<typename key_type, typename mapped_type>
-const bool Iterator<key_type, mapped_type>::operator<=(Iterator<key_type, mapped_type> node) {
+bool Iterator<key_type, mapped_type>::operator<=(Iterator<key_type, mapped_type> node) const {
     if (current_node && node.current_node) return current_node->key <= node.current_node->key;
     return 0;
 }
@@ -97,7 +97,7 @@ return *this;
 }
 
 template<typename key_type, typename mapped_type>
-const bool ConstIterator<key_type, mapped_type>::operator<=(ConstIterator<key_type, mapped_type> node) {
+bool ConstIterator<key_type, mapped_type>::operator<=(ConstIterator<key_type, mapped_type> node) const {
     if (current_node && node.current_node) return current_node->key <= node.current_node->key;
     return 0;
 }

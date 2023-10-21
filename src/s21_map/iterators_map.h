@@ -5,14 +5,16 @@ namespace s21 {
 template<typename key_type, typename mapped_type>
 class Iterator {
 public:
+    key_type& get_key() { return current_node->key;}
+    mapped_type& get_value() { return current_node->value; }
+    Node<key_type, mapped_type>* get_current_node() { return current_node; }
     Iterator(Node<key_type, mapped_type>* node);
     Iterator<key_type, mapped_type>& operator++();
     Iterator<key_type, mapped_type>& operator--();
     mapped_type& operator*();
-    const bool operator<=(Iterator<key_type, mapped_type> node);
-    Node<key_type, mapped_type>* current_node;
+    bool operator<=(Iterator<key_type, mapped_type> node) const;
 private:
-    
+    Node<key_type, mapped_type>* current_node;
     template <typename K, typename V>
     friend Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node) noexcept;
 
@@ -23,13 +25,16 @@ private:
 template<typename key_type, typename mapped_type>
 class ConstIterator {
 public:
+    const key_type& get_key_const() { return current_node->key;}
+    const mapped_type& get_value_const() { return current_node->value; }
     ConstIterator(const Node<key_type, mapped_type>* node);
     ConstIterator<key_type, mapped_type>& operator++();
     ConstIterator<key_type, mapped_type>& operator--();
     ConstIterator<key_type, mapped_type>& operator*();
-    const bool operator<=(ConstIterator<key_type, mapped_type> node);
-    const Node<key_type, mapped_type>* current_node;
+    bool operator<=(ConstIterator<key_type, mapped_type> node) const;
 private:
+    const Node<key_type, mapped_type>* current_node;
+    
     
     template <typename K, typename V>
     friend Node<key_type, mapped_type>* findMin(Node<key_type, mapped_type>* node) noexcept;

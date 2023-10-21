@@ -75,7 +75,7 @@ private:
     // Node<K, V>* begin_node;
     // Node<K, V>* end_node;
 
-    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, Node<K, V>* parent, int assign);
+    std::pair<iterator, bool> insert(const value_type& value, Node<K, V>* current_node, int assign);
     void insertBalanceTree(Node<K, V>* newNode) noexcept;
     void smallPivot(Node<K, V>* node) noexcept;
     void bigPivot(Node<K, V>* node) noexcept;
