@@ -11,8 +11,10 @@ public:
     Iterator(Node<key_type, mapped_type>* node);
     Iterator<key_type, mapped_type>& operator++();
     Iterator<key_type, mapped_type>& operator--();
-    mapped_type& operator*();
+    std::pair<key_type,mapped_type> operator*();
+    std::pair<key_type,mapped_type>* operator->();
     bool operator<=(Iterator<key_type, mapped_type> node) const;
+    std::pair<key_type,mapped_type>  pairIter;
 private:
     Node<key_type, mapped_type>* current_node;
     template <typename K, typename V>

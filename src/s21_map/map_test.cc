@@ -1,6 +1,6 @@
 #include "test_header.h"
 
-namespace {
+namespace s21 {
 TEST(Map, Constructor_Default) {
   s21::map<int, std::string> s21_map;
   std::map<int, std::string> std_map;
@@ -122,7 +122,7 @@ TEST(Map, Modifier_Insert_or_assign) {
   auto it1 = s21_map_1.begin();
   auto it2 = s21_map_2.begin();
   while (it1 <= s21_map_1.end()) {
-    EXPECT_EQ(*it1, *it2);
+    EXPECT_EQ(it1->first, it2->first);
     ++it1, ++it2;
   }
   EXPECT_EQ(s21_map_1.size(), s21_map_2.size());
@@ -139,7 +139,7 @@ TEST(Map, Modifier_Erase_1) {
   auto it1 = s21_map_1.begin();
   auto it2 = s21_map_2.begin();
   while (it1 <= s21_map_1.end()) {
-    EXPECT_EQ(*it1, *it2);
+    EXPECT_EQ(it1->first, it2->first);
     ++it1, ++it2;
   }
   EXPECT_EQ(s21_map_1.size(), s21_map_2.size());
@@ -161,11 +161,11 @@ TEST(Map, Modifier_Swap) {
   auto it3 = s21_map_3.begin();
   auto it4 = s21_map_4.begin();
   while (it1 <= s21_map_1.end()) {
-    EXPECT_EQ(*it1, *it4);
+    EXPECT_EQ(it1->first, it4->first);
     ++it1, ++it4;
   }
   while (it2 <= s21_map_2.end()) {
-    EXPECT_EQ(*it2, *it3);
+    EXPECT_EQ(it2->first, it3->first);
     ++it2, ++it3;
   }
   EXPECT_EQ(s21_map_1.size(), s21_map_4.size());
@@ -339,7 +339,7 @@ TEST(map_begin, case3) {
 
   auto min_value = s21_map.begin();
 
-  EXPECT_EQ(*min_value, 1);
+  EXPECT_EQ(min_value->second, 1);
 }
 
 TEST(map_begin, case4) {
@@ -355,7 +355,7 @@ TEST(map_begin, case5) {
 
   auto min_value = s21_map.begin();
 
-  EXPECT_EQ(*min_value, "hello");
+  EXPECT_EQ(min_value->second, "hello");
 }
 
 TEST(map_begin, case6) {
@@ -367,7 +367,7 @@ TEST(map_begin, case6) {
 
   auto min_value = s21_map.begin();
 
-  EXPECT_EQ(*min_value, 1);
+  EXPECT_EQ((*min_value).second, 1);
 }
 
 TEST(map_end, case1) {
@@ -1058,5 +1058,31 @@ TEST(map_merge, case4) {
   EXPECT_EQ(s21_map_int_res.size(), 6U);
 }
 
+TEST(test, mapEmplace) {
+  s21::map<int, std::string> my_map{
+      std::make_pair(42, "foo"), std::make_pair(3, "bar"),
+      std::make_pair(33, "aboba"), std::make_pair(3, "ba")};
+  std::map<int, std::string> std_map{
+      std::make_pair(42, "foo"), std::make_pair(3, "bar"),
+      std::make_pair(33, "aboba"), std::make_pair(3, "ba")};
+
+  std::map<int, std::string> std_map2{
+      std::make_pair(42, "foo"), std::make_pair(323, "basdar"),
+      std::make_pair(343, "abobaaWD"), std::make_pair(-3, "ba")};
+
+  std_map.merge(std_map2);
+  my_map.insert_many(std::make_pair(42, "foo"), std::make_pair(323, "basdar"),
+                 std::make_pair(343, "abobaaWD"), std::make_pair(-3, "ba"));
+
+  auto my_iter = my_map.begin();
+  auto std_iter = std_map.begin();
+
+  while (my_iter <= my_map.end()) {
+    ASSERT_TRUE(my_iter->first == std_iter->first);
+    ASSERT_TRUE(my_iter->second == std_iter->second);
+    ++my_iter;
+    ++std_iter;
+  }
+}
 
 }  // namespace

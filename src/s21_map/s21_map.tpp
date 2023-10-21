@@ -434,12 +434,17 @@ void map<K, V>::clear(Node<K, V>* delete_ptr) noexcept {
     }
 }
 
-// template <typename K, typename V>
-// template <class... Args>
-// std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
-//     std::vector<std::pair<iterator, bool>> results;
-//     return results;
-// }
+template <typename K, typename V>
+template <class... Args>
+std::vector<std::pair<typename map<K, V>::iterator, bool>> map<K, V>::insert_many(Args&&... args) {
+    std::vector<std::pair<iterator, bool>> results;
+    map<K,V> temp = {args...};
+    for (auto it = temp.begin(); it <= temp.end(); ++it) { 
+        auto itInsert = insert(std::make_pair(it.get_key(), it.get_value()));
+        results.push_back(itInsert);
+    }
+    return results;
+}
 
 
 

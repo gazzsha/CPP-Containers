@@ -4,7 +4,7 @@
 #include <algorithm>
 #include "RB_tree_map.h"
 #include "iterators_map.h"
-//#include "s21_vector.h"
+#include <vector>
 
 namespace s21 {
 template <typename K, typename V>
@@ -60,8 +60,8 @@ public:
     V& operator[](const K& key) noexcept;
     bool contains(const K& key);
     
-    //template <class... Args>
-    //std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
+    template <class... Args>
+    std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
         Node<K, V>* Node_tree_;
     static Node<K, V>* leaf_tree;  // nil leaf
     static Node<K, V> leaf;

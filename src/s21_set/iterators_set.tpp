@@ -43,13 +43,14 @@ Iterator<key_type>& Iterator<key_type>::operator--() {
     return *this;
 }
 
+
 template<typename key_type>
 key_type& Iterator<key_type>::operator*() {
     return current_node->key;
 }
 
 template<typename key_type>
-const bool Iterator<key_type>::operator<=(Iterator<key_type> node) {
+bool Iterator<key_type>::operator<=(Iterator<key_type> node) const{
     if (current_node && node.current_node) return current_node->key <= node.current_node->key;
     return 0;
 }
@@ -97,7 +98,7 @@ return *this;
 }
 
 template<typename key_type>
-const bool ConstIterator<key_type>::operator<=(ConstIterator<key_type> node) {
+bool ConstIterator<key_type>::operator<=(ConstIterator<key_type> node) const {
     if (current_node && node.current_node) return current_node->key <= node.current_node->key;
     return 0;
 }

@@ -4,7 +4,8 @@
 int main() {
     s21::multiset<int> aaa;
     aaa.insert(12);
-    aaa.insert(12);
-    aaa.insert(12);
-    aaa.insert(12);
+    aaa.insert(11);
+    aaa.insert(11);
+    aaa.insert(11);
+    aaa.printTree();
 }

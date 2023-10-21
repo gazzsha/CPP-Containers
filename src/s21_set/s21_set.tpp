@@ -55,42 +55,43 @@ set<K>::~set() {
 template <typename K>
 void set<K>::clear() noexcept {
     clear(Node_tree_);
+    size_set = 0;
     Node_tree_ = nullptr;
 }
 
 template <typename K>
-bool set<K>::empty() noexcept {
+const bool set<K>::empty() const noexcept {
     return !Node_tree_;
 }
 
 template <typename K>
-typename set<K>::size_type set<K>::size() noexcept {
+const typename set<K>::size_type set<K>::size() const  noexcept {
     return size_set;
 }
 
 template <typename K>
-typename set<K>::size_type set<K>::max_size() noexcept {
+const typename set<K>::size_type set<K>::max_size() const noexcept {
     return std::numeric_limits<size_type>::max() / sizeof(Node<K>) / 2;
 }
 
 template <typename K>
 std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& value) {
     ++size_set;
-    return insert(value, Node_tree_, nullptr, 0);
+    return insert(value, Node_tree_, 0);
 }
 
 template <typename K>
 void set<K>::erase(iterator pos) noexcept {
     Node<K>* x_node, * y_node; 
     --size_set;
-    if(pos.current_node == end_node) end_node = pos.current_node->parent;
-    if(pos.current_node == begin_node) begin_node = pos.current_node->parent;
-    if (!pos.current_node || pos.current_node == leaf_tree) return;
+    if(pos.get_current_node() == end_node) end_node = pos.get_current_node()->parent;
+    if(pos.get_current_node() == begin_node) begin_node = pos.get_current_node()->parent;
+    if (!pos.get_current_node() || pos.get_current_node() == leaf_tree) return;
 
-    if (pos.current_node->left == leaf_tree || pos.current_node->right == leaf_tree) {
-        y_node = pos.current_node;
+    if (pos.get_current_node()->left == leaf_tree || pos.get_current_node()->right == leaf_tree) {
+        y_node = pos.get_current_node();
     } else {
-        y_node = pos.current_node->left;
+        y_node = pos.get_current_node()->left;
         while (y_node->right != leaf_tree) y_node = y_node->right;
     }
 
@@ -103,8 +104,8 @@ void set<K>::erase(iterator pos) noexcept {
         else y_node->parent->right = x_node;
     } else Node_tree_ = x_node;
 
-    if (y_node != pos.current_node) {
-        pos.current_node->key = y_node->key;
+    if (y_node != pos.get_current_node()) {
+        pos.get_key() = y_node->key;
     }
     if (!y_node->red) deleteBalanceTree(x_node);
     
@@ -129,7 +130,7 @@ void set<K>::swap(set& other) noexcept {
 template <typename K>
 void set<K>::merge(set& other) noexcept {
     for (auto it = other.begin(); it <= other.end(); ++it) {
-        insert(it.current_node->key);
+        insert(it.get_key());
     }
 }
 
@@ -137,7 +138,7 @@ template <typename K>
 bool set<K>::contains(const K& key) {
     try {
     for (auto it = begin(); it <= end(); ++it) {
-        if(it.current_node->key == key) return 1;
+        if(it.get_key() == key) return 1;
     }
     } catch (...) {}
     return 0;
@@ -145,8 +146,7 @@ bool set<K>::contains(const K& key) {
 
 
 template <typename K>
-std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& value, Node<K>* current_node, Node<K>* parent, int assign){
-    Node<K>* temp;
+std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& value, Node<K>* current_node, int assign){
     if (!Node_tree_) {
         Node_tree_ = new Node<K>(value, leaf_tree);
         begin_node = Node_tree_;
@@ -160,7 +160,7 @@ std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& valu
             if (begin_node->key > value) begin_node = current_node->left;
             return std::make_pair(iterator(current_node->left), true);
         } else {
-            return insert(value, current_node->left, current_node, assign);
+            return insert(value, current_node->left, assign);
         }
     } else if (value != current_node->key){
         if (current_node->right == leaf_tree) {
@@ -169,7 +169,7 @@ std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& valu
             if (end_node->key < value) end_node = current_node->right;
             return std::make_pair(iterator(current_node->right), true);
         } else {
-            return insert(value, current_node->right, current_node, assign);
+            return insert(value, current_node->right, assign);
         }
     } else {
         --size_set;
@@ -224,7 +224,6 @@ void set<K>::insertBalanceTree(Node<K>* newNode) noexcept {
 
 template <typename K>
 void set<K>::smallPivot(Node<K>* node) noexcept {
-    Node<K>* grand_ = node->parent->parent;
     Node<K>* parent_ = node->parent;
 
     if(node == node->parent->right){
@@ -423,12 +422,17 @@ typename set<K>::iterator set<K>::find(Node<K>* Node, const K& key) {
     }
 }
 
-// template <typename K>
-// template <class... Args>
-// std::vector<std::pair<typename set<K>::iterator, bool>> set<K>::insert_many(Args&&... args) {
-//     std::vector<std::pair<iterator, bool>> results;
-//     return results;
-// }
+template <typename K>
+template <class... Args>
+std::vector<std::pair<typename set<K>::iterator, bool>> set<K>::insert_many(Args&&... args) {
+    std::vector<std::pair<iterator, bool>> results;
+    set<K> temp = {args...};
+    for (auto it = temp.begin(); it <= temp.end(); ++it) { 
+        auto itInsert = insert(it.get_key());
+        results.push_back(itInsert);
+    }
+    return results;
+}
 
 
 

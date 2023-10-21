@@ -4,6 +4,7 @@
 #include <algorithm>
 #include "RB_tree_set.h"
 #include "iterators_set.h"
+#include <vector>
 //#include "s21_vector.h"
 
 namespace s21 {
@@ -20,7 +21,7 @@ public:
 
     set();   // default constructor
 
-    set(std::initializer_list<value_type> const &items);
+     set(std::initializer_list<value_type> const &items);
     set(const set &m);             
     set(set &&m);
     set<K>& operator=(set &&m);
@@ -45,9 +46,9 @@ public:
      }
 
     void clear() noexcept;
-    bool empty() noexcept;
-    size_type size() noexcept;
-    size_type max_size() noexcept;
+    const bool empty() const noexcept;
+    const size_type size() const noexcept;
+    const size_type max_size() const noexcept;
     virtual std::pair<iterator, bool> insert(const value_type& value);
     void erase(iterator pos) noexcept;
     void printTree() noexcept;
@@ -56,8 +57,8 @@ public:
     bool contains(const K& key);
     iterator find(const K& key);
     
-    //template <class... Args>
-    //std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
+    template <class... Args>
+    std::vector<std::pair<iterator, bool>> insert_many(Args&&... args);
 protected:
     Node<K>* Node_tree_;
     static Node<K>* leaf_tree;  // nil leaf
@@ -66,7 +67,7 @@ protected:
     Node<K>* end_node;
     size_t size_set = 0;
 
-    virtual std::pair<iterator, bool> insert(const value_type& value, Node<K>* current_node, Node<K>* parent, int assign);
+    virtual std::pair<iterator, bool> insert(const value_type& value, Node<K>* current_node,  int assign);
     void insertBalanceTree(Node<K>* newNode) noexcept;
     void smallPivot(Node<K>* node) noexcept;
     void bigPivot(Node<K>* node) noexcept;

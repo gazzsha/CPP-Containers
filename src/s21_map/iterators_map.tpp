@@ -1,7 +1,11 @@
 namespace s21 {
     
 template<typename key_type, typename mapped_type>
-Iterator<key_type, mapped_type>::Iterator(Node<key_type, mapped_type>* node) : current_node(node){}
+Iterator<key_type, mapped_type>::Iterator(Node<key_type, mapped_type>* node) : current_node(node) {
+    key_type temp_k = current_node->key;
+    mapped_type temp_v = current_node->value;
+     pairIter = std::make_pair<key_type,mapped_type>(std::move(temp_k), std::move(temp_v));
+}
 
 template<typename key_type, typename mapped_type>
 Iterator<key_type, mapped_type>& Iterator<key_type, mapped_type>::operator++() {
@@ -19,6 +23,8 @@ if (current_node->right->right != nullptr) {
     }
     current_node = parent;
 }
+
+if (current_node) pairIter = std::make_pair(get_key(),get_value());
     
 return *this;
 }
@@ -39,13 +45,18 @@ Iterator<key_type, mapped_type>& Iterator<key_type, mapped_type>::operator--() {
         }
         current_node = parent;
     }
-    
+if (current_node)    pairIter = std::make_pair(get_key(),get_value());
     return *this;
 }
 
 template<typename key_type, typename mapped_type>
-mapped_type& Iterator<key_type, mapped_type>::operator*() {
-    return current_node->value;
+std::pair<key_type,mapped_type> Iterator<key_type, mapped_type>::operator*() {
+    return std::make_pair(get_key(),get_value());
+}
+
+template<typename key_type, typename mapped_type>
+std::pair<key_type,mapped_type>* Iterator<key_type, mapped_type>::operator->() {
+    return &(pairIter);
 }
 
 template<typename key_type, typename mapped_type>
