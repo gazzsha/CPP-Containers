@@ -1,4 +1,4 @@
-#include "test_header.h"
+#include "unit_test.h"
 
 namespace s21 {
 TEST(Map, Constructor_Default) {
@@ -34,7 +34,6 @@ TEST(Map, Modifier_Insert) {
 
   EXPECT_EQ(s21_map_1.insert(pair1).second, true);
   EXPECT_EQ(s21_map_1.insert(pair2).second, false);
-
 
   EXPECT_EQ(s21_map_1.size(), s21_map_2.size());
 }
@@ -171,7 +170,6 @@ TEST(Map, Modifier_Swap) {
   EXPECT_EQ(s21_map_1.size(), s21_map_4.size());
   EXPECT_EQ(s21_map_2.size(), s21_map_3.size());
 }
-
 
 TEST(map_constructor, case1) {
   s21::map<int, int> s21_map_int;
@@ -324,9 +322,6 @@ TEST(map_constructor, case14) {
   EXPECT_EQ(s21_map_ref.size(), 0U);
   EXPECT_EQ(s21_map_res.size(), 3U);
 }
-
-
-
 
 TEST(map_begin, case3) {
   std::pair<std::string, int> pair1{"hello", 1};
@@ -1058,7 +1053,7 @@ TEST(map_merge, case4) {
   EXPECT_EQ(s21_map_int_res.size(), 6U);
 }
 
-TEST(test, mapEmplace) {
+TEST(map_inert_many, case1) {
   s21::map<int, std::string> my_map{
       std::make_pair(42, "foo"), std::make_pair(3, "bar"),
       std::make_pair(33, "aboba"), std::make_pair(3, "ba")};
@@ -1072,7 +1067,7 @@ TEST(test, mapEmplace) {
 
   std_map.merge(std_map2);
   my_map.insert_many(std::make_pair(42, "foo"), std::make_pair(323, "basdar"),
-                 std::make_pair(343, "abobaaWD"), std::make_pair(-3, "ba"));
+                     std::make_pair(343, "abobaaWD"), std::make_pair(-3, "ba"));
 
   auto my_iter = my_map.begin();
   auto std_iter = std_map.begin();
@@ -1085,4 +1080,4 @@ TEST(test, mapEmplace) {
   }
 }
 
-}  // namespace
+}  // namespace s21

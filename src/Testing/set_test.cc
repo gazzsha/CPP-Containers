@@ -1,8 +1,4 @@
-#include <gtest/gtest.h>
-
-#include <set>
-
-#include "s21_set.h"
+#include "unit_test.h"
 
 TEST(set_constructor, case1) {
   s21::set<int> s21_set_int;
@@ -661,7 +657,7 @@ TEST(set_find, case2) {
   EXPECT_EQ(*s21_set.find(22.2), *it);
 }
 
-TEST(test, setEmplace) {
+TEST(set_insert_many, case1) {
   std::initializer_list<int> items{1, 2, 3};
   std::initializer_list<int> items2{2, 3, 543};
   s21::set<int> my_set(items);
