@@ -2,26 +2,26 @@
 namespace s21 {
 
 
-template <typename K>
-Node<K> set<K>::leaf = Node<K>();
+template <typename K,typename Comp>
+Node<K> set<K,Comp>::leaf = Node<K>();
 
 
-template <typename K>
-Node<K>* set<K>::leaf_tree = &leaf;
+template <typename K,typename Comp>
+Node<K>* set<K,Comp>::leaf_tree = &leaf;
 
 
-template <typename K>
-set<K>::set() : Node_tree_(nullptr) , size_set(0) {}
+template <typename K,typename Comp>
+set<K,Comp>::set() : Node_tree_(nullptr) , size_set(0) {}
 
-template <typename K>
-set<K>::set(std::initializer_list<value_type> const &items) : Node_tree_(nullptr) , size_set(0){
+template <typename K,typename Comp>
+set<K,Comp>::set(std::initializer_list<value_type> const &items) : Node_tree_(nullptr) , size_set(0){
     for (const value_type &item : items) {
         insert(item);
     }
 }
 
-template <typename K>
-set<K>::set(const set &m) : set() {
+template <typename K,typename Comp>
+set<K,Comp>::set(const set &m) : set() {
     size_set = m.size_set;
     try {
         copyNodes(m.Node_tree_, Node_tree_);
@@ -31,57 +31,57 @@ set<K>::set(const set &m) : set() {
     }
 }
 
-template <typename K>
-set<K>::set(set &&m) : Node_tree_(nullptr) , size_set(0){
+template <typename K,typename Comp>
+set<K,Comp>::set(set &&m) : Node_tree_(nullptr) , size_set(0){
     size_set = m.size_set;
     m.size_set = 0;
     moveNodes(m.Node_tree_, this->Node_tree_);
 
 } 
 
-template <typename K>
-set<K>& set<K>::operator=(set &&m){
+template <typename K,typename Comp>
+set<K,Comp>& set<K,Comp>::operator=(set &&m){
     size_set = m.size_set;
     m.size_set = 0;
     moveNodes(m.Node_tree_, Node_tree_);
     return *this;
 }
 
-template <typename K>
-set<K>::~set() {
+template <typename K,typename Comp>
+set<K,Comp>::~set() {
     clear();
 }
 
-template <typename K>
-void set<K>::clear() noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::clear() noexcept {
     clear(Node_tree_);
     size_set = 0;
     Node_tree_ = nullptr;
 }
 
-template <typename K>
-const bool set<K>::empty() const noexcept {
+template <typename K,typename Comp>
+const bool set<K,Comp>::empty() const noexcept {
     return !Node_tree_;
 }
 
-template <typename K>
-const typename set<K>::size_type set<K>::size() const  noexcept {
+template <typename K,typename Comp>
+const typename set<K,Comp>::size_type set<K,Comp>::size() const  noexcept {
     return size_set;
 }
 
-template <typename K>
-const typename set<K>::size_type set<K>::max_size() const noexcept {
+template <typename K,typename Comp>
+const typename set<K,Comp>::size_type set<K,Comp>::max_size() const noexcept {
     return std::numeric_limits<size_type>::max() / sizeof(Node<K>) / 2;
 }
 
-template <typename K>
-std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& value) {
+template <typename K,typename Comp>
+std::pair<typename set<K,Comp>::iterator, bool> set<K,Comp>::insert(const value_type& value) {
     ++size_set;
     return insert(value, Node_tree_, 0);
 }
 
-template <typename K>
-void set<K>::erase(iterator pos) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::erase(iterator pos) noexcept {
     Node<K>* x_node, * y_node; 
     --size_set;
     if(pos.get_current_node() == end_node) end_node = pos.get_current_node()->parent;
@@ -112,13 +112,13 @@ void set<K>::erase(iterator pos) noexcept {
     delete y_node;
 }
 
-template <typename K>
-void set<K>::printTree() noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::printTree() noexcept {
     printTree(Node_tree_, 0);
 }
 
-template <typename K>
-void set<K>::swap(set& other) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::swap(set& other) noexcept {
     size_t temp_s = size_set;
     Node<K>* temp = Node_tree_;
     Node_tree_ = other.Node_tree_;
@@ -127,15 +127,15 @@ void set<K>::swap(set& other) noexcept {
     other.size_set = temp_s;
 }
 
-template <typename K>
-void set<K>::merge(set& other) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::merge(set& other) noexcept {
     for (auto it = other.begin(); it <= other.end(); ++it) {
         insert(it.get_key());
     }
 }
 
-template <typename K>
-bool set<K>::contains(const K& key) {
+template <typename K,typename Comp>
+bool set<K,Comp>::contains(const K& key) {
     try {
     for (auto it = begin(); it <= end(); ++it) {
         if(it.get_key() == key) return 1;
@@ -145,19 +145,18 @@ bool set<K>::contains(const K& key) {
 }
 
 
-template <typename K>
-std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& value, Node<K>* current_node, int assign){
+template <typename K,typename Comp>
+std::pair<typename set<K,Comp>::iterator, bool> set<K,Comp>::insert(const value_type& value, Node<K>* current_node, int assign){
     if (!Node_tree_) {
         Node_tree_ = new Node<K>(value, leaf_tree);
         begin_node = Node_tree_;
         end_node = Node_tree_;
         return std::make_pair(iterator(Node_tree_), true);
     }
-    if (value < current_node->key && value != current_node->key) {
+    if ((Comp{}  (value,current_node->key)) && value!= current_node->key) {
         if (current_node->left == leaf_tree) {
             current_node->left = new Node<K>(value, current_node, leaf_tree);
             insertBalanceTree(current_node->left);
-            if (begin_node->key > value) begin_node = current_node->left;
             return std::make_pair(iterator(current_node->left), true);
         } else {
             return insert(value, current_node->left, assign);
@@ -166,7 +165,6 @@ std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& valu
         if (current_node->right == leaf_tree) {
             current_node->right = new Node<K>(value, current_node, leaf_tree);
             insertBalanceTree(current_node->right);
-            if (end_node->key < value) end_node = current_node->right;
             return std::make_pair(iterator(current_node->right), true);
         } else {
             return insert(value, current_node->right, assign);
@@ -177,10 +175,8 @@ std::pair<typename set<K>::iterator, bool> set<K>::insert(const value_type& valu
     }
 }
 
-template <typename K>
-void set<K>::insertBalanceTree(Node<K>* newNode) noexcept {
-    if (!begin_node || newNode->key < begin_node->key) begin_node = newNode;
-    if (!end_node || newNode->key > end_node->key) end_node = newNode;
+template <typename K,typename Comp>
+void set<K,Comp>::insertBalanceTree(Node<K>* newNode) noexcept {
     while (newNode != Node_tree_ && newNode->parent->red && newNode->parent->parent != nullptr) {
         if (newNode->parent == newNode->parent->parent->left) {
             Node<K>* uncle = newNode->parent->parent->right;
@@ -218,12 +214,10 @@ void set<K>::insertBalanceTree(Node<K>* newNode) noexcept {
         }
     }
     Node_tree_->red = false;
-    if (!begin_node || newNode->key < begin_node->key) begin_node = newNode;
-    if (!end_node || newNode->key > end_node->key) end_node = newNode;
 }
 
-template <typename K>
-void set<K>::smallPivot(Node<K>* node) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::smallPivot(Node<K>* node) noexcept {
     Node<K>* parent_ = node->parent;
 
     if(node == node->parent->right){
@@ -253,8 +247,8 @@ void set<K>::smallPivot(Node<K>* node) noexcept {
     }
 }
 
-template <typename K>
-void set<K>::bigPivot(Node<K>* node) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::bigPivot(Node<K>* node) noexcept {
     Node<K>* grand_ = node->parent->parent;
     Node<K>* parent_ = node->parent;
     
@@ -285,8 +279,8 @@ void set<K>::bigPivot(Node<K>* node) noexcept {
     }
 }
 
-template <typename K>
-void set<K>::printTree(Node<K>* node, int level) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::printTree(Node<K>* node, int level) noexcept {
     if (node != leaf_tree && node) {
         if (node->right) {
             printTree(node->right, level + 4);
@@ -306,13 +300,13 @@ void set<K>::printTree(Node<K>* node, int level) noexcept {
     }
 }
 
-template <typename K>
-bool set<K>::nodeExist(Node<K>* node) noexcept {
+template <typename K,typename Comp>
+bool set<K,Comp>::nodeExist(Node<K>* node) noexcept {
     return node != leaf_tree;
 }
 
-template <typename K>
-void set<K>::deleteBalanceTree(Node<K>* node) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::deleteBalanceTree(Node<K>* node) noexcept {
     while (node != Node_tree_ && node->red == false) {
         if (node == node->parent->left) {
             Node<K>* brother = node->parent->right;
@@ -368,8 +362,8 @@ void set<K>::deleteBalanceTree(Node<K>* node) noexcept {
     node->red = false;
 }
 
-template <typename K>
-void set<K>::copyNodes(Node<K>* sourceNode, Node<K>*& targetNode) {
+template <typename K,typename Comp>
+void set<K,Comp>::copyNodes(Node<K>* sourceNode, Node<K>*& targetNode) {
     if (sourceNode) {
         
         targetNode = new Node<K>(sourceNode->key, sourceNode->parent, sourceNode->red);
@@ -383,14 +377,14 @@ void set<K>::copyNodes(Node<K>* sourceNode, Node<K>*& targetNode) {
     }
 }
 
-template <typename K>
-void set<K>::moveNodes(Node<K>*& sourceNode, Node<K>*& targetNode) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::moveNodes(Node<K>*& sourceNode, Node<K>*& targetNode) noexcept {
     targetNode = sourceNode;
     sourceNode = nullptr;
 }
 
-template <typename K>
-void set<K>::clear(Node<K>* delete_ptr) noexcept {
+template <typename K,typename Comp>
+void set<K,Comp>::clear(Node<K>* delete_ptr) noexcept {
     if (delete_ptr && delete_ptr != leaf_tree) {
         if (delete_ptr->right && delete_ptr->right != leaf_tree) {
             clear(delete_ptr->right);
@@ -402,31 +396,31 @@ void set<K>::clear(Node<K>* delete_ptr) noexcept {
     }
 }
 
-template <typename K>
-typename set<K>::iterator set<K>::find(const K& key) {
+template <typename K,typename Comp>
+typename set<K,Comp>::iterator set<K,Comp>::find(const K& key) {
     return find(Node_tree_, key);
 }
 
-template <typename K>
-typename set<K>::iterator set<K>::find(Node<K>* Node, const K& key) {
+template <typename K,typename Comp>
+typename set<K,Comp>::iterator set<K,Comp>::find(Node<K>* Node, const K& key) {
     if(!Node) return end();
     
     if(Node->key == key) return iterator(Node);
 
     if (key == Node->key) {
         return iterator(Node);
-    } else if (key < Node->key) {
+    } else if (Comp{} (key,Node->key)) {
         return find(Node->left, key);
     } else {
         return find(Node->right, key);
     }
 }
 
-template <typename K>
+template <typename K,typename Comp>
 template <class... Args>
-std::vector<std::pair<typename set<K>::iterator, bool>> set<K>::insert_many(Args&&... args) {
+std::vector<std::pair<typename set<K,Comp>::iterator, bool>> set<K,Comp>::insert_many(Args&&... args) {
     std::vector<std::pair<iterator, bool>> results;
-    set<K> temp = {args...};
+    set<K,Comp> temp = {args...};
     for (auto it = temp.begin(); it <= temp.end(); ++it) { 
         auto itInsert = insert(it.get_key());
         results.push_back(itInsert);

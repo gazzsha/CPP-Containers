@@ -1,19 +1,19 @@
 #ifndef SRC_ITERATORS_H_
 #define SRC_ITERATORS_H_
-
+#include <functional>
 namespace s21 {   
-template<typename key_type, typename mapped_type>
+template<typename key_type, typename mapped_type,typename Comp = std::less<key_type>>
 class Iterator {
 public:
     key_type& get_key() { return current_node->key;}
     mapped_type& get_value() { return current_node->value; }
     Node<key_type, mapped_type>* get_current_node() { return current_node; }
     Iterator(Node<key_type, mapped_type>* node);
-    Iterator<key_type, mapped_type>& operator++();
-    Iterator<key_type, mapped_type>& operator--();
+    Iterator& operator++();
+    Iterator& operator--();
     std::pair<key_type,mapped_type> operator*();
     std::pair<key_type,mapped_type>* operator->();
-    bool operator<=(Iterator<key_type, mapped_type> node) const;
+    bool operator<=(Iterator<key_type, mapped_type,Comp> node) const;
     std::pair<key_type,mapped_type>  pairIter;
 private:
     Node<key_type, mapped_type>* current_node;
@@ -24,16 +24,16 @@ private:
     friend Node<key_type, mapped_type>* findMax(Node<key_type, mapped_type>* node) noexcept;
 };
 
-template<typename key_type, typename mapped_type>
+template<typename key_type, typename mapped_type,typename Comp = std::less<key_type>>
 class ConstIterator {
 public:
     const key_type& get_key_const() { return current_node->key;}
     const mapped_type& get_value_const() { return current_node->value; }
     ConstIterator(const Node<key_type, mapped_type>* node);
-    ConstIterator<key_type, mapped_type>& operator++();
-    ConstIterator<key_type, mapped_type>& operator--();
-    ConstIterator<key_type, mapped_type>& operator*();
-    bool operator<=(ConstIterator<key_type, mapped_type> node) const;
+    ConstIterator& operator++();
+    ConstIterator& operator--();
+    ConstIterator& operator*();
+    bool operator<=(ConstIterator<key_type, mapped_type,Comp> node) const;
 private:
     const Node<key_type, mapped_type>* current_node;
     

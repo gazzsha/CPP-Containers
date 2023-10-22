@@ -5,18 +5,19 @@
 #include "RB_tree_set.h"
 #include "iterators_set.h"
 #include <vector>
+#include <functional>
 //#include "s21_vector.h"
 
 namespace s21 {
-template <typename K>
+template <typename K,typename Comp = std::less<K>>
 class set {
 public:
     using key_type = K;
     using value_type = K;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator = Iterator<K>;
-    using const_iterator = ConstIterator<K>;
+    using iterator = Iterator<K,Comp>;
+    using const_iterator = ConstIterator<K,Comp>;
     using size_type = size_t;
 
     set();   // default constructor
@@ -24,7 +25,7 @@ public:
      set(std::initializer_list<value_type> const &items);
     set(const set &m);             
     set(set &&m);
-    set<K>& operator=(set &&m);
+    set& operator=(set &&m);
     // Destructor
     ~set();
     

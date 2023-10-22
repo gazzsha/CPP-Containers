@@ -5,18 +5,20 @@
 #include "RB_tree_map.h"
 #include "iterators_map.h"
 #include <vector>
+#include <functional>
 
 namespace s21 {
-template <typename K, typename V>
+template <typename K, typename V,typename Comp = std::less<K>>
 class map {
 public:
+
     using key_type = K;
     using mapped_type = V;
     using value_type = std::pair<const key_type, mapped_type>;
     using reference = value_type&;
     using const_reference = const value_type&;
-    using iterator = Iterator<K, V>;
-    using const_iterator = ConstIterator<K, V>;
+    using iterator = Iterator<K, V,Comp>;
+    using const_iterator = ConstIterator<K, V,Comp>;
     using size_type = size_t;
 
     map();   // default constructor
@@ -24,7 +26,7 @@ public:
     map(std::initializer_list<value_type> const &items);
     map(const map &m);             
     map(map &&m);
-    map<K, V>& operator=(map &&m);
+    map& operator=(map &&m);
     // Destructor
     ~map();
     
